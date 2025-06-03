@@ -46,18 +46,8 @@ struct CameraPreviewView: UIViewRepresentable {
                 captureSession.addOutput(videoOutput)
             }
 
-            // Set video orientation to portrait
-            if let connection = videoOutput.connection(with: .video) {
-                if connection.isVideoOrientationSupported {
-                    connection.videoOrientation = .portrait
-                }
-            }
-
             previewView.videoPreviewLayer.session = captureSession
             previewView.videoPreviewLayer.videoGravity = .resizeAspectFill
-            
-            // Set preview layer orientation to portrait
-            previewView.videoPreviewLayer.connection?.videoOrientation = .portrait
             
             captureSession.commitConfiguration()
             captureSession.startRunning()

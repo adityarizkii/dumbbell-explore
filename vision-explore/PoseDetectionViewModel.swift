@@ -18,7 +18,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
     private let sequenceHandler = VNSequenceRequestHandler()
     private var lastRightWristPoint: CGPoint?
     private var lastLeftWristPoint: CGPoint?
-    private let positionTolerance: CGFloat = 0.2
+    private let positionTolerance: CGFloat = 0.12
     
     func angleBetweenPoints(pointA: CGPoint, pointB: CGPoint, pointC: CGPoint) -> CGFloat {
         let vectorBA = CGVector(dx: pointA.x - pointB.x, dy: pointA.y - pointB.y)
@@ -74,13 +74,24 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                   let rightWrist = points[.rightWrist],
                   let leftShoulder = points[.leftShoulder],
                   let leftElbow = points[.leftElbow],
-                  let leftWrist = points[.leftWrist],
-                  rightShoulder.confidence > 0.5,
-                  rightElbow.confidence > 0.5,
-                  rightWrist.confidence > 0.5,
-                  leftShoulder.confidence > 0.5,
-                  leftElbow.confidence > 0.5,
-                  leftWrist.confidence > 0.5 else {
+                  let leftWrist = points[.leftWrist] else {
+                self.feedbackText = "Tidak ada pose terdeteksi"
+                self.currentPoints = nil
+                self.overlayColor = .gray
+                return
+            }
+            
+            // Check for right side detection
+            let rightSideDetected = rightShoulder.confidence > 0.5 &&
+                                  rightElbow.confidence > 0.5 &&
+                                  rightWrist.confidence > 0.5
+            
+            // Check for left side detection
+            let leftSideDetected = leftShoulder.confidence > 0.5 &&
+                                 leftElbow.confidence > 0.5 &&
+                                 leftWrist.confidence > 0.5
+            
+            guard rightSideDetected || leftSideDetected else {
                 self.feedbackText = "Pose tidak jelas"
                 self.overlayColor = .gray
                 return
@@ -110,42 +121,37 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                 abs(leftWristPt.y - self.lastLeftWristPoint!.y) > self.positionTolerance
             
             if rightWristChanged || leftWristChanged {
-                print("\n=== Converted Points ===")
-                print("Right Side:")
-//                print("Shoulder: x: \(rightShoulderPt.x), y: \(rightShoulderPt.y)")
-//                print("Elbow: x: \(rightElbowPt.x), y: \(rightElbowPt.y)")
-                print("Wrist: x: \(rightWristPt.x), y: \(rightWristPt.y)")
-                print("\nLeft Side:")
-//                print("Shoulder: x: \(leftShoulderPt.x), y: \(leftShoulderPt.y)")
-//                print("Elbow: x: \(leftElbowPt.x), y: \(leftElbowPt.y)")
-                print("Wrist: x: \(leftWristPt.x), y: \(leftWristPt.y)")
-                print("=====================\n")
+                if rightSideDetected {
+                    let rightAngle = self.angleBetweenPoints(pointA: rightWristPt, pointB: rightElbowPt, pointC: rightShoulderPt)
+                    print("Right Angle: \(rightAngle)")
+                    self.lastRightWristPoint = rightWristPt
+                }
                 
-                // Update last positions
-                self.lastRightWristPoint = rightWristPt
-                self.lastLeftWristPoint = leftWristPt
+                if leftSideDetected {
+                    let leftAngle = self.angleBetweenPoints(pointA: leftWristPt, pointB: leftElbowPt, pointC: leftShoulderPt)
+                    print("Left Angle: \(leftAngle)")
+                    self.lastLeftWristPoint = leftWristPt
+                }
             }
             
-            // Comment out angle calculations for now
-            /*
+            // ========== ANGLE =========
             let rightAngle = self.angleBetweenPoints(pointA: rightWristPt, pointB: rightElbowPt, pointC: rightShoulderPt)
             let leftAngle = self.angleBetweenPoints(pointA: leftWristPt, pointB: leftElbowPt, pointC: leftShoulderPt)
             
-            if rightAngle > 150 || leftAngle > 150 {
-                self.feedbackText = "Turunkan dumbbell"
-                self.overlayColor = .red
-            } else if rightAngle < 40 || leftAngle < 40 {
-                self.feedbackText = "Angkat dumbbell lebih tinggi"
-                self.overlayColor = .yellow
-            } else {
-                self.feedbackText = "Gerakan bagus!"
-                self.overlayColor = .green
-            }
-            */
+//            if rightAngle > 150 || leftAngle > 150 {
+//                self.feedbackText = "Turunkan dumbbell"
+//                self.overlayColor = .red
+//            } else if rightAngle < 40 || leftAngle < 40 {
+//                self.feedbackText = "Angkat dumbbell lebih tinggi"
+//                self.overlayColor = .yellow
+//            } else {
+//                self.feedbackText = "Gerakan bagus!"
+//                self.overlayColor = .green
+//            }
             
-            // Set default feedback for now
-            self.feedbackText = "Pose terdeteksi"
-//            self.feedbackText = "Wrist: x: \(rightWristPt.x), y: \(rightWristPt.y)"
+//             Set default feedback for now
+//            self.feedbackText = "left: \(leftAngle), right: \(rightAngle)"
+            self.feedbackText = "right : \(rightSideDetected), left: \(leftSideDetected)"
             self.overlayColor = .green
         }
     }
