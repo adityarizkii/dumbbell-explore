@@ -12,20 +12,16 @@ struct PoseOverlayView: View {
     let points: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]
     let evaluationColor: Color
 
+    // Only include right arm joint pairs
     let jointPairs: [(VNHumanBodyPoseObservation.JointName, VNHumanBodyPoseObservation.JointName)] = [
         (.rightShoulder, .rightElbow),
-        (.rightElbow, .rightWrist),
-        (.leftShoulder, .leftElbow),
-        (.leftElbow, .leftWrist),
-        (.leftShoulder, .rightShoulder),
-        (.leftHip, .rightHip),
-        (.leftShoulder, .leftHip),
-        (.rightShoulder, .rightHip)
+        (.rightElbow, .rightWrist)
     ]
 
     var body: some View {
         GeometryReader { geometry in
             ZStack {
+                // Draw lines between joints
                 ForEach(Array(jointPairs.enumerated()), id: \.offset) { _, pair in
                     let jointA = pair.0
                     let jointB = pair.1
@@ -46,7 +42,10 @@ struct PoseOverlayView: View {
                     }
                 }
 
-                ForEach(points.keys.sorted(by: { $0.rawValue.rawValue < $1.rawValue.rawValue }), id: \ .self) { key in
+                // Draw joint points (only right arm)
+                ForEach([VNHumanBodyPoseObservation.JointName.rightShoulder,
+                        .rightElbow,
+                        .rightWrist], id: \.self) { key in
                     if let point = points[key], point.confidence > 0.1 {
                         let rotatedX = 1 - point.location.y
                         let rotatedY = point.location.x
