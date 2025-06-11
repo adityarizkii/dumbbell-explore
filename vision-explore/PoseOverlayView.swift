@@ -18,14 +18,16 @@ struct PoseOverlayView: View {
         (.leftShoulder, .leftElbow),
         (.leftElbow, .leftWrist),
         (.leftShoulder, .rightShoulder),
-        (.leftHip, .rightHip),
-        (.leftShoulder, .leftHip),
-        (.rightShoulder, .rightHip)
+//        (.leftHip, .rightHip),
+//        (.leftShoulder, .leftHip),
+//        (.rightShoulder, .rightHip)
     ]
 
     var body: some View {
         GeometryReader { geometry in
             ZStack {
+
+                
                 ForEach(Array(jointPairs.enumerated()), id: \.offset) { _, pair in
                     let jointA = pair.0
                     let jointB = pair.1
