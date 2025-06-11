@@ -22,9 +22,12 @@ struct ContentView: View {
                 Color.black.opacity(0.5)
                     .edgesIgnoringSafeArea(.all)
                 
-                CompletionAlertView {
-                    viewModel.resetExercise()
-                }
+                CompletionAlertView(
+                    onReset: {
+                        viewModel.resetExercise()
+                    },
+                    repetitionData: viewModel.repetitionData
+                )
             }
         }
     }
