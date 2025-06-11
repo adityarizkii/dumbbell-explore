@@ -14,11 +14,64 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
     @Published var feedbackText: String = ""
     @Published var currentPoints: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]? = nil
     @Published var overlayColor: Color = .gray
+    @Published var showCompletionAlert: Bool = false
+    @Published var repetitionCount: Int = 0
+    @Published var repetitionData: [RepetitionData] = []
     
     private let sequenceHandler = VNSequenceRequestHandler()
-    private var lastRightWristPoint: CGPoint?
-    private var lastLeftWristPoint: CGPoint?
-    private let positionTolerance: CGFloat = 0.12
+    
+    struct RepetitionData {
+        let number: Int
+        let upDuration: TimeInterval
+        let downDuration: TimeInterval
+        
+        var upFeedback: String {
+            let difference = abs(upDuration - 2.0)
+            if difference <= 0.5 {
+                return "Pas"
+            } else if upDuration < 2.0 {
+                return "Terlalu Cepat"
+            } else {
+                return "Terlalu Lambat"
+            }
+        }
+        
+        var downFeedback: String {
+            let difference = abs(downDuration - 3.0)
+            if difference <= 0.5 {
+                return "Pas"
+            } else if downDuration < 3.0 {
+                return "Terlalu Cepat"
+            } else {
+                return "Terlalu Lambat"
+            }
+        }
+    }
+    
+    // Constants for dumbbell curl exercise
+    private let curlUpAngle: CGFloat = 135.0    // Angle threshold for curl up position
+    private let curlDownAngle: CGFloat = 65.0   // Angle threshold for curl down position
+    private let maxRepetitions: Int = 5
+    
+    // Timing constants
+    private let targetUpDuration: TimeInterval = 2.0    // 2 seconds for lifting
+    private let targetDownDuration: TimeInterval = 3.0  // 3 seconds for lowering
+    private let timingTolerance: TimeInterval = 0.5     // 0.5 seconds tolerance
+    
+    // State for tracking exercise phase
+    private var isInUpPosition: Bool = false
+    private var isInDownPosition: Bool = false
+    private var phaseStartTime: Date?
+    private var currentPhase: ExercisePhase = .none
+    private var currentUpDuration: TimeInterval = 0
+    private var currentDownDuration: TimeInterval = 0
+    private var isAddingRepetition: Bool = false
+    
+    enum ExercisePhase {
+        case none
+        case lifting
+        case lowering
+    }
     
     func angleBetweenPoints(pointA: CGPoint, pointB: CGPoint, pointC: CGPoint) -> CGFloat {
         let vectorBA = CGVector(dx: pointA.x - pointB.x, dy: pointA.y - pointB.y)
@@ -65,33 +118,137 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
         }
     }
     
+    private func evaluateDumbbellCurl(angle: CGFloat) -> (String, Color) {
+        let currentTime = Date()
+        
+        // Update exercise phase
+        if angle < curlDownAngle {
+            if currentPhase != .lowering {
+                currentPhase = .lowering
+                phaseStartTime = nil  // Reset timer when starting to move
+                print("Reset timer - starting lowering phase")
+            }
+            isInDownPosition = true
+            isInUpPosition = false  // Reset isInUpPosition when starting to lower
+            print("Phase: Lowering, isInUpPosition: \(isInUpPosition), isInDownPosition: \(isInDownPosition)")
+            
+            return ("Turunkan dumbbell", .red)
+            
+        } else if angle > curlUpAngle {
+            if currentPhase != .lifting {
+                currentPhase = .lifting
+                phaseStartTime = nil  // Reset timer when starting to move
+                print("Reset timer - starting lifting phase")
+            }
+            isInUpPosition = true
+            print("Phase: Lifting, isInUpPosition: \(isInUpPosition), isInDownPosition: \(isInDownPosition)")
+            
+            if isAddingRepetition {
+                print("Adding repetition! Current count: \(repetitionCount)")
+                let data = RepetitionData(
+                    number: repetitionCount + 1,
+                    upDuration: currentUpDuration,
+                    downDuration: currentDownDuration
+                )
+                repetitionData.append(data)
+                
+                repetitionCount += 1
+                isInDownPosition = false
+                isInUpPosition = false  // Reset both flags after completing repetition
+                currentPhase = .none
+                phaseStartTime = nil  // Reset timer after completing repetition
+                currentUpDuration = 0
+                currentDownDuration = 0
+                isAddingRepetition = false
+                print("Reset timer - completed repetition")
+                
+                if repetitionCount >= maxRepetitions {
+                    DispatchQueue.main.async {
+                        self.showCompletionAlert = true
+                    }
+                }
+            }
+
+            return ("Angkat dumbbell", .yellow)
+        } else {
+            // Start timing when position is correct (green)
+            if phaseStartTime == nil {
+                phaseStartTime = currentTime
+                print("Start timing - position is correct")
+            }
+            
+            if let startTime = phaseStartTime {
+                let duration = currentTime.timeIntervalSince(startTime)
+                
+                // Update current duration based on phase
+                if currentPhase == .lifting {
+                    currentUpDuration = duration
+                    print("Up duration: \(duration)")
+                } else if currentPhase == .lowering {
+                    currentDownDuration = duration
+                    print("Down duration: \(duration)")
+                    isAddingRepetition = true
+                }
+                
+                let targetDuration = currentPhase == .lifting ? targetUpDuration : targetDownDuration
+                let timeFeedback = getTimingFeedback(duration: duration, targetDuration: targetDuration)
+                return ("Gerakan bagus! (\(String(format: "%.1f", duration))s) - \(timeFeedback)", .green)
+            }
+            
+            return ("Gerakan bagus!", .green)
+        }
+    }
+    
+    private func getTimingFeedback(duration: TimeInterval, targetDuration: TimeInterval) -> String {
+        let difference = abs(duration - targetDuration)
+        if difference <= timingTolerance {
+            return "Tempo tepat!"
+        } else if duration < targetDuration {
+            return "Lebih lambat"
+        } else {
+            return "Lebih cepat"
+        }
+    }
+    
+    func resetExercise() {
+        repetitionCount = 0
+        isInUpPosition = false
+        isInDownPosition = false
+        showCompletionAlert = false
+        repetitionData.removeAll()
+        currentUpDuration = 0
+        currentDownDuration = 0
+    }
+    
     private func evaluatePose(points: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]) {
         DispatchQueue.main.async {
             self.currentPoints = points
             
-            guard let rightShoulder = points[.rightShoulder],
-                  let rightElbow = points[.rightElbow],
-                  let rightWrist = points[.rightWrist],
-                  let leftShoulder = points[.leftShoulder],
-                  let leftElbow = points[.leftElbow],
-                  let leftWrist = points[.leftWrist] else {
+            // Check if we have right arm points
+            let hasRightArm = points[.rightShoulder] != nil && 
+                             points[.rightElbow] != nil && 
+                             points[.rightWrist] != nil
+            
+            guard hasRightArm else {
                 self.feedbackText = "Tidak ada pose terdeteksi"
                 self.currentPoints = nil
                 self.overlayColor = .gray
                 return
             }
             
-            // Check for right side detection
-            let rightSideDetected = rightShoulder.confidence > 0.5 &&
-                                  rightElbow.confidence > 0.5 &&
-                                  rightWrist.confidence > 0.5
+            // Get right arm points
+            let rightShoulder = points[.rightShoulder]
+            let rightElbow = points[.rightElbow]
+            let rightWrist = points[.rightWrist]
             
-            // Check for left side detection
-            let leftSideDetected = leftShoulder.confidence > 0.5 &&
-                                 leftElbow.confidence > 0.5 &&
-                                 leftWrist.confidence > 0.5
+            // print("Confident: \(rightShoulder?.confidence ?? 0), \(rightElbow?.confidence ?? 0), \(rightWrist?.confidence ?? 0)")
             
-            guard rightSideDetected || leftSideDetected else {
+            // Check for right arm detection with confidence threshold
+            let rightArmDetected = rightShoulder?.confidence ?? 0 > 0.1 &&
+                                 rightElbow?.confidence ?? 0 > 0.1 &&
+                                 rightWrist?.confidence ?? 0 > 0.1
+            
+            guard rightArmDetected else {
                 self.feedbackText = "Pose tidak jelas"
                 self.overlayColor = .gray
                 return
@@ -101,58 +258,16 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                 CGPoint(x: CGFloat(point.location.x), y: CGFloat(1 - point.location.y))
             }
             
-            // Right side points
-            let rightShoulderPt = convertPoint(rightShoulder)
-            let rightElbowPt = convertPoint(rightElbow)
-            let rightWristPt = convertPoint(rightWrist)
-            
-            // Left side points
-            let leftShoulderPt = convertPoint(leftShoulder)
-            let leftElbowPt = convertPoint(leftElbow)
-            let leftWristPt = convertPoint(leftWrist)
-            
-            // Check if wrist positions have changed significantly
-            let rightWristChanged = self.lastRightWristPoint == nil || 
-                abs(rightWristPt.x - self.lastRightWristPoint!.x) > self.positionTolerance ||
-                abs(rightWristPt.y - self.lastRightWristPoint!.y) > self.positionTolerance
+            if let rightWristPt = rightWrist.map(convertPoint),
+               let rightElbowPt = rightElbow.map(convertPoint),
+               let rightShoulderPt = rightShoulder.map(convertPoint) {
+                let rightAngle = self.angleBetweenPoints(pointA: rightWristPt, pointB: rightElbowPt, pointC: rightShoulderPt)
+                // print("Right Angle: \(rightAngle)")
                 
-            let leftWristChanged = self.lastLeftWristPoint == nil ||
-                abs(leftWristPt.x - self.lastLeftWristPoint!.x) > self.positionTolerance ||
-                abs(leftWristPt.y - self.lastLeftWristPoint!.y) > self.positionTolerance
-            
-            if rightWristChanged || leftWristChanged {
-                if rightSideDetected {
-                    let rightAngle = self.angleBetweenPoints(pointA: rightWristPt, pointB: rightElbowPt, pointC: rightShoulderPt)
-                    print("Right Angle: \(rightAngle)")
-                    self.lastRightWristPoint = rightWristPt
-                }
-                
-                if leftSideDetected {
-                    let leftAngle = self.angleBetweenPoints(pointA: leftWristPt, pointB: leftElbowPt, pointC: leftShoulderPt)
-                    print("Left Angle: \(leftAngle)")
-                    self.lastLeftWristPoint = leftWristPt
-                }
+                let (feedback, color) = self.evaluateDumbbellCurl(angle: rightAngle)
+                self.feedbackText = "\(feedback) (\(Int(rightAngle))°) - Rep: \(self.repetitionCount)/\(self.maxRepetitions)"
+                self.overlayColor = color
             }
-            
-            // ========== ANGLE =========
-            let rightAngle = self.angleBetweenPoints(pointA: rightWristPt, pointB: rightElbowPt, pointC: rightShoulderPt)
-            let leftAngle = self.angleBetweenPoints(pointA: leftWristPt, pointB: leftElbowPt, pointC: leftShoulderPt)
-            
-//            if rightAngle > 150 || leftAngle > 150 {
-//                self.feedbackText = "Turunkan dumbbell"
-//                self.overlayColor = .red
-//            } else if rightAngle < 40 || leftAngle < 40 {
-//                self.feedbackText = "Angkat dumbbell lebih tinggi"
-//                self.overlayColor = .yellow
-//            } else {
-//                self.feedbackText = "Gerakan bagus!"
-//                self.overlayColor = .green
-//            }
-            
-//             Set default feedback for now
-//            self.feedbackText = "left: \(leftAngle), right: \(rightAngle)"
-            self.feedbackText = "right : \(rightSideDetected), left: \(leftSideDetected)"
-            self.overlayColor = .green
         }
     }
 }

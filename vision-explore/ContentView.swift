@@ -17,6 +17,18 @@ struct ContentView: View {
                     .cornerRadius(10)
                     .padding()
             }
+            
+            if viewModel.showCompletionAlert {
+                Color.black.opacity(0.5)
+                    .edgesIgnoringSafeArea(.all)
+                
+                CompletionAlertView(
+                    onReset: {
+                        viewModel.resetExercise()
+                    },
+                    repetitionData: viewModel.repetitionData
+                )
+            }
         }
     }
 }
