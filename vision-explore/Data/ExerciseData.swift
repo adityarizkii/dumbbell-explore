@@ -5,12 +5,7 @@
 //  Created by Muhammad Chandra Ramadhan on 11/06/25.
 //
 
-struct Exercise : Hashable{
-    var name : String
-    var image : String
-    var path : String
-    var description : String
-}
+
 
 var exercises : [Exercise] = [
     Exercise(name: "Dumbbell Curl", image: "DumbbellCurl", path: "dumble", description: "Latihan biceps dengan mengangkat dumbbell ke arah bahu, telapak tangan menghadap atas."),
