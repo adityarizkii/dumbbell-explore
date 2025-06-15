@@ -59,5 +59,5 @@ class ListViewModel: ObservableObject {
 
 
 #Preview{
-    Boarding()
+    Preview()
 }

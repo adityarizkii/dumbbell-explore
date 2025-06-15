@@ -53,7 +53,7 @@ struct Home: View {
             }
             .navigationDestination(for: String.self){ route in
                 if route == "exercise"{
-                    Boarding()
+                    Preview()
                 }
             }
         }

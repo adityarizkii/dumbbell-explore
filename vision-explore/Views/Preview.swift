@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Boarding: View {
+struct Preview: View {
 
     var body: some View {
         GeometryReader{ geometry in
@@ -74,5 +74,5 @@ struct Boarding: View {
 
 
 #Preview{
-    Boarding()
+    Preview()
 }
