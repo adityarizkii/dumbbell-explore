@@ -262,7 +262,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                let rightElbowPt = rightElbow.map(convertPoint),
                let rightShoulderPt = rightShoulder.map(convertPoint) {
                 let rightAngle = self.angleBetweenPoints(pointA: rightWristPt, pointB: rightElbowPt, pointC: rightShoulderPt)
-                // print("Right Angle: \(rightAngle)")
+                 print("Right Angle: \(rightAngle)")
                 
                 let (feedback, color) = self.evaluateDumbbellCurl(angle: rightAngle)
                 self.feedbackText = "\(feedback) (\(Int(rightAngle))°) - Rep: \(self.repetitionCount)/\(self.maxRepetitions)"
