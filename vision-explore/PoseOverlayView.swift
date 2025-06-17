@@ -15,13 +15,19 @@ struct PoseOverlayView: View {
     // Only include right arm joint pairs
     let jointPairs: [(VNHumanBodyPoseObservation.JointName, VNHumanBodyPoseObservation.JointName)] = [
         (.rightShoulder, .rightElbow),
-        (.rightElbow, .rightWrist)
+        (.rightElbow, .rightWrist),
+        (.leftShoulder, .leftElbow),
+        (.leftElbow, .leftWrist),
+        (.leftShoulder, .rightShoulder),
+//        (.leftHip, .rightHip),
+//        (.leftShoulder, .leftHip),
+//        (.rightShoulder, .rightHip)
     ]
 
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                // Draw lines between joints
+
                 ForEach(Array(jointPairs.enumerated()), id: \.offset) { _, pair in
                     let jointA = pair.0
                     let jointB = pair.1
