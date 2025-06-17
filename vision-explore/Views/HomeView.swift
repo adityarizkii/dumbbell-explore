@@ -7,22 +7,12 @@
 
 import SwiftUI
 
-struct exercise{
-    var name : String
-    var description : String
-    var image : String
-}
 
 struct HomeView: View {
-    var exercises = [
-        exercise(name: "Bicep Curl", description: "Lorem ipsum dolor sit amet consectetur adipisicing elit.", image: "gambar1"),
-        exercise(name: "Hammer Curl", description: "Lorem ipsum dolor sit amet consectetur adipisicing elit.", image: "gambar2"),
-        exercise(name: "Front Raises", description: "Lorem ipsum dolor sit amet consectetur adipisicing elit.", image: "gambar3")]
+    @StateObject var routeManager = RouteManager()
     
     var body: some View {
-        NavigationStack{
-            
-            
+        NavigationStack(path : $routeManager.path){
             ZStack {
                 Color(.black)
                 LinearGradient(
@@ -169,6 +159,7 @@ struct HomeView: View {
                                             .padding(.bottom, 5)
                                         
                                         Button {
+                                            routeManager.push(path : "exercise")
                                         } label: {
                                             Text("Button")
                                                 .foregroundStyle(Color.black)
@@ -193,7 +184,9 @@ struct HomeView: View {
                                 }
                                 
                             }
-                            .frame(maxWidth: 350, maxHeight: 132)
+                            .frame(maxWidth: .infinity, maxHeight: 132)
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 10)
                             .background(RadialGradient(
                                 gradient: Gradient(colors: [Color("neon"), .darkgreen]),
                                 center: .topTrailing,
@@ -203,11 +196,16 @@ struct HomeView: View {
                             .cornerRadius(14)
                         }
                     }
-                }
+                }                        .padding()
+
             }
             .ignoresSafeArea(.all)
+            .navigationDestination(for : String.self){ path in
+                AnyView(routeManager.getViewFromRoute(path: path))
+            }
 
         }
+      
     }
 }
 
