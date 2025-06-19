@@ -159,7 +159,7 @@ struct HomeView: View {
                                             .padding(.bottom, 5)
                                         
                                         Button {
-                                            routeManager.push(path : "exercise")
+                                            routeManager.push(path : "preview")
                                         } label: {
                                             Text("Button")
                                                 .foregroundStyle(Color.black)
@@ -196,7 +196,8 @@ struct HomeView: View {
                             .cornerRadius(14)
                         }
                     }
-                }                        .padding()
+                }
+                .padding(.horizontal, 20)
 
             }
             .ignoresSafeArea(.all)

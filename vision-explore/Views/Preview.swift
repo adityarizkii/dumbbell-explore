@@ -28,8 +28,6 @@ struct Preview: View {
                     .font(.title.bold())
                     .frame(maxWidth : .infinity, alignment : .leading)
                 
-                Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
-                    .frame(maxWidth : .infinity, alignment : .leading)
                 
                 HStack{
                     ForEach(0..<2){ _ in
@@ -39,33 +37,50 @@ struct Preview: View {
                             Text("Start Demo")
                                 .foregroundStyle(.white)
                                 .font(.caption)
-                                .padding(10)
+                                .padding(.horizontal, 10)
+                                .padding(.vertical, 5)
                                 .background(
                                     RoundedRectangle(cornerRadius: 20)
-                                        .fill(.gray)
+                                        .fill(.gray.opacity(0.8))
                                 )
                         }
+                        
                     }
                    
                 }
                 .frame(maxWidth: .infinity, alignment : .leading)
                 
+                Button(
+                    action : {
+                                    
+                    }){
+                        Text("Start Exercise")
+                            .foregroundStyle(.black)
+                            .font(.headline.bold())
+                            .frame(maxWidth : .infinity)
+                            .padding(20)
+                            .background(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [Color("Button1"),Color("Button2") ]),
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                            .cornerRadius(15)
+                }
+                    .padding(.vertical, 20)
+                
+                
+                Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
+                    .frame(maxWidth : .infinity, alignment : .leading)
+                
+                
                 ListViewModel().ListView()
                 
-                Button(action : {
-                    
-                }){
-                    Text("Continue")
-                        .foregroundStyle(.white)
-                        .frame(maxWidth : .infinity)
-                        .padding(20)
-                        .background(
-                            RoundedRectangle(cornerRadius : 20)
-                                .fill()
-                        )
-                }
+               
             
             }
+            .preferredColorScheme(.dark)
             .padding(.horizontal, 20)
         }
        

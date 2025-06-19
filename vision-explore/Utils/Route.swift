@@ -24,8 +24,6 @@ class Route : ObservableObject{
         return self.routes.first(where: { $0.name == name })
     }
     
-//    public func getViewFromRoute(name : String) ->  AnyView {
-//        return self.routes.first(where: { $0.name == name })?.view ?? AnyView(EmptyView())
-//    }
+
 }
 

@@ -19,26 +19,41 @@ class ListViewModel: ObservableObject {
             ForEach(Array(self.items.enumerated()), id: \.1) { index, item in
                 HStack(alignment: .top) {
                     VStack {
-                        Circle()
-                            .fill(Color.blue)
-                            .frame(width: 14, height: 14)
+                        Text("\(index + 1)")
+                            .padding(10)
+                            .background(
+                                Circle()
+                                    .fill(Color.blue)
+                                
+                            )
+                        
+                        
                         
                         if index != self.items.count - 1 {
                             Rectangle()
                                 .fill(Color.blue)
-                                .frame(width: 2, height: 50)
+                                .frame(width: 2, height: 30)
                         }
                     }
                     .padding(.top, 4)
-                    .offset(y : 25)
+                    .offset(y : 15)
                     
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(self.items[index].title)
-                            .font(.headline)
-                        Text(self.items[index].description)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .frame(maxWidth : .infinity, alignment : .leading)
+                    HStack() {
+                        Image(systemName: "photo")
+                            .resizable()
+                            .frame(width: 70, height: 50)
+                            .foregroundColor(.blue)
+                        VStack{
+//                            Text(self.items[index].title)
+//                                .font(.headline)
+//                                .frame(maxWidth : .infinity, alignment : .leading)
+                            
+                            Text(self.items[index].description)
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .frame(maxWidth : .infinity, alignment : .leading)
+                        }
+                      
 
                     }
                     .padding()
@@ -48,10 +63,8 @@ class ListViewModel: ObservableObject {
                     )
                     .padding(.leading, 8)
                 }
-                .padding(.vertical, 8)
             }
         }
-        .padding()
     }
     
     
