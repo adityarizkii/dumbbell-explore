@@ -10,84 +10,95 @@ import SwiftUI
 struct Preview: View {
 
     var body: some View {
-        GeometryReader{ geometry in
-            VStack{
-                Text("Video Demo")
-                    .font(.title.bold())
-                
-                Image("Image")
-                    .frame(maxWidth : .infinity)
-                    .padding(.vertical, 20)
-                    .background(
-                        RoundedRectangle(cornerRadius : 20)
-                            .fill(.black.opacity(0.2))
-                    )
+        ScrollView{
+            GeometryReader{ geometry in
+                VStack{
+                    Text("Video Demo")
+                        .font(.title.bold())
+                    
+                    Image("Image")
+                        .frame(maxWidth : .infinity)
+                        .padding(.vertical, 20)
+                        .background(
+                            RoundedRectangle(cornerRadius : 20)
+                                .fill(.black.opacity(0.2))
+                        )
 
 
-                Text("Bicep Curl")
-                    .font(.title.bold())
-                    .frame(maxWidth : .infinity, alignment : .leading)
-                
-                
-                HStack{
-                    ForEach(0..<2){ _ in
-                        Button(action : {
+                    Text("Bicep Curl")
+                        .font(.title.bold())
+                        .frame(maxWidth : .infinity, alignment : .leading)
+                    
+                    
+                    HStack{
+                        ForEach(0..<2){ _ in
+                            Button(action : {
+                                
+                            }){
+                                Text("Start Demo")
+                                    .foregroundStyle(.white)
+                                    .font(.caption)
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 5)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .fill(.gray.opacity(0.8))
+                                    )
+                            }
                             
-                        }){
-                            Text("Start Demo")
-                                .foregroundStyle(.white)
-                                .font(.caption)
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 5)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .fill(.gray.opacity(0.8))
-                                )
                         }
-                        
+                       
                     }
-                   
-                }
-                .frame(maxWidth: .infinity, alignment : .leading)
-                
-                Button(
-                    action : {
-                                    
-                    }){
-                        Text("Start Exercise")
-                            .foregroundStyle(.black)
-                            .font(.headline.bold())
-                            .frame(maxWidth : .infinity)
-                            .padding(20)
-                            .background(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [Color("Button1"),Color("Button2") ]),
-                                    startPoint: .leading,
-                                    endPoint: .trailing
+                    .frame(maxWidth: .infinity, alignment : .leading)
+                    
+                    
+                    
+                    Text("Seated bicep curls are a strength-training  exercise that targets your biceps, the muscles  in the front part of your upper arms. By sitting  down while doing this movement, your body stays more stable, minimizing the involvement of other muscles and allowing for better isolation of the biceps. ")
+                        .lineLimit(2)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth : .infinity, alignment : .leading)
+                        .padding(.bottom , 10)
+                    
+                    ListViewModel().ListView()
+
+                    
+                    Button(
+                        action : {
+                                        
+                        }){
+                            Text("Start Exercise")
+                                .foregroundStyle(.black)
+                                .font(.headline.bold())
+                                .frame(maxWidth : .infinity)
+                                .padding(20)
+                                .background(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [Color("Button1"),Color("Button2") ]),
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
                                 )
-                            )
-                            .cornerRadius(15)
+                                .cornerRadius(15)
+                    }
+                        .padding(.vertical, 20)
+                    
+                
                 }
-                    .padding(.vertical, 20)
+                .preferredColorScheme(.dark)
+                .padding(.horizontal, 20)
                 
-                
-                Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
-                    .frame(maxWidth : .infinity, alignment : .leading)
-                
-                
-                ListViewModel().ListView()
-                
-               
-            
             }
-            .preferredColorScheme(.dark)
-            .padding(.horizontal, 20)
+
+          
+
         }
+        
+        
        
     }
 }
 
 
 #Preview{
-    Preview()
+    HomeView()
 }
