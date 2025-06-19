@@ -95,3 +95,8 @@ struct WorkOut: View {
         )
     }
 }
+
+
+#Preview {
+    WorkOut()
+}
