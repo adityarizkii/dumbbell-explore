@@ -37,6 +37,8 @@ struct WorkOut: View {
                     repetitionData: viewModel.repetitionData
                 )
             }
+            
+            
             Color.black.opacity(0.7)
                 .mask(Rectmask())
                 .ignoresSafeArea()
@@ -48,7 +50,7 @@ struct WorkOut: View {
                         Text("Voice")
                             .foregroundStyle(.white)
                     }
-//                    .preferredColorScheme(.light)
+                    .colorScheme(.dark)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 10)
                     .background(
@@ -63,13 +65,17 @@ struct WorkOut: View {
                     .frame(width : 120)
                     
                     
+                    
                     Spacer()
-                    Image(systemName: "info.circle")
-                        .font(.largeTitle)
-                        .foregroundStyle(.gray)
-                    Image(systemName: "info.circle")
-                        .font(.largeTitle)
-                        .foregroundStyle(.gray)
+                    ZStack{
+                        Circle()
+                            .fill(Color.black)
+                            .frame(width: 50, height: 50)
+                        Image(systemName: "xmark.circle")
+                            .font(.largeTitle)
+                            .foregroundStyle(.gray)
+                    }
+                    
                     
                 }
                 
@@ -91,13 +97,13 @@ struct WorkOut: View {
                     )
                 )
                 .cornerRadius(14)
-
+                
             }
             .padding(20)
             .frame(maxWidth : .infinity, alignment : .leading)
             
             
-
+            
         }
         .background(
             .black.opacity(0.7)
