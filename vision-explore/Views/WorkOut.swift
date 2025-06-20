@@ -96,7 +96,5 @@ struct WorkOut: View {
     }
 }
 
-
 #Preview {
-    HomeView()
 }

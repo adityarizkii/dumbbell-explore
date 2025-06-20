@@ -14,7 +14,6 @@ class RouteManager : Route {
         self.addRoute(route: "home", view: HomeView())
         self.addRoute(route: "preview", view: Preview())
         self.addRoute(route: "exercise", view: WorkOut())
-        self.path.append("preview")
     }
     
     public func getViewFromRoute(path:String) -> AnyView {
