@@ -39,9 +39,14 @@ struct WorkOut: View {
             }
             
             
-            Color.black.opacity(0.7)
-                .mask(Rectmask())
-                .ignoresSafeArea()
+//            Color.black.opacity(0.7)
+//                .mask(Rectmask())
+//                .ignoresSafeArea()
+            ZStack {
+                Color.black.opacity(0.7) // Kamera / latar belakang
+                Rectmask()  // Ini sudah memuat lubang + border
+            }
+            .ignoresSafeArea()
             
             VStack{
                 
