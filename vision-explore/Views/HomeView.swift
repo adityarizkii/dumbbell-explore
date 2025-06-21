@@ -144,7 +144,7 @@ struct HomeView: View {
                 .padding()
                 .frame(maxHeight:.infinity, alignment: .bottom)
 //                .background(.red)
-                .padding(.bottom, 40)
+                .padding(.bottom, 30)
 
             }
             .navigationBarTitleDisplayMode(.inline)
@@ -171,6 +171,7 @@ struct HomeView: View {
             .navigationDestination(for: String.self) { path in
                 AnyView(routeManager.getViewFromRoute(path: path))
             }
+            
         }
       
     }
