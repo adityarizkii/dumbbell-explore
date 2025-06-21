@@ -6,6 +6,10 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             CameraPreviewView(viewModel: viewModel)
+            
+            // Black frame overlay with transparent center
+            FrameOverlayView()
+            
             if let points = viewModel.currentPoints {
                 PoseOverlayView(points: points, evaluationColor: viewModel.overlayColor)
             }
