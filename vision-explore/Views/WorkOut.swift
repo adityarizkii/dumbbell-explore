@@ -11,7 +11,6 @@ struct WorkOut: View {
     @StateObject var viewModel = PoseDetectionViewModel()
     @State var isOn = false
     var body: some View {
-        
         ZStack {
             CameraPreviewView(viewModel: viewModel)
             if let points = viewModel.currentPoints {
@@ -39,14 +38,11 @@ struct WorkOut: View {
             }
             
             
-//            Color.black.opacity(0.7)
-//                .mask(Rectmask())
-//                .ignoresSafeArea()
-            ZStack {
-                Color.black.opacity(0.7) // Kamera / latar belakang
-                Rectmask()  // Ini sudah memuat lubang + border
-            }
-            .ignoresSafeArea()
+            Color.black.opacity(0.9)
+                .mask(Rectmask())
+                .overlay(FrameOverlay())
+                .ignoresSafeArea()
+
             
             VStack{
                 
@@ -75,10 +71,11 @@ struct WorkOut: View {
                     ZStack{
                         Circle()
                             .fill(Color.black)
-                            .frame(width: 50, height: 50)
+                            .frame(width: 39, height: 39)
                         Image(systemName: "xmark.circle")
-                            .font(.largeTitle)
-                            .foregroundStyle(.gray)
+//                            .font(.largeTitle)
+                            .foregroundStyle(.white)
+                            .font(.system(size: 16, weight: .semibold, design: .default ))
                     }
                     
                     
@@ -113,6 +110,7 @@ struct WorkOut: View {
         .background(
             .black.opacity(0.7)
         )
+        .navigationBarBackButtonHidden(true)
     }
 }
 
