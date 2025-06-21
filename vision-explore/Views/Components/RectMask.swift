@@ -39,7 +39,7 @@ struct Rectmask: View {
 
             ZStack {
 
-                Color.black.opacity(0.3)
+                Color.white
 
 
                 RoundedRectangle(cornerRadius: cornerRadius)
