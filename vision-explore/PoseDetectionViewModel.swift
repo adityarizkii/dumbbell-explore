@@ -9,6 +9,7 @@ import Foundation
 import Vision
 import SwiftUI
 import CoreGraphics
+import AVFoundation
 
 class PoseDetectionViewModel: NSObject, ObservableObject {
     @Published var feedbackText: String = ""
@@ -19,6 +20,12 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
     @Published var repetitionData: [RepetitionData] = []
     
     private let sequenceHandler = VNSequenceRequestHandler()
+    
+    // voice
+    private let synthesizer = AVSpeechSynthesizer()
+    private var lastSpeechTime: Date = .distantPast
+    private let speechCooldown: TimeInterval = 4.0 // 2 detik jeda antar suara
+
     
     struct RepetitionData {
         let number: Int
@@ -67,10 +74,28 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
     private var currentDownDuration: TimeInterval = 0
     private var isAddingRepetition: Bool = false
     
+    // Position tracking for stability
+    private var initialShoulderPosition: CGPoint?
+    private var initialElbowPosition: CGPoint?
+    private let positionTolerance: CGFloat = 0.05  // 5% tolerance for movement
+    
     enum ExercisePhase {
         case none
         case lifting
         case lowering
+    }
+    
+    func speak(_ text: String) {
+        let now = Date()
+        guard now.timeIntervalSince(lastSpeechTime) >= speechCooldown else { return }
+        
+        let utterance = AVSpeechUtterance(string: text)
+        utterance.voice = AVSpeechSynthesisVoice(language: "id-ID")
+        utterance.rate = 0.5
+        synthesizer.speak(utterance)
+        
+        // Update lastSpeechTime after speaking
+        lastSpeechTime = now
     }
     
     func angleBetweenPoints(pointA: CGPoint, pointB: CGPoint, pointC: CGPoint) -> CGFloat {
@@ -123,23 +148,28 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
         
         // Update exercise phase
         if angle < curlDownAngle {
+            phaseStartTime = nil
+            
             if currentPhase != .lowering {
                 currentPhase = .lowering
-                phaseStartTime = nil  // Reset timer when starting to move
-                print("Reset timer - starting lowering phase")
+                print("Starting lowering phase")
             }
+            
             isInDownPosition = true
             isInUpPosition = false  // Reset isInUpPosition when starting to lower
             print("Phase: Lowering, isInUpPosition: \(isInUpPosition), isInDownPosition: \(isInDownPosition)")
             
+            speak("Turunkan dambel")
             return ("Turunkan dumbbell", .red)
             
         } else if angle > curlUpAngle {
+            phaseStartTime = nil
+                
             if currentPhase != .lifting {
                 currentPhase = .lifting
-                phaseStartTime = nil  // Reset timer when starting to move
-                print("Reset timer - starting lifting phase")
+                print("Starting lifting phase")
             }
+            
             isInUpPosition = true
             print("Phase: Lifting, isInUpPosition: \(isInUpPosition), isInDownPosition: \(isInDownPosition)")
             
@@ -160,6 +190,8 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                 currentUpDuration = 0
                 currentDownDuration = 0
                 isAddingRepetition = false
+                initialShoulderPosition = nil  // Reset position tracking
+                initialElbowPosition = nil
                 print("Reset timer - completed repetition")
                 
                 if repetitionCount >= maxRepetitions {
@@ -168,8 +200,10 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                     }
                 }
             }
-
+            
+            speak("Angkat dambel")
             return ("Angkat dumbbell", .yellow)
+            
         } else {
             // Start timing when position is correct (green)
             if phaseStartTime == nil {
@@ -184,10 +218,63 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                 if currentPhase == .lifting {
                     currentUpDuration = duration
                     print("Up duration: \(duration)")
+                    
+                    // Check for shoulder and elbow stability
+                    if let currentPoints = currentPoints,
+                       let shoulder = currentPoints[.rightShoulder],
+                       let elbow = currentPoints[.rightElbow] {
+                        
+                        let shoulderPoint = CGPoint(x: CGFloat(shoulder.location.x), y: CGFloat(1 - shoulder.location.y))
+                        let elbowPoint = CGPoint(x: CGFloat(elbow.location.x), y: CGFloat(1 - elbow.location.y))
+                        
+                        // Initialize positions if not set
+                        if initialShoulderPosition == nil {
+                            initialShoulderPosition = shoulderPoint
+                            initialElbowPosition = elbowPoint
+                        }
+                        
+                        // Calculate movement
+                        let shoulderMovement = calculateMovement(from: initialShoulderPosition!, to: shoulderPoint)
+                        let elbowMovement = calculateMovement(from: initialElbowPosition!, to: elbowPoint)
+                        
+                        // Check if movement exceeds tolerance
+                        if shoulderMovement > positionTolerance || elbowMovement > positionTolerance {
+                            return ("Jaga posisi bahu dan siku tetap stabil!", .yellow)
+                        } else {
+                            return ("Posisi stabil!", .green)
+                        }
+                    }
                 } else if currentPhase == .lowering {
                     currentDownDuration = duration
                     print("Down duration: \(duration)")
+                    
                     isAddingRepetition = true
+                    
+                    // Check for shoulder and elbow stability
+                    if let currentPoints = currentPoints,
+                       let shoulder = currentPoints[.rightShoulder],
+                       let elbow = currentPoints[.rightElbow] {
+                        
+                        let shoulderPoint = CGPoint(x: CGFloat(shoulder.location.x), y: CGFloat(1 - shoulder.location.y))
+                        let elbowPoint = CGPoint(x: CGFloat(elbow.location.x), y: CGFloat(1 - elbow.location.y))
+                        
+                        // Initialize positions if not set
+                        if initialShoulderPosition == nil {
+                            initialShoulderPosition = shoulderPoint
+                            initialElbowPosition = elbowPoint
+                        }
+                        
+                        // Calculate movement
+                        let shoulderMovement = calculateMovement(from: initialShoulderPosition!, to: shoulderPoint)
+                        let elbowMovement = calculateMovement(from: initialElbowPosition!, to: elbowPoint)
+                        
+                        // Check if movement exceeds tolerance
+                        if shoulderMovement > positionTolerance || elbowMovement > positionTolerance {
+                            return ("Jaga posisi bahu dan siku tetap stabil!", .yellow)
+                        } else {
+                            return ("Posisi stabil!", .green)
+                        }
+                    }
                 }
                 
                 let targetDuration = currentPhase == .lifting ? targetUpDuration : targetDownDuration
@@ -197,6 +284,12 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
             
             return ("Gerakan bagus!", .green)
         }
+    }
+    
+    private func calculateMovement(from: CGPoint, to: CGPoint) -> CGFloat {
+        let dx = to.x - from.x
+        let dy = to.y - from.y
+        return sqrt(dx * dx + dy * dy)
     }
     
     private func getTimingFeedback(duration: TimeInterval, targetDuration: TimeInterval) -> String {
@@ -225,9 +318,9 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
             self.currentPoints = points
             
             // Check if we have right arm points
-            let hasRightArm = points[.rightShoulder] != nil && 
-                             points[.rightElbow] != nil && 
-                             points[.rightWrist] != nil
+            let hasRightArm = points[.rightShoulder] != nil &&
+            points[.rightElbow] != nil &&
+            points[.rightWrist] != nil
             
             guard hasRightArm else {
                 self.feedbackText = "Tidak ada pose terdeteksi"
@@ -245,8 +338,8 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
             
             // Check for right arm detection with confidence threshold
             let rightArmDetected = rightShoulder?.confidence ?? 0 > 0.1 &&
-                                 rightElbow?.confidence ?? 0 > 0.1 &&
-                                 rightWrist?.confidence ?? 0 > 0.1
+            rightElbow?.confidence ?? 0 > 0.1 &&
+            rightWrist?.confidence ?? 0 > 0.1
             
             guard rightArmDetected else {
                 self.feedbackText = "Pose tidak jelas"
