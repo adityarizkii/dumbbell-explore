@@ -44,8 +44,6 @@ struct GuidedLineView: View {
             let startAngle = Angle(radians: atan2(dy, dx))
             let endAngle = Angle(degrees: startAngle.degrees + 135)
             
-            
-            // ✅ Calculate endpoint manually using polar math
             let endRadians = endAngle.radians
             let endPoint = CGPoint(
                 x: pointA.x + radius * cos(endRadians),
@@ -223,7 +221,7 @@ struct GuidedLineView: View {
                             
                     }
                     .frame(width: 100, height: 100)
-                    .position(animatedMovingPoint) // ✅ Only apply position here
+                    .position(animatedMovingPoint) //
                     .onAppear {
                         points = [pointB, endPoint]
                         currentIndex = 0
