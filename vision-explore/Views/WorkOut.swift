@@ -15,11 +15,13 @@ struct WorkOut: View {
     var wristPoint: CGPoint?
     @State var isOn = false
     var body: some View {
+        @State var workoutViewModel : WorkoutViewModel = .init(viewModel : viewModel)
+
         ZStack {
             CameraPreviewView(viewModel: viewModel)
-            if let points = viewModel.currentPoints {
-                PoseOverlayView(points: points, evaluationColor: viewModel.overlayColor)
-            }
+
+            workoutViewModel.evaluationLayer()
+            
             VStack {
                 Text(viewModel.feedbackText)
                     .padding()
@@ -29,27 +31,12 @@ struct WorkOut: View {
                     .padding()
             }
             
-            if viewModel.showCompletionAlert {
-                Color.black.opacity(0.5)
-                    .edgesIgnoringSafeArea(.all)
-                
-                CompletionAlertView(
-                    onReset: {
-                        viewModel.resetExercise()
-                    },
-                    repetitionData: viewModel.repetitionData
-                )
-            }
-            
-            
             Color.black.opacity(0.9)
                 .mask(Rectmask())
                 .overlay(FrameOverlay())
                 .ignoresSafeArea()
 
-            
             VStack{
-                
                 HStack{
                     Toggle(isOn : $isOn){
                         Text("Voice")
@@ -69,29 +56,21 @@ struct WorkOut: View {
                     ))
                     .frame(width : 120)
                     
-                    
-                    
                     Spacer()
                     ZStack{
                         Circle()
                             .fill(Color.black)
                             .frame(width: 39, height: 39)
                         Image(systemName: "xmark.circle")
-//                            .font(.largeTitle)
                             .foregroundStyle(.white)
                             .font(.system(size: 16, weight: .semibold, design: .default ))
                     }
                     .onTapGesture {
-                        if routeManager != nil {
-                            routeManager.pop()
-                        }
+                        routeManager.pop()
+                        
                     }
                     
-                    
                 }
-                
-                
-                
                 
                 Spacer()
                 Button{} label: {
@@ -113,13 +92,7 @@ struct WorkOut: View {
             .padding(20)
             .frame(maxWidth : .infinity, alignment : .leading)
             
-            if let firstJoint = viewModel.capturedJoints.first {
-                GuidedLineView(
-//                    shoulderPoint: firstJoint.shoulder,
-                    wristPoint: firstJoint.wrist,
-                    elbowPoint: firstJoint.elbow
-                )
-            }
+            workoutViewModel.handleguidanceLayer()
             
         }
         .background(

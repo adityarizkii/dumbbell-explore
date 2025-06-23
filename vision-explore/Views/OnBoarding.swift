@@ -17,7 +17,6 @@ struct OnBoarding : View {
     var body: some View {
         VStack{
             Spacer()
-            
             Image(systemName : "dumbbell")
                 .font(.system(size : 120))
                 .padding(50)
@@ -25,23 +24,19 @@ struct OnBoarding : View {
                     Circle()
                         .fill(.gray.opacity(0.2))
                 )
-            
             Spacer()
             
             Text(OBContent[index].title)
                 .font(.title3.bold())
                 .frame(maxWidth : .infinity, alignment : .leading)
-            
             Text(OBContent[index].content)
                 .font(.caption)
                 .frame(maxWidth : .infinity, alignment : .leading)
-            
             Spacer()
 
             Button(action: {
                 withAnimation(.default){
                     next()
-
                 }
             }) {
                 Text("Get Started")
@@ -52,7 +47,6 @@ struct OnBoarding : View {
                     .background(Color.blue)
                     .cornerRadius(10)
             }
-
         }
         .preferredColorScheme(.dark)
         .padding(20)

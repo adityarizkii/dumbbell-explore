@@ -20,7 +20,7 @@ class RouteManager : Route {
     }
     
     public func getViewFromRoute(path:String) -> AnyView {
-        return self.routes.first(where: { $0.name == path })?.view ?? AnyView(HomeView())
+        return self.routes.first(where: { $0.name == path })?.view ?? AnyView(WorkOut())
     }
     
     public func pop(){

@@ -1,13 +1,13 @@
 //
-//  ListViewModel.swift
+//  PreviewViewModel.swift
 //  vision-explore
 //
-//  Created by Muhammad Chandra Ramadhan on 13/06/25.
+//  Created by Muhammad Chandra Ramadhan on 23/06/25.
 //
 
 import SwiftUI
 
-class ListViewModel: ObservableObject {
+class PreviewViewModel: ObservableObject {
     @Published var items: [Step] = [
         Step(title: "Step 1", description: "Description 1"),
         Step(title: "Step 2", description: "Description 2"),
@@ -67,10 +67,25 @@ class ListViewModel: ObservableObject {
         }
     }
     
-    
-}
-
-
-#Preview{
-    Preview()
+    func render() -> some View{
+        HStack{
+            ForEach(0..<2){ _ in
+                Button(action : {
+                    
+                }){
+                    Text("Start Demo")
+                        .foregroundStyle(.white)
+                        .font(.caption)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                        .background(
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(.gray.opacity(0.8))
+                        )
+                }
+                
+            }
+           
+        }
+    }
 }

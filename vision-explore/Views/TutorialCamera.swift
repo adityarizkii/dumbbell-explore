@@ -13,7 +13,6 @@ struct TutorialCamera: View {
     private let totalPages = 3
 
     var body: some View {
-        NavigationStack {
             VStack(spacing: 24) {
                 ZStack{
                     VStack{
@@ -98,8 +97,7 @@ struct TutorialCamera: View {
             }
 
         }
-            }
-
+            
     // MARK: - Content Helpers
     func buttonText(for page: Int) -> String {
         switch page {

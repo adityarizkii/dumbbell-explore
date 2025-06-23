@@ -11,12 +11,13 @@ struct Preview: View {
     @EnvironmentObject var routeManager:RouteManager
     
     var body: some View {
+        @State var previewViewModel:PreviewViewModel = PreviewViewModel()
+
         ScrollView{
             GeometryReader{ geometry in
                 VStack{
                     Text("Video Demo")
                         .font(.title.bold())
-                    
                     Image("Image")
                         .frame(maxWidth : .infinity)
                         .padding(.vertical, 20)
@@ -25,34 +26,13 @@ struct Preview: View {
                                 .fill(.black.opacity(0.2))
                         )
 
-
                     Text("Bicep Curl")
                         .font(.title.bold())
                         .frame(maxWidth : .infinity, alignment : .leading)
                     
-                    
-                    HStack{
-                        ForEach(0..<2){ _ in
-                            Button(action : {
-                                
-                            }){
-                                Text("Start Demo")
-                                    .foregroundStyle(.white)
-                                    .font(.caption)
-                                    .padding(.horizontal, 10)
-                                    .padding(.vertical, 5)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 20)
-                                            .fill(.gray.opacity(0.8))
-                                    )
-                            }
-                            
-                        }
-                       
-                    }
-                    .frame(maxWidth: .infinity, alignment : .leading)
-                    
-                    
+                    previewViewModel.render()
+                        .frame(maxWidth: .infinity, alignment : .leading)
+
                     
                     Text("Seated bicep curls are a strength-training  exercise that targets your biceps, the muscles  in the front part of your upper arms. By sitting  down while doing this movement, your body stays more stable, minimizing the involvement of other muscles and allowing for better isolation of the biceps. ")
                         .lineLimit(2)
@@ -60,9 +40,8 @@ struct Preview: View {
                         .frame(maxWidth : .infinity, alignment : .leading)
                         .padding(.bottom , 10)
                     
-                    ListViewModel().ListView()
+                    previewViewModel.ListView()
 
-                    
                     Button(
                         action : {
                             routeManager.push(path : "firstguidance")
@@ -82,21 +61,13 @@ struct Preview: View {
                                 .cornerRadius(15)
                     }
                         .padding(.vertical, 20)
-                    
                 
                 }
                 .preferredColorScheme(.dark)
                 .padding(.horizontal, 20)
-                
             }
-
-          
-
         }
         .frame(maxWidth : .infinity, maxHeight : .infinity)
-        
-        
-       
     }
 }
 
