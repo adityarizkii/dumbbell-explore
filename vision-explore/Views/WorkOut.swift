@@ -8,10 +8,13 @@
 import SwiftUI
 
 struct WorkOut: View {
+    @EnvironmentObject var routeManager: RouteManager
     @StateObject var viewModel = PoseDetectionViewModel()
+    var shoulderPoint: CGPoint?
+    var elbowPoint: CGPoint?
+    var wristPoint: CGPoint?
     @State var isOn = false
     var body: some View {
-        
         ZStack {
             CameraPreviewView(viewModel: viewModel)
             if let points = viewModel.currentPoints {
@@ -37,9 +40,13 @@ struct WorkOut: View {
                     repetitionData: viewModel.repetitionData
                 )
             }
-            Color.black.opacity(0.7)
+            
+            
+            Color.black.opacity(0.9)
                 .mask(Rectmask())
+                .overlay(FrameOverlay())
                 .ignoresSafeArea()
+
             
             VStack{
                 
@@ -48,7 +55,7 @@ struct WorkOut: View {
                         Text("Voice")
                             .foregroundStyle(.white)
                     }
-//                    .preferredColorScheme(.light)
+                    .colorScheme(.dark)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 10)
                     .background(
@@ -63,13 +70,23 @@ struct WorkOut: View {
                     .frame(width : 120)
                     
                     
+                    
                     Spacer()
-                    Image(systemName: "info.circle")
-                        .font(.largeTitle)
-                        .foregroundStyle(.gray)
-                    Image(systemName: "info.circle")
-                        .font(.largeTitle)
-                        .foregroundStyle(.gray)
+                    ZStack{
+                        Circle()
+                            .fill(Color.black)
+                            .frame(width: 39, height: 39)
+                        Image(systemName: "xmark.circle")
+//                            .font(.largeTitle)
+                            .foregroundStyle(.white)
+                            .font(.system(size: 16, weight: .semibold, design: .default ))
+                    }
+                    .onTapGesture {
+                        if routeManager != nil {
+                            routeManager.pop()
+                        }
+                    }
+                    
                     
                 }
                 
@@ -91,20 +108,26 @@ struct WorkOut: View {
                     )
                 )
                 .cornerRadius(14)
-
+                
             }
             .padding(20)
             .frame(maxWidth : .infinity, alignment : .leading)
             
+            if let firstJoint = viewModel.capturedJoints.first {
+                GuidedLineView(
+//                    shoulderPoint: firstJoint.shoulder,
+                    wristPoint: firstJoint.wrist,
+                    elbowPoint: firstJoint.elbow
+                )
+            }
             
-
         }
         .background(
             .black.opacity(0.7)
         )
+        .navigationBarBackButtonHidden(true)
     }
 }
-
 
 
 #Preview {

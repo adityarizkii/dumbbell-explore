@@ -9,7 +9,7 @@ import SwiftUI
 
 
 struct HomeView: View {
-    @StateObject var routeManager = RouteManager()
+    @EnvironmentObject var routeManager: RouteManager
     
     var body: some View {
         NavigationStack(path : $routeManager.path){
@@ -99,7 +99,7 @@ struct HomeView: View {
                                             VStack{
                                                 Spacer()
                                                 Button {
-                                                    routeManager.push(path : "exercise")
+                                                    routeManager.push(path : "preview")
                                                 } label: {
                                                     Text("Start Exercise")
                                                         .foregroundStyle(Color.black)

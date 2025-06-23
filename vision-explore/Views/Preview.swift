@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct Preview: View {
-
+    @EnvironmentObject var routeManager:RouteManager
+    
     var body: some View {
         ScrollView{
             GeometryReader{ geometry in
@@ -64,7 +65,7 @@ struct Preview: View {
                     
                     Button(
                         action : {
-                                        
+                            routeManager.push(path : "workout")
                         }){
                             Text("Start Exercise")
                                 .foregroundStyle(.black)
@@ -92,6 +93,7 @@ struct Preview: View {
           
 
         }
+        .frame(maxWidth : .infinity, maxHeight : .infinity)
         
         
        

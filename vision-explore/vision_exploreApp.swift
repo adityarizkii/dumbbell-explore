@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct vision_exploreApp: App {
+    @StateObject var routeManager = RouteManager()
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(routeManager)
         }
     }
 }
