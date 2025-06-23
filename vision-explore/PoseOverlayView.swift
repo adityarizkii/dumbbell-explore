@@ -16,9 +16,9 @@ struct PoseOverlayView: View {
     let jointPairs: [(VNHumanBodyPoseObservation.JointName, VNHumanBodyPoseObservation.JointName)] = [
         (.rightShoulder, .rightElbow),
         (.rightElbow, .rightWrist),
-        (.leftShoulder, .leftElbow),
-        (.leftElbow, .leftWrist),
-        (.leftShoulder, .rightShoulder),
+//        (.leftShoulder, .leftElbow),
+//        (.leftElbow, .leftWrist),
+//        (.leftShoulder, .rightShoulder),
 //        (.leftHip, .rightHip),
 //        (.leftShoulder, .leftHip),
 //        (.rightShoulder, .rightHip)
@@ -44,7 +44,7 @@ struct PoseOverlayView: View {
                             path.move(to: CGPoint(x: rotatedX1 * geometry.size.width, y: rotatedY1 * geometry.size.height))
                             path.addLine(to: CGPoint(x: rotatedX2 * geometry.size.width, y: rotatedY2 * geometry.size.height))
                         }
-                        .stroke(evaluationColor, lineWidth: 2)
+                        .stroke(evaluationColor, lineWidth: 5)
                     }
                 }
 
@@ -58,7 +58,7 @@ struct PoseOverlayView: View {
 
                         Circle()
                             .fill(Color.blue.opacity(0.7))
-                            .frame(width: 10, height: 10)
+                            .frame(width: 15, height: 15)
                             .position(
                                 x: rotatedX * geometry.size.width,
                                 y: rotatedY * geometry.size.height
