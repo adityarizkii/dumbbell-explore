@@ -10,4 +10,5 @@ struct Exercise : Hashable{
     var image : String
     var path : String
     var description : String
+    var muscles : [String]
 }

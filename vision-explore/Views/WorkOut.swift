@@ -48,20 +48,28 @@ struct WorkOut: View {
                         Text("Voice")
                             .foregroundStyle(.white)
                     }
+//                    .preferredColorScheme(.light)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 10)
                     .background(
                         RoundedRectangle(cornerRadius : 30)
                             .fill(.black.opacity(0.5))
                     )
+                    .tint(LinearGradient(
+                        gradient: Gradient(colors: [Color("Button1"),Color("Button2") ]),
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    ))
                     .frame(width : 120)
                     
                     
                     Spacer()
                     Image(systemName: "info.circle")
                         .font(.largeTitle)
+                        .foregroundStyle(.gray)
                     Image(systemName: "info.circle")
                         .font(.largeTitle)
+                        .foregroundStyle(.gray)
                     
                 }
                 
@@ -69,19 +77,20 @@ struct WorkOut: View {
                 
                 
                 Spacer()
-                Button(action : {
-                    
-                }){
-                    Text("Start")
-                        .font(.title)
-                        .foregroundColor(.white)
-                        .padding(.vertical, 10)
-                        .frame(maxWidth : .infinity)
-                        .background(
-                            RoundedRectangle(cornerRadius : 20)
-                                .fill(Color.blue)
-                        )
+                Button{} label: {
+                    Text("Start Your First Move")
+                        .foregroundStyle(.black)
+                        .font(.system(size: 17, weight: .semibold, design: .default ))
                 }
+                .frame(width: 343, height: 50)
+                .background(
+                    LinearGradient(
+                        gradient: Gradient(colors: [Color("Button1"),Color("Button2") ]),
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+                .cornerRadius(14)
 
             }
             .padding(20)
@@ -96,5 +105,8 @@ struct WorkOut: View {
     }
 }
 
+
+
 #Preview {
+    WorkOut()
 }

@@ -14,136 +14,40 @@ struct HomeView: View {
     var body: some View {
         NavigationStack(path : $routeManager.path){
             ZStack {
-                Color(.black)
-                LinearGradient(
-                    gradient: Gradient(stops: [
-                        .init(color: Color("neon"), location: 0.0),
-                        .init(color: .black, location: 0.3),
-                        .init(color: .black, location: 0.7),
-                        .init(color: Color("neon"), location: 1.0)
-                    ]),
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .opacity(1)
+                ZStack{
+                    HStack{
+                        Spacer()
+                        Image("homeImage")
+                            .resizable()
+                            .frame(width: 350, height: 400)
+//                            .background(Color.gray.opacity(0.3))
+                    }
+                    .padding(.top, 80)
+                    
+                    VStack(alignment:.leading, spacing:10){
+                        Text("Start Your\nPosture Journey")
+                            .bold()
+                            .font(.system(size: 24, weight: .bold, design: .default))
+                        
+                        Text("Track your form, improve your \nposture, and build\nconfidence—one rep at a time.")
+                            .font(.system(size: 14, weight: .light, design: .default))
+                    }
+                    .padding(.top, 100)
+                    .padding(.leading, 30)
+                    .frame(maxWidth: .infinity,maxHeight: 400, alignment: .topLeading)
+
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 
                 
                 VStack{
-                    Text("Workout")
-                        .foregroundStyle(.white)
-                        .font(.system(size: 24, weight: .bold, design: .default))
-                    
-                    
-                    VStack{
-                        HStack{
-                            Spacer()
-                            ZStack {
-                                
-                                Circle()
-                                    .stroke(Color.gray.opacity(0.3), lineWidth: 10)
-                                
-                                Circle()
-                                    .trim(from: 0.0, to: 0.8)
-                                    .stroke(
-                                        Color("Button1"),
-                                        style: StrokeStyle(lineWidth: 10, lineCap: .round)
-                                    )
-                                    .rotationEffect(.degrees(-90))
-
-                                Text("\(Int(0.8 * 100))%")
-                                    .font(.system(size: 20, weight: .bold))
-                                    .foregroundColor(.white)
-                            }
-                            .frame(width: 84, height: 84)
-
-                            Spacer()
-                            VStack(alignment: .leading, spacing: 5){
-                                Text("Workout Summary")
-                                    .font(.system(size: 20, weight: .bold, design: .default))
-                                    .foregroundColor(.white)
-                                Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit")
-                                    .foregroundColor(.white)
-                            }
-                            Spacer()
-                        }
-                        .padding()
-
-                        HStack{
-                            HStack(spacing:0){
-                                Text("Rep: ")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 12, weight: .bold, design: .default))
-                                Text("3")
-                                    .foregroundColor(Color("Button1"))
-                                    .font(.system(size: 12, weight: .bold, design: .default))
-                            }
-                            .padding()
-                            .frame(maxHeight:35)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 15)
-                                    .stroke(Color.gray, lineWidth: 0.5)
-                            )
-
-                            HStack(spacing:0){
-                                Text("Set: ")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 12, weight: .bold, design: .default))
-                                Text("3")
-                                    .foregroundColor(Color("Button1"))
-                                    .font(.system(size: 12, weight: .bold, design: .default))
-                            }
-                            .padding()
-                            .frame(maxHeight:35)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 15)
-                                    .stroke(Color.gray, lineWidth: 0.5)
-                            )
-                            
-                            HStack(spacing:0){
-                                Text("Time: ")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 12, weight: .bold, design: .default))
-                                Text("30s")
-                                    .foregroundColor(Color("Button1"))
-                                    .font(.system(size: 12, weight: .bold, design: .default))
-                            }
-                            .padding()
-                            .frame(maxHeight:35)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 15)
-                                    .stroke(Color.gray, lineWidth: 0.5)
-                            )
-                            
-                            Button {
-                            } label: {
-                                Text("Button")
-                                    .foregroundStyle(Color.black)
-                                    .font(.system(size: 17, weight: .semibold, design: .default))
-                                    .padding(.horizontal)
-                                
-                            }
-                            .frame( maxHeight: 35)
-                            .background(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [Color("Button1"),Color("Button2") ]),
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                            .cornerRadius(15)
-                            
-                        }
-                        .padding(.vertical)
+                    Text("Select Exercises")
+                        .font(.headline)
+                        .foregroundColor(.white)
                         
-                    }
-                    .frame(maxWidth: 350, maxHeight: 212)
-                    .background(Color("darkgreen"))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 15)
-                            .stroke(Color.gray, lineWidth: 1)
-                    )
-                    .cornerRadius(14)
-                    .padding(.bottom, 29)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal)
+
                     
                     ForEach(exercises, id: \.name) { exercise in
                         VStack(spacing: 21){
@@ -152,36 +56,77 @@ struct HomeView: View {
                                     VStack(alignment: .leading, spacing: 5){
                                         Text(exercise.name)
                                             .foregroundColor(.white)
-                                            .font(.system(size: 12, weight: .bold, design: .default))
+                                            .font(.body)
+                                            .font(.system(size: 17, weight: .bold, design: .default))
                                         Text(exercise.description)
                                             .foregroundColor(.white)
-                                            .font(.system(size: 12, design: .default))
+                                            .font(.system(size: 12,weight: .light, design: .default))
                                             .padding(.bottom, 5)
-                                        
-                                        Button {
-                                            routeManager.push(path : "preview")
-                                        } label: {
-                                            Text("Button")
-                                                .foregroundStyle(Color.black)
-                                                .font(.system(size: 17, weight: .semibold, design: .default))
-                                                .padding(.horizontal)
+
+                                        HStack{
+                                            ForEach(exercise.muscles, id: \.self){index in
+                                                Text(index)
+                                                    .font(.system(size: 10, weight: .light)) // optional styling
+                                                    .overlay(
+                                                        LinearGradient(
+                                                            colors: [Color("Button1"),Color("Button2")],
+                                                            startPoint: .leading,
+                                                            endPoint: .trailing
+                                                        )
+                                                    )
+                                                    .mask(
+                                                        Text(index)
+                                                            .font(.system(size: 10, weight: .light))
+                                                    )
+                                                    .font(.system(size: 10, weight: .light, design: .default))
+                                                    .padding(.horizontal, 10)
+                                                    .padding(.vertical,3)
+                                                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(style: StrokeStyle(lineWidth: 0.5))
+                                                        .foregroundColor(.gray),alignment: .center)
                                             
+                                            }
                                         }
-                                        .frame( maxHeight: 25)
-                                        .background(
-                                            LinearGradient(
-                                                gradient: Gradient(colors: [Color("Button1"),Color("Button2") ]),
-                                                startPoint: .leading,
-                                                endPoint: .trailing
-                                            )
-                                        )
-                                        .cornerRadius(15)
+                                        
+                                        
                                         
                                     }
-                                    Image(exercise.image)
-                                        .resizable()
-                                        .frame(width: 150, height: 150)
+                                    Spacer()
+                                    VStack(alignment: .trailing){
+                                        ZStack{
+                                            Image(exercise.image)
+                                                .resizable()
+                                                .frame(width: 150, height: 150)
+                                            VStack{
+                                                Spacer()
+                                                Button {
+                                                    routeManager.push(path : "exercise")
+                                                } label: {
+                                                    Text("Start Exercise")
+                                                        .foregroundStyle(Color.black)
+                                                        .font(.system(size: 15, weight: .semibold, design: .default))
+                                                        .padding(.horizontal)
+                                                    
+                                                }
+                                                .frame( maxHeight: 30)
+                                                .background(
+                                                    LinearGradient(
+                                                        gradient: Gradient(colors: [Color("Button1"),Color("Button2") ]),
+                                                        startPoint: .leading,
+                                                        endPoint: .trailing
+                                                    )
+                                                )
+                                                .cornerRadius(10)
+                                                .padding(.bottom,15)
+                                            }
+                                            .frame(maxHeight: .infinity)
+                                            
+                                        }
+                                    }
+                                    
+                                    
                                 }
+                                .frame(maxWidth: .infinity)
+//                                .background(.gray.opacity(0.2))
                                 
                             }
                             .frame(maxWidth: .infinity, maxHeight: 132)
@@ -197,14 +142,37 @@ struct HomeView: View {
                         }
                     }
                 }
-                .padding(.horizontal, 20)
+
+                .padding()
+                .frame(maxHeight:.infinity, alignment: .bottom)
+//                .background(.red)
+                .padding(.bottom, 40)
 
             }
-            .ignoresSafeArea(.all)
-            .navigationDestination(for : String.self){ path in
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("Select Workout")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                }
+            }
+            .navigationBarTitleDisplayMode(.large)
+            .foregroundStyle(.white)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(
+                RadialGradient(
+                    gradient: Gradient(colors: [Color("neon"), .darkBg]),
+                    center: .top,
+                    startRadius: -10,
+                    endRadius: 150
+                )
+                .scaleEffect(x: 1.5, y: 1.0)
+            )
+            .ignoresSafeArea()
+            .navigationDestination(for: String.self) { path in
                 AnyView(routeManager.getViewFromRoute(path: path))
             }
-
         }
       
     }
