@@ -12,7 +12,6 @@ struct PoseOverlayView: View {
     let points: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]
     let evaluationColor: Color
 
-    // Only include right arm joint pairs
     let jointPairs: [(VNHumanBodyPoseObservation.JointName, VNHumanBodyPoseObservation.JointName)] = [
         (.rightShoulder, .rightElbow),
         (.rightElbow, .rightWrist),
@@ -25,6 +24,8 @@ struct PoseOverlayView: View {
     ]
 
     var body: some View {
+        
+        
         GeometryReader { geometry in
             ZStack {
 
@@ -33,7 +34,7 @@ struct PoseOverlayView: View {
                     let jointB = pair.1
 
                     if let pointA = points[jointA], let pointB = points[jointB],
-                       pointA.confidence > 0.1, pointB.confidence > 0.1 {
+                       pointA.confidence > 0.05, pointB.confidence > 0.05 {
 
                         Path { path in
                             let rotatedX1 = 1 - pointA.location.y
@@ -44,25 +45,27 @@ struct PoseOverlayView: View {
                             path.move(to: CGPoint(x: rotatedX1 * geometry.size.width, y: rotatedY1 * geometry.size.height))
                             path.addLine(to: CGPoint(x: rotatedX2 * geometry.size.width, y: rotatedY2 * geometry.size.height))
                         }
-                        .stroke(evaluationColor, lineWidth: 2)
+                        .stroke(evaluationColor, lineWidth: 8)
                     }
                 }
 
-                // Draw joint points (only right arm)
                 ForEach([VNHumanBodyPoseObservation.JointName.rightShoulder,
                         .rightElbow,
                         .rightWrist], id: \.self) { key in
                     if let point = points[key], point.confidence > 0.1 {
                         let rotatedX = 1 - point.location.y
                         let rotatedY = point.location.x
-
+                      
                         Circle()
                             .fill(Color.blue.opacity(0.7))
-                            .frame(width: 10, height: 10)
+                            .frame(width: 25, height: 25)
                             .position(
                                 x: rotatedX * geometry.size.width,
                                 y: rotatedY * geometry.size.height
                             )
+                            .onChange(of: point.confidence) { newValue in
+                                print("Confidence changed to: \(newValue)")
+                            }
                     }
                 }
             }

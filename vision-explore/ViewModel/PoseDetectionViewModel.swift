@@ -13,7 +13,7 @@ import CoreGraphics
 class PoseDetectionViewModel: NSObject, ObservableObject {
     @Published var feedbackText: String = ""
     @Published var currentPoints: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]? = nil
-    @Published var overlayColor: Color = .gray
+    @Published var overlayColor: Color = Color("StrokeColor")
     @Published var showCompletionAlert: Bool = false
     @Published var repetitionCount: Int = 0
     @Published var repetitionData: [RepetitionData] = []
@@ -126,11 +126,11 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
             if currentPhase != .lowering {
                 currentPhase = .lowering
                 phaseStartTime = nil  // Reset timer when starting to move
-                print("Reset timer - starting lowering phase")
+                //print("Reset timer - starting lowering phase")
             }
             isInDownPosition = true
             isInUpPosition = false  // Reset isInUpPosition when starting to lower
-            print("Phase: Lowering, isInUpPosition: \(isInUpPosition), isInDownPosition: \(isInDownPosition)")
+            //print("Phase: Lowering, isInUpPosition: \(isInUpPosition), isInDownPosition: \(isInDownPosition)")
             
             return ("Turunkan dumbbell", .red)
             
@@ -160,7 +160,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                 currentUpDuration = 0
                 currentDownDuration = 0
                 isAddingRepetition = false
-                print("Reset timer - completed repetition")
+                //print("Reset timer - completed repetition")
                 
                 if repetitionCount >= maxRepetitions {
                     DispatchQueue.main.async {
@@ -174,7 +174,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
             // Start timing when position is correct (green)
             if phaseStartTime == nil {
                 phaseStartTime = currentTime
-                print("Start timing - position is correct")
+                //print("Start timing - position is correct")
             }
             
             if let startTime = phaseStartTime {
@@ -183,10 +183,10 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                 // Update current duration based on phase
                 if currentPhase == .lifting {
                     currentUpDuration = duration
-                    print("Up duration: \(duration)")
+                    //print("Up duration: \(duration)")
                 } else if currentPhase == .lowering {
                     currentDownDuration = duration
-                    print("Down duration: \(duration)")
+                    //print("Down duration: \(duration)")
                     isAddingRepetition = true
                 }
                 
@@ -224,8 +224,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
         DispatchQueue.main.async {
             self.currentPoints = points
             
-            // Check if we have right arm points
-            let hasRightArm = points[.rightShoulder] != nil && 
+            let hasRightArm = points[.rightShoulder] != nil &&
                              points[.rightElbow] != nil && 
                              points[.rightWrist] != nil
             
@@ -236,17 +235,15 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                 return
             }
             
-            // Get right arm points
             let rightShoulder = points[.rightShoulder]
             let rightElbow = points[.rightElbow]
             let rightWrist = points[.rightWrist]
             
             // print("Confident: \(rightShoulder?.confidence ?? 0), \(rightElbow?.confidence ?? 0), \(rightWrist?.confidence ?? 0)")
             
-            // Check for right arm detection with confidence threshold
-            let rightArmDetected = rightShoulder?.confidence ?? 0 > 0.1 &&
-                                 rightElbow?.confidence ?? 0 > 0.1 &&
-                                 rightWrist?.confidence ?? 0 > 0.1
+            let rightArmDetected = rightShoulder?.confidence ?? 0 > 0.05 &&
+                                 rightElbow?.confidence ?? 0 > 0.05 &&
+                                 rightWrist?.confidence ?? 0 > 0.05
             
             guard rightArmDetected else {
                 self.feedbackText = "Pose tidak jelas"
@@ -262,7 +259,6 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                let rightElbowPt = rightElbow.map(convertPoint),
                let rightShoulderPt = rightShoulder.map(convertPoint) {
                 let rightAngle = self.angleBetweenPoints(pointA: rightWristPt, pointB: rightElbowPt, pointC: rightShoulderPt)
-                // print("Right Angle: \(rightAngle)")
                 
                 let (feedback, color) = self.evaluateDumbbellCurl(angle: rightAngle)
                 self.feedbackText = "\(feedback) (\(Int(rightAngle))°) - Rep: \(self.repetitionCount)/\(self.maxRepetitions)"
