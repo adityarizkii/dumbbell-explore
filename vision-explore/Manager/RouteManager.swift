@@ -13,11 +13,14 @@ class RouteManager : Route {
         
         self.addRoute(route: "home", view: HomeView())
         self.addRoute(route: "preview", view: Preview())
+        self.addRoute(route: "firstguidance", view: SetupCameraView())
+        self.addRoute(route: "guidance", view: TutorialCamera())
         self.addRoute(route: "workout", view: WorkOut())
+
     }
     
     public func getViewFromRoute(path:String) -> AnyView {
-        return self.routes.first(where: { $0.name == path })?.view ?? AnyView(EmptyView())
+        return self.routes.first(where: { $0.name == path })?.view ?? AnyView(HomeView())
     }
     
     public func pop(){

@@ -239,4 +239,6 @@ struct GuidedLineView: View {
 
 #Preview {
     GuidedLineView()
+        .environmentObject(RouteManager())
+
 }

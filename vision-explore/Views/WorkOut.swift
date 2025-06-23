@@ -132,4 +132,5 @@ struct WorkOut: View {
 
 #Preview {
     WorkOut()
+        .environmentObject(RouteManager())
 }

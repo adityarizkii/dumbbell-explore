@@ -64,4 +64,5 @@ struct OnBoarding : View {
 
 #Preview{
     OnBoarding()
+        .environmentObject(RouteManager())
 }

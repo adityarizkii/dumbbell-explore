@@ -65,7 +65,7 @@ struct Preview: View {
                     
                     Button(
                         action : {
-                            routeManager.push(path : "workout")
+                            routeManager.push(path : "firstguidance")
                         }){
                             Text("Start Exercise")
                                 .foregroundStyle(.black)
@@ -103,4 +103,5 @@ struct Preview: View {
 
 #Preview{
     HomeView()
+        .environmentObject(RouteManager())
 }

@@ -25,7 +25,6 @@ struct CountDownView: View {
                     .opacity(showReady ? 0.0 : 0.3)
                     .foregroundColor(Color("Button1"))
                 
-                // Smooth animated progress ring
                 Circle()
                     .trim(from: 0.0, to: progress)
                     .stroke(
@@ -89,4 +88,5 @@ struct CountDownView: View {
 
 #Preview {
     CountDownView()
+        .environmentObject(RouteManager())
 }

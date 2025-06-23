@@ -8,6 +8,7 @@ import SwiftUI
 
 struct TutorialCamera: View {
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var routeManager: RouteManager
     @State private var currentPage = 0
     private let totalPages = 3
 
@@ -28,10 +29,9 @@ struct TutorialCamera: View {
                     .ignoresSafeArea()
 
                     VStack{
-                        // Page Indicator
+                        
                         PageIndicator(currentPage: currentPage, totalPages: totalPages)
 
-                        // Title & Subtitle
                         VStack(spacing: 12) {
                             Text(pageTitle(for: currentPage))
                                 .font(.system(size: 22, weight: .bold))
@@ -55,6 +55,7 @@ struct TutorialCamera: View {
                                 if currentPage < totalPages - 1 {
                                     currentPage += 1
                                 } else {
+                                    routeManager.push(path : "workout")
                                     print("Start real-time guiding")
                                 }
                             }
@@ -167,4 +168,5 @@ struct PageIndicator: View {
 
 #Preview {
     TutorialCamera()
+        .environmentObject(RouteManager())
 }

@@ -62,4 +62,5 @@ struct FinishView: View {
 
 #Preview {
     FinishView()
+        .environmentObject(RouteManager())
 }

@@ -131,6 +131,7 @@ struct TestSound: View {
 
 #Preview {
     TestSound()
+        .environmentObject(RouteManager())
 }
 
 

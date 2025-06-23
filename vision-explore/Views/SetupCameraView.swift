@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct SetupCameraView: View {
+    @EnvironmentObject var routeManager : RouteManager
     var body: some View {
         NavigationStack{
-            
             
             VStack{
                 Spacer()
@@ -29,8 +29,13 @@ struct SetupCameraView: View {
                     Text("Skip Guding")
                         .font(.subheadline)
                         .foregroundStyle(.white)
+                        .onTapGesture{
+                            routeManager.push(path : "workout")
+                        }
                     
-                    Button{} label: {
+                    Button{
+                        routeManager.push(path : "guidance")
+                    } label: {
                         Text("Start Guiding")
                             .font(.body)
                             .bold()
@@ -56,4 +61,5 @@ struct SetupCameraView: View {
 
 #Preview {
     SetupCameraView()
+        .environmentObject(RouteManager())
 }
