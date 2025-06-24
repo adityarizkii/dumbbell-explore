@@ -7,10 +7,10 @@
 import SwiftUI
 
 struct FrameOverlayAnimation: View {
-    @State private var count: Int = 3
+    @State private var count: Int = 1
     @State private var progress: Double = 0.0
     @State private var showReady = false
-    let totalCount = 3
+    let totalCount = 1
     
     var body: some View {
         GeometryReader { geo in
@@ -54,7 +54,7 @@ struct FrameOverlayAnimation: View {
     func startCountdown() {
         // Gradually update progress over time
         var timerCount = 0
-        let timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+        let timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
             if timerCount < totalCount {
                 // Increment progress smoothly
                 progress = Double(timerCount + 1) / Double(totalCount)

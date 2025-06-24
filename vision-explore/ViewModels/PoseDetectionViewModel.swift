@@ -30,6 +30,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
         capturedJoints.first
     }
     
+    
     struct RepetitionData {
         let number: Int
         let upDuration: TimeInterval
@@ -103,21 +104,30 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
             guard let observations = request.results as? [VNHumanBodyPoseObservation],
                   let first = observations.first else {
                 DispatchQueue.main.async {
-                    self.feedbackText = "Tidak ada pose terdeteksi"
+                    self.feedbackText = "Get on the Frame"
                     self.currentPoints = nil
                     self.overlayColor = .gray
                 }
                 return
             }
             
+            
             do {
                 let jointPoints = try first.recognizedPoints(.rightArm)
                 
                 if !self.jointsCaptured {
-                    self.captureRightArmJoints(jointPoints: jointPoints)
+                    self.capturerightArmJoints(jointPoints: jointPoints)
                 }
                 
-                self.evaluatePose(points: jointPoints)
+                print("mulai : \(self.mulai)")
+                
+                self.checkPosition(points: jointPoints)
+                
+                if self.mulai{
+                    self.evaluatePose(points: jointPoints)
+                }
+                
+//                self.evaluatePose(points: jointPoints)
             } catch {
                 print("Error: \(error)")
             }
@@ -130,7 +140,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
         }
     }
     
-    private func captureRightArmJoints(jointPoints: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]) {
+    private func capturerightArmJoints(jointPoints: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]) {
         // Ensure right shoulder, elbow, and wrist points exist and have a confidence above a threshold
         if let rightShoulder = jointPoints[.rightShoulder],
            let rightElbow = jointPoints[.rightElbow],
@@ -147,9 +157,9 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
             // Append to capturedJoints array
             capturedJoints.append((shoulder: shoulderPoint, elbow: elbowPoint, wrist: wristPoint))
             jointsCaptured = true
-            print("Captured right arm joints shoulder : \(capturedJoints[0].shoulder.x) , \(capturedJoints[0].shoulder.y)")
-            print("Captured right arm joints elbow : \(capturedJoints[0].elbow.x) , \(capturedJoints[0].elbow.y)")
-            print("Captured right arm joints wrist : \(capturedJoints[0].wrist.x) , \(capturedJoints[0].wrist.y)")
+//            print("Captured right arm joints shoulder : \(capturedJoints[0].shoulder.x) , \(capturedJoints[0].shoulder.y)")
+//            print("Captured right arm joints elbow : \(capturedJoints[0].elbow.x) , \(capturedJoints[0].elbow.y)")
+//            print("Captured right arm joints wrist : \(capturedJoints[0].wrist.x) , \(capturedJoints[0].wrist.y)")
         }
     }
     
@@ -255,16 +265,53 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
         currentDownDuration = 0
     }
     
+    private func checkPosition(points: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]){
+        DispatchQueue.main.async {
+            self.currentPoints = points
+            let rightShoulder = points[.rightShoulder]
+            let rightElbow = points[.rightElbow]
+            let rightWrist = points[.rightWrist]
+            
+            
+            func getDistance() -> Double{
+                return distanceBetween(CGPoint(x :( rightElbow?.x ?? 0 ) , y : ( rightElbow?.y ?? 0 ) ),CGPoint(x :( rightWrist?.x ?? 0 ) , y : ( rightWrist?.y ?? 0 ) ))
+            }
+            
+//            print("Posisi lengan kanan \( getDistance())")
+            print("Posisi Shulder kanan \(  rightShoulder?.x ?? 0  ) \(  rightShoulder?.y ?? 0  )")
+            print("Posisi elbow kanan \(   rightElbow?.x ?? 0  ) \(  rightElbow?.y ?? 0  )")
+            print( "Posisi Wrist kanan \(  rightWrist?.x ?? 0  ) \(  rightWrist?.y ?? 0  )")
+
+            
+            
+            if (  rightShoulder?.x ?? 0  ) > 0.2 , (  rightWrist?.x ?? 0  ) < 0.7 {
+                print("OKKKKEEEE")
+                self.feedbackText = "POSISI OKKEEEE"
+                self.mulai = true
+            }
+            
+//            if getDistance() > 0.1 && getDistance() < 0.4 && (rightElbow?.x ?? 0) > 0.2 && (rightElbow?.x ?? 0 ) < 0.4 {
+//                print("OKKKKEEEE")
+//                self.feedbackText = "POSISI OKKEEEE"
+//                self.mulai = true
+//            }
+            
+//            self.mulai = true
+//            print(self.mulai)
+        }
+        
+    }
+    
     private func evaluatePose(points: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]) {
         DispatchQueue.main.async {
             self.currentPoints = points
             
             // Check if we have right arm points
-            let hasRightArm = points[.rightShoulder] != nil &&
+            let hasrightArm = points[.rightShoulder] != nil &&
                              points[.rightElbow] != nil &&
                              points[.rightWrist] != nil
             
-            guard hasRightArm else {
+            guard hasrightArm else {
                 self.feedbackText = "Tidak ada pose terdeteksi"
                 self.currentPoints = nil
                 self.overlayColor = .gray
@@ -281,37 +328,37 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
             let rightElbow = points[.rightElbow]
             let rightWrist = points[.rightWrist]
             
-            func getDistance() -> Double{
-                return distanceBetween(CGPoint(x :( rightElbow?.x ?? 0 ) , y : ( rightElbow?.y ?? 0 ) ),CGPoint(x :( rightWrist?.x ?? 0 ) , y : ( rightWrist?.y ?? 0 ) ))
-            }
-            
-            print("Posisi lengan kanan \( getDistance())")
-
-           
-            
-            if getDistance() < 0.1 {
-                self.feedbackText = "POSISIKAN DIRI MENDEKAT KE KAMERA"
-                self.currentPoints = nil
-                self.overlayColor = .gray
-                
-                return
-            }
-            
-            if getDistance() > 0.4 {
-                self.feedbackText = "POSISIKAN DIRI MENJAUH DARI KAMERA"
-                self.currentPoints = nil
-                self.overlayColor = .gray
-                return
-            }
-            
-            if (rightElbow?.x ?? 0) < 0.4 || (rightElbow?.x ?? 0 ) > 0.6 {
-                self.feedbackText = "POSISIKAN DIRI DITENGAH KAMERA"
-                self.currentPoints = nil
-                self.overlayColor = .gray
-                return
-            }
-            
-            self.mulai = true
+//            func getDistance() -> Double{
+//                return distanceBetween(CGPoint(x :( rightElbow?.x ?? 0 ) , y : ( rightElbow?.y ?? 0 ) ),CGPoint(x :( rightWrist?.x ?? 0 ) , y : ( rightWrist?.y ?? 0 ) ))
+//            }
+//            
+//            print("Posisi lengan kanan \( getDistance())")
+//
+//           
+//            
+//            if getDistance() < 0.1 {
+//                self.feedbackText = "POSISIKAN DIRI MENDEKAT KE KAMERA"
+//                self.currentPoints = nil
+//                self.overlayColor = .gray
+//                
+//                return
+//            }
+//            
+//            if getDistance() > 0.4 {
+//                self.feedbackText = "POSISIKAN DIRI MENJAUH DARI KAMERA"
+//                self.currentPoints = nil
+//                self.overlayColor = .gray
+//                return
+//            }
+//            
+//            if (rightElbow?.x ?? 0) < 0.4 || (rightElbow?.x ?? 0 ) > 0.6 {
+//                self.feedbackText = "POSISIKAN DIRI DITENGAH KAMERA"
+//                self.currentPoints = nil
+//                self.overlayColor = .gray
+//                return
+//            }
+//            
+//            self.mulai = true
             
 //            print("rightShoulder \(rightShoulder),rightElbow \(rightElbow),rightWrist \(rightWrist)")
             
@@ -336,7 +383,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                let rightElbowPt = rightElbow.map(convertPoint),
                let rightShoulderPt = rightShoulder.map(convertPoint) {
                 let rightAngle = self.angleBetweenPoints(pointA: rightWristPt, pointB: rightElbowPt, pointC: rightShoulderPt)
-                // print("Right Angle: \(rightAngle)")
+                // print("right Angle: \(rightAngle)")
                 
                 let (feedback, color) = self.evaluateDumbbellCurl(angle: rightAngle)
                 self.feedbackText = "\(feedback) \n\(Int(rightAngle))°- Rep: \(self.repetitionCount)/\(self.maxRepetitions)"

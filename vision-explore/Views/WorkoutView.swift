@@ -14,122 +14,212 @@ struct WorkoutView: View {
     var elbowPoint: CGPoint?
     var wristPoint: CGPoint?
     
-    var mulai : Bool = false
+    var mulai : Bool = true
+    @State var showSecondText : Bool = true
+    @State var showThirdText : Bool = false
     
     var body: some View {
-        ZStack {
-            CameraManager(viewModel: viewModel)
-            if let points = viewModel.currentPoints {
-                PoseOverlay(points: points, evaluationColor: viewModel.overlayColor)
-            }
-            VStack {
-                Text(viewModel.feedbackText)
-                    .padding()
-                    .background(Color.black.opacity(0.7))
-                    .cornerRadius(10)
-                    .font(.title3)
-                    .overlay(
-                        LinearGradient(
-                            colors: [Color("Button1"),Color("Button2")],
-                            startPoint: .leading,
-                            endPoint: .trailing
+        GeometryReader { geometry in
+            
+            let width = geometry.size.width
+            let height = geometry.size.height
+            
+            ZStack {
+                CameraManager(viewModel: viewModel)
+                if let points = viewModel.currentPoints {
+                    PoseOverlay(points: points, evaluationColor: viewModel.overlayColor)
+                }
+                VStack {
+                    Text(viewModel.feedbackText)
+                        .padding()
+                        .background(Color.black.opacity(0.7))
+                        .cornerRadius(10)
+                        .font(.title3)
+                        .overlay(
+                            LinearGradient(
+                                colors: [Color("Button1"),Color("Button2")],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
                         )
+                        .mask(
+                            Text(viewModel.feedbackText)
+                        )
+                        .font(.title3)
+                        .font(.system(size: 10, weight: .light, design: .default))
+                        .background(Color.black.opacity(0.7))
+                        .cornerRadius(10)
+                        .padding()
+                        .padding(.top, 120)
+                    Spacer()
+                    
+                    
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                
+                if viewModel.showCompletionAlert {
+                    Color.black.opacity(0.5)
+                        .edgesIgnoringSafeArea(.all)
+                    
+                    CompletionAlert(
+                        onReset: {
+                            viewModel.resetExercise()
+                        },
+                        repetitionData: viewModel.repetitionData
                     )
-                    .mask(
-                        Text(viewModel.feedbackText)
-                    )
-                    .font(.title3)
-                    .font(.system(size: 10, weight: .light, design: .default))
-                    .background(Color.black.opacity(0.7))
-                    .cornerRadius(10)
-                    .padding()
-                    .padding(.top, 120)
-                Spacer()
+                }
                 
                 
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
-            if viewModel.showCompletionAlert {
-                Color.black.opacity(0.5)
-                    .edgesIgnoringSafeArea(.all)
-                
-                CompletionAlert(
-                    onReset: {
-                        viewModel.resetExercise()
-                    },
-                    repetitionData: viewModel.repetitionData
-                )
-            }
-            
-            
-            VStack{
-                HStack{
-                    VStack{
-                        Text("00:02")
-                            .font(.largeTitle)
-                            .overlay(
-                                LinearGradient(
-                                    colors: [Color("Button1"),Color("Button2")],
-                                    startPoint: .leading,
-                                    endPoint: .trailing
+                VStack{
+                    HStack{
+                        VStack{
+                            Text("00:02")
+                                .font(.largeTitle)
+                                .overlay(
+                                    LinearGradient(
+                                        colors: [Color("Button1"),Color("Button2")],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
                                 )
-                            )
-                            .mask(
-                                Text("00:02")
-                            )
-                            .font(.largeTitle)
-                            .font(.system(size: 10, weight: .light, design: .default))
+                                .mask(
+                                    Text("00:02")
+                                )
+                                .font(.largeTitle)
+                                .font(.system(size: 10, weight: .light, design: .default))
+                        }
+                        .frame(width: 134, height: 60)
+                        .background(Color.black)
+                        .cornerRadius(14)
+                        
+                        Spacer()
+                        VStack{
+                            Text("0/8")
+                                .font(.largeTitle)
+                                .overlay(
+                                    LinearGradient(
+                                        colors: [Color("Button1"),Color("Button2")],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                )
+                                .mask(
+                                    Text("0/8")
+                                )
+                                .font(.largeTitle)
+                                .font(.system(size: 10, weight: .light, design: .default))
+                            
+                        }
+                        .frame(width: 134, height: 60)
+                        .background(Color.black)
+                        .cornerRadius(14)
                     }
-                    .frame(width: 134, height: 60)
-                    .background(Color.black)
-                    .cornerRadius(14)
+                    Spacer()
+                    
+                    
+                }
+                .padding(20)
+                .frame(maxWidth : .infinity, alignment : .leading)
+                
+                VStack{
+                    Spacer()
+                    Spacer()
+                    if !viewModel.mulai {
+                        ZStack{
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
+                                        startPoint: .trailing,
+                                        endPoint: .leading
+                                    ),
+                                    lineWidth: 4
+                                )
+                                .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height)
+                            //                    .padding()
+                            //                    .background(Color.red)
+                            VStack{
+                                Circle()
+                                    .fill(LinearGradient(
+                                        gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
+                                        startPoint: .trailing,
+                                        endPoint: .leading
+                                    ))
+                                    .frame(width: 25, height: 25)
+                                
+                                    .padding(40)
+                            }
+                            .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height, alignment: .topTrailing)
+                            
+                            
+                            
+                        }
+                    }else if viewModel.mulai  && showSecondText{
+                        FrameOverlayAnimation()
+                            .onAppear {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                    withAnimation {
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                            withAnimation {
+                                                self.showSecondText = false
+                                                showThirdText = true
+                                                
+                                            }
+                                        }
+                                        
+                                    }
+                                }
+                            }
+                    }
+                    else if showThirdText{
+                        if let firstJoint = viewModel.capturedJoints.first {
+                            GuideLine(
+                                //                    shoulderPoint: firstJoint.shoulder,
+                                wristPoint: firstJoint.wrist,
+                                elbowPoint: firstJoint.elbow
+                            )
+                        }
+                    }
+                    
+                    
                     
                     Spacer()
-                    VStack{
-                        Text("0/8")
-                            .font(.largeTitle)
-                            .overlay(
-                                LinearGradient(
-                                    colors: [Color("Button1"),Color("Button2")],
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                )
-                            )
-                            .mask(
-                                Text("0/8")
-                            )
-                            .font(.largeTitle)
-                            .font(.system(size: 10, weight: .light, design: .default))
-                        
-                    }
-                    .frame(width: 134, height: 60)
-                    .background(Color.black)
-                    .cornerRadius(14)
+                    
                 }
-                Spacer()
+                .frame(maxWidth : .infinity, maxHeight: .infinity)
+                //                .background(.blue)
+                
+                
+                
+                //            HStack{
+                //               Spacer()
+                //                VStack{
+                //
+                //                }.frame(maxWidth :  150, maxHeight: 600)
+                //                    .background(Color.black)
+                //                    .opacity(0.3)
+                //            }
+                
+                
+//                if viewModel.mulai {
+//                    if let firstJoint = viewModel.capturedJoints.first {
+//                        GuideLine(
+//                            //                    shoulderPoint: firstJoint.shoulder,
+//                            wristPoint: firstJoint.wrist,
+//                            elbowPoint: firstJoint.elbow
+//                        )
+//                    }
+//                }
+                
+                
                 
             }
-            .padding(20)
-            .frame(maxWidth : .infinity, alignment : .leading)
-            
-            if viewModel.mulai {
-                if let firstJoint = viewModel.capturedJoints.first {
-                    GuideLine(
-    //                    shoulderPoint: firstJoint.shoulder,
-                        wristPoint: firstJoint.wrist,
-                        elbowPoint: firstJoint.elbow
-                    )
-                }
-            }
-            
-
-            
+            .background(
+                .black.opacity(0.7)
+            )
+            //.navigationBarBackButtonHidden(true)
         }
-        .background(
-            .black.opacity(0.7)
-        )
-        //.navigationBarBackButtonHidden(true)
+        
     }
 }
 
