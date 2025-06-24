@@ -98,7 +98,7 @@ struct HomeView: View {
                                             VStack{
                                                 Spacer()
                                                 Button {
-                                                    self.routeManager.push( "preview")
+                                                    self.routeManager.push(exercise.path)
                                                 } label: {
                                                     Text("Start Exercise")
                                                         .foregroundStyle(Color.black)
@@ -167,8 +167,8 @@ struct HomeView: View {
                 .scaleEffect(x: 1.5, y: 1.0)
             )
             .ignoresSafeArea()
-            .navigationDestination(for: String.self) { path in
-                AnyView(routeManager.getView(for: path))
+            .navigationDestination(for: Exercise.self) { exercise in
+                AnyView(TutorialView(exercise: exercise).environmentObject(routeManager))
             }
         }
         .onAppear(){

@@ -5,6 +5,7 @@
 //  Created by Muhammad Chandra Ramadhan on 24/06/25.
 //
 
+
 import SwiftUI
 import AVKit
 
@@ -23,6 +24,7 @@ struct VideoPlayerView: View {
                 .padding()
             
             
+
     }
 }
 

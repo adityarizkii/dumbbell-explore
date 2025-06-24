@@ -63,12 +63,9 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
         }
     }
     
-    private let curlUpAngle: CGFloat = 135.0
-    private let curlDownAngle: CGFloat = 65.0
-    private let maxRepetitions: Int = 5
+ 
     
-    private let targetUpDuration: TimeInterval = 2.0
-    private let targetDownDuration: TimeInterval = 3.0
+ 
     private let timingTolerance: TimeInterval = 0.5
     
     private var isInUpPosition: Bool = false
@@ -78,6 +75,8 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
     private var currentUpDuration: TimeInterval = 0
     private var currentDownDuration: TimeInterval = 0
     private var isAddingRepetition: Bool = false
+    
+    var config: ExerciseAttribute = curl
     
     enum ExercisePhase {
         case none
@@ -136,7 +135,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
     }
     
     private func captureArmJoints(position : position = .right ,  jointPoints: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]) {
-        // Ensure right shoulder, elbow, and wrist points exist and have a confidence above a threshold
+    
         let shoulderPos:VNHumanBodyPoseObservation.JointName = position == .left ? .leftShoulder : .rightShoulder
         let elbowPos:VNHumanBodyPoseObservation.JointName = position == .left ? .leftElbow :.rightElbow
         let wristPos:VNHumanBodyPoseObservation.JointName = position == .left ? .leftWrist :.rightWrist
@@ -166,7 +165,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
         let currentTime = Date()
         
         // Update exercise phase
-        if angle < curlDownAngle {
+        if angle < config.downAngle {
             if currentPhase != .lowering {
                 currentPhase = .lowering
                 phaseStartTime = nil  // Reset timer when starting to move
@@ -178,7 +177,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
             
             return ("Turunkan dumbbell", .red)
             
-        } else if angle > curlUpAngle {
+        } else if angle > config.upAngle {
             if currentPhase != .lifting {
                 currentPhase = .lifting
                 phaseStartTime = nil  // Reset timer when starting to move
@@ -206,7 +205,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                 isAddingRepetition = false
 //                print("Reset timer - completed repetition")
                 
-                if repetitionCount >= maxRepetitions {
+                if repetitionCount >= config.repetition {
                     DispatchQueue.main.async {
                         self.showCompletionAlert = true
                     }
@@ -234,7 +233,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                     isAddingRepetition = true
                 }
                 
-                let targetDuration = currentPhase == .lifting ? targetUpDuration : targetDownDuration
+                let targetDuration = currentPhase == .lifting ? config.timeUp : config.timeDown
                 let timeFeedback = getTimingFeedback(duration: duration, targetDuration: targetDuration)
                 return ("Gerakan bagus! (\(String(format: "%.1f", duration))s) - \(timeFeedback)", .green)
             }
@@ -348,7 +347,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                 // print("Right Angle: \(rightAngle)")
                 
                 let (feedback, color) = self.evaluateDumbbellCurl(angle: rightAngle)
-                self.feedbackText = "\(feedback) \n\(Int(rightAngle))°- Rep: \(self.repetitionCount)/\(self.maxRepetitions)"
+                self.feedbackText = "\(feedback) \n\(Int(rightAngle))°- Rep: \(self.repetitionCount)/\(self.config.repetition)"
                 self.overlayColor = color
             }
         }
