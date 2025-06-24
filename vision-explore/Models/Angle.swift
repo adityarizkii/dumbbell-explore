@@ -5,7 +5,7 @@
 //  Created by Muhammad Chandra Ramadhan on 24/06/25.
 //
 
-struct ExerciseAttribute {
+struct ExerciseAttribute : Hashable{
     var upAngle : Double
     var downAngle : Double
     var repetition : Int

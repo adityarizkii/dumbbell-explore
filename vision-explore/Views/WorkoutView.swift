@@ -7,9 +7,9 @@
 import SwiftUI
 
 struct WorkoutView: View {
-    @StateObject var viewModel = PoseDetectionViewModel()
+    @EnvironmentObject var exerciseManager : ExerciseManager
     @State var isOn = false
-    
+    @StateObject var viewModel  = PoseDetectionViewModel()
     var shoulderPoint: CGPoint?
     var elbowPoint: CGPoint?
     var wristPoint: CGPoint?
@@ -17,6 +17,8 @@ struct WorkoutView: View {
     var mulai : Bool = false
     
     var body: some View {
+        
+
         ZStack {
             CameraManager(viewModel: viewModel)
             if let points = viewModel.currentPoints {
@@ -87,7 +89,7 @@ struct WorkoutView: View {
                     
                     Spacer()
                     VStack{
-                        Text("0/8")
+                        Text("0/\(viewModel.config.repetition)")
                             .font(.largeTitle)
                             .overlay(
                                 LinearGradient(
@@ -97,7 +99,7 @@ struct WorkoutView: View {
                                 )
                             )
                             .mask(
-                                Text("0/8")
+                                Text("0/\(viewModel.config.repetition)")
                             )
                             .font(.largeTitle)
                             .font(.system(size: 10, weight: .light, design: .default))
@@ -129,6 +131,9 @@ struct WorkoutView: View {
         .background(
             .black.opacity(0.7)
         )
+        .onAppear(){
+            viewModel.config = exerciseManager.exercise.config
+        }
         //.navigationBarBackButtonHidden(true)
     }
 }

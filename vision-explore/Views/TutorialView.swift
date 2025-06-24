@@ -29,11 +29,12 @@ extension Color {
 }
 
 struct TutorialView: View {
-    let exercise: Exercise
     @EnvironmentObject var routeManager: RouteManager
+    @EnvironmentObject var exerciseManager: ExerciseManager
     @State private var selectedSegment = 0
     
     var body: some View {
+        @State var exercise = exerciseManager.exercise
         ScrollView {
             VStack(spacing: 20) {
                 VideoSection()

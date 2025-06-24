@@ -19,7 +19,9 @@ struct Exercise: Hashable {
     var name: String
     var image: String
     var path: String
+    var workoutPath : String
     var description: String
     var muscles: [String]
     var detail: ExerciseDetail
+    var config : ExerciseAttribute
 }

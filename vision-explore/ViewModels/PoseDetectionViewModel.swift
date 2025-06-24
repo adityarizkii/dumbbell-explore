@@ -12,17 +12,21 @@ import CoreGraphics
 import CoreVideo
 
 class PoseDetectionViewModel: NSObject, ObservableObject {
+    
+    
     @Published var feedbackText: String = ""
     @Published var currentPoints: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]? = nil
     @Published var overlayColor: Color = .gray
     @Published var showCompletionAlert: Bool = false
     @Published var repetitionCount: Int = 0
     @Published var repetitionData: [RepetitionData] = []
-    
+    public var config: ExerciseAttribute = curl
+
     @Published var mulai: Bool = false
     
     private let sequenceHandler = VNSequenceRequestHandler()
     private var jointsCaptured = false
+    
 
     @Published var capturedJoints: [(shoulder: CGPoint, elbow: CGPoint, wrist: CGPoint)] = []
     
@@ -76,7 +80,6 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
     private var currentDownDuration: TimeInterval = 0
     private var isAddingRepetition: Bool = false
     
-    var config: ExerciseAttribute = curl
     
     enum ExercisePhase {
         case none

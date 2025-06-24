@@ -16,6 +16,7 @@ class HomeViewModel: ObservableObject {
                 name: "Dumbbell Curl",
                 image: "DumbbellCurl",
                 path: "dumble",
+                workoutPath: "workout1",
                 description: "Latihan biceps dengan mengangkat dumbbell ke arah bahu, telapak tangan menghadap atas.",
                 muscles: ["Biceps", "Under Arm"],
                 detail: ExerciseDetail(
@@ -26,12 +27,14 @@ class HomeViewModel: ObservableObject {
                         KeyMoment(key_image: "moment3", key_description: "Tahan di atas, kontraksikan biceps maksimal."),
                         KeyMoment(key_image: "moment4", key_description: "Turunkan dumbbell perlahan ke posisi awal.")
                     ]
-                )
+                ),
+                config: curl
             ),
             Exercise(
                 name: "Hammer Curl",
                 image: "HammerCurl",
-                path: "camera",
+                path: "hammer",
+                workoutPath: "workout2",
                 description: "Variasi curl dengan telapak tangan netral. Melatih biceps dan otot lengan samping.",
                 muscles: ["Biceps", "Under Arm"],
                 detail: ExerciseDetail(
@@ -42,12 +45,15 @@ class HomeViewModel: ObservableObject {
                         KeyMoment(key_image: "moment3", key_description: "Tahan di atas, rasakan kontraksi pada lengan bawah."),
                         KeyMoment(key_image: "moment4", key_description: "Turunkan perlahan ke posisi awal.")
                     ]
-                )
+                ),
+                config: hammer
+
             ),
             Exercise(
                 name: "Forearm Raise",
                 image: "ForearmRaise",
-                path: "camera",
+                path: "forearm",
+                workoutPath: "workout3",
                 description: "Latihan lengan bawah dengan mengangkat pergelangan tangan sambil memegang dumbbell.",
                 muscles: ["Shoulder", "Upper Arm"],
                 detail: ExerciseDetail(
@@ -58,7 +64,9 @@ class HomeViewModel: ObservableObject {
                         KeyMoment(key_image: "moment3", key_description: "Tahan di atas, kontraksikan otot lengan bawah."),
                         KeyMoment(key_image: "moment4", key_description: "Turunkan perlahan ke posisi awal.")
                     ]
-                )
+                ),
+                config: raise
+
             )
         ]
     }

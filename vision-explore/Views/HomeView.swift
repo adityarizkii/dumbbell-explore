@@ -10,6 +10,7 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var routeManager: RouteManager
+    @EnvironmentObject var exerciseManager: ExerciseManager
     
     var body: some View {
         @State var homeViewModel = HomeViewModel()
@@ -98,7 +99,9 @@ struct HomeView: View {
                                             VStack{
                                                 Spacer()
                                                 Button {
-                                                    self.routeManager.push(exercise.path)
+                                                    self.routeManager.push("tutorial")
+                                                    exerciseManager.exercise = exercise
+                                                    print("Route : \(exercise.path)")
                                                 } label: {
                                                     Text("Start Exercise")
                                                         .foregroundStyle(Color.black)
@@ -167,8 +170,8 @@ struct HomeView: View {
                 .scaleEffect(x: 1.5, y: 1.0)
             )
             .ignoresSafeArea()
-            .navigationDestination(for: Exercise.self) { exercise in
-                AnyView(TutorialView(exercise: exercise).environmentObject(routeManager))
+            .navigationDestination(for: String.self) { exercise in
+                AnyView(routeManager.getView(for: exercise))
             }
         }
         .onAppear(){
