@@ -26,6 +26,11 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
 
     @Published var capturedJoints: [(shoulder: CGPoint, elbow: CGPoint, wrist: CGPoint)] = []
     
+    enum position {
+        case right
+        case left
+    }
+    
     var firstJoint: (shoulder: CGPoint, elbow: CGPoint, wrist: CGPoint)? {
         capturedJoints.first
     }
@@ -114,7 +119,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                 let jointPoints = try first.recognizedPoints(.rightArm)
                 
                 if !self.jointsCaptured {
-                    self.captureRightArmJoints(jointPoints: jointPoints)
+                    self.captureArmJoints(jointPoints: jointPoints)
                 }
                 
                 self.evaluatePose(points: jointPoints)
@@ -130,19 +135,23 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
         }
     }
     
-    private func captureRightArmJoints(jointPoints: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]) {
+    private func captureArmJoints(position : position = .right ,  jointPoints: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]) {
         // Ensure right shoulder, elbow, and wrist points exist and have a confidence above a threshold
-        if let rightShoulder = jointPoints[.rightShoulder],
-           let rightElbow = jointPoints[.rightElbow],
-           let rightWrist = jointPoints[.rightWrist],
-           rightShoulder.confidence > 0.5,
-           rightElbow.confidence > 0.5,
-           rightWrist.confidence > 0.5 {
+        let shoulderPos:VNHumanBodyPoseObservation.JointName = position == .left ? .leftShoulder : .rightShoulder
+        let elbowPos:VNHumanBodyPoseObservation.JointName = position == .left ? .leftElbow :.rightElbow
+        let wristPos:VNHumanBodyPoseObservation.JointName = position == .left ? .leftWrist :.rightWrist
+        
+        if let shoulder = jointPoints[shoulderPos],
+           let elbow = jointPoints[elbowPos],
+           let wrist = jointPoints[wristPos],
+           shoulder.confidence > 0.5,
+           elbow.confidence > 0.5,
+           wrist.confidence > 0.5 {
 
             // Record the first detected right arm joints
-            let shoulderPoint = CGPoint(x: CGFloat(1 - rightShoulder.location.y), y: CGFloat(rightShoulder.location.x))
-            let elbowPoint = CGPoint(x: CGFloat(1 - rightElbow.location.y), y: CGFloat(rightElbow.location.x))
-            let wristPoint = CGPoint(x: CGFloat(1 - rightWrist.location.y), y: CGFloat(rightWrist.location.x))
+            let shoulderPoint = CGPoint(x: CGFloat(1 - shoulder.location.y), y: CGFloat(shoulder.location.x))
+            let elbowPoint = CGPoint(x: CGFloat(1 - elbow.location.y), y: CGFloat(elbow.location.x))
+            let wristPoint = CGPoint(x: CGFloat(1 - wrist.location.y), y: CGFloat(wrist.location.x))
             
             // Append to capturedJoints array
             capturedJoints.append((shoulder: shoulderPoint, elbow: elbowPoint, wrist: wristPoint))
