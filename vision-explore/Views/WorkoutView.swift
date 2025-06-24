@@ -4,6 +4,13 @@
 //
 //  Created by M Ikhsan Azis Pane on 22/06/25.
 //
+
+//
+//  TestSound.swift
+//  vision-explore
+//
+//  Created by M Ikhsan Azis Pane on 22/06/25.
+//
 import SwiftUI
 
 struct WorkoutView: View {
@@ -14,7 +21,7 @@ struct WorkoutView: View {
     var elbowPoint: CGPoint?
     var wristPoint: CGPoint?
     
-//    var mulai : Bool = false
+    //    var mulai : Bool = false
     var mulai : Bool = true
     @State var showSecondText : Bool = true
     @State var showThirdText : Bool = false
@@ -22,7 +29,7 @@ struct WorkoutView: View {
     var body: some View {
         GeometryReader { geometry in
             let height = geometry.size.height
-            let width = geometry.size.width
+            let width = geometry.size.width/2
             
             ZStack {
                 CameraManager(viewModel: viewModel)
@@ -132,33 +139,47 @@ struct WorkoutView: View {
                 
                 if !viewModel.mulai {
                     ZStack{
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
-                                    startPoint: .trailing,
-                                    endPoint: .leading
-                                ),
-                                lineWidth: 4
-                            )
-                            .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height)
-                        //                    .padding()
-                        //                    .background(Color.red)
                         VStack{
-                            Circle()
-                                .fill(LinearGradient(
-                                    gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
-                                    startPoint: .trailing,
-                                    endPoint: .leading
-                                ))
-                                .frame(width: 25, height: 25)
-                            
-                                .padding(40)
+                            ZStack{
+                                
+                                
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(
+                                        LinearGradient(
+                                            gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
+                                            startPoint: .trailing,
+                                            endPoint: .leading
+                                        ),
+                                        lineWidth: 4
+                                    )
+                                    .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height)
+                                //                    .padding()
+                                    .background(LinearGradient(
+                                        gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
+                                        startPoint: .trailing,
+                                        endPoint: .leading
+                                    ))
+                                    .opacity(0.2)
+                                
+                                VStack{
+                                    Circle()
+                                        .fill(LinearGradient(
+                                            gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
+                                            startPoint: .trailing,
+                                            endPoint: .leading
+                                        ))
+                                        .frame(width: 25, height: 25)
+                                    
+                                        .padding(40)
+                                }
+                                .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height, alignment: .top)
+                                .padding()
+//                                .background(.red)
+                            }
+                            .padding(.top,100)
                         }
-                        .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height, alignment: .topTrailing)
-                        
-                        
-                        
+                        .frame(maxWidth : .infinity, alignment : .trailing)
+
                     }
                 }else if viewModel.mulai  && showSecondText{
                     FrameOverlayAnimation()
@@ -196,11 +217,11 @@ struct WorkoutView: View {
             .onAppear(){
                 viewModel.config = exerciseManager.exercise.config
             }
-
+            
         }
         
         
-                //.navigationBarBackButtonHidden(true)
+        //.navigationBarBackButtonHidden(true)
     }
 }
 
@@ -208,6 +229,8 @@ struct WorkoutView: View {
 #Preview {
     WorkoutView()
         .environmentObject(RouteManager())
+        .environmentObject(ExerciseManager())
+    //        .environmentObject(RouteManager())
 }
 
 
