@@ -7,22 +7,22 @@
 import SwiftUI
 
 struct WorkoutView: View {
-    @StateObject var viewModel = PoseDetectionViewModel()
+    @EnvironmentObject var exerciseManager : ExerciseManager
     @State var isOn = false
-    
+    @StateObject var viewModel  = PoseDetectionViewModel()
     var shoulderPoint: CGPoint?
     var elbowPoint: CGPoint?
     var wristPoint: CGPoint?
     
+//    var mulai : Bool = false
     var mulai : Bool = true
     @State var showSecondText : Bool = true
     @State var showThirdText : Bool = false
     
     var body: some View {
         GeometryReader { geometry in
-            
-            let width = geometry.size.width
             let height = geometry.size.height
+            let width = geometry.size.width
             
             ZStack {
                 CameraManager(viewModel: viewModel)
@@ -94,7 +94,7 @@ struct WorkoutView: View {
                         
                         Spacer()
                         VStack{
-                            Text("0/8")
+                            Text("0/\(viewModel.config.repetition)")
                                 .font(.largeTitle)
                                 .overlay(
                                     LinearGradient(
@@ -104,7 +104,7 @@ struct WorkoutView: View {
                                     )
                                 )
                                 .mask(
-                                    Text("0/8")
+                                    Text("0/\(viewModel.config.repetition)")
                                 )
                                 .font(.largeTitle)
                                 .font(.system(size: 10, weight: .light, design: .default))
@@ -116,100 +116,76 @@ struct WorkoutView: View {
                     }
                     Spacer()
                     
-                    
                 }
                 .padding(20)
                 .frame(maxWidth : .infinity, alignment : .leading)
                 
-                VStack{
-                    Spacer()
-                    Spacer()
-                    if !viewModel.mulai {
-                        ZStack{
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(
-                                    LinearGradient(
-                                        gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
-                                        startPoint: .trailing,
-                                        endPoint: .leading
-                                    ),
-                                    lineWidth: 4
-                                )
-                                .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height)
-                            //                    .padding()
-                            //                    .background(Color.red)
-                            VStack{
-                                Circle()
-                                    .fill(LinearGradient(
-                                        gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
-                                        startPoint: .trailing,
-                                        endPoint: .leading
-                                    ))
-                                    .frame(width: 25, height: 25)
-                                
-                                    .padding(40)
-                            }
-                            .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height, alignment: .topTrailing)
-                            
-                            
-                            
-                        }
-                    }else if viewModel.mulai  && showSecondText{
-                        FrameOverlayAnimation()
-                            .onAppear {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                                    withAnimation {
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                                            withAnimation {
-                                                self.showSecondText = false
-                                                showThirdText = true
-                                                
-                                            }
-                                        }
-                                        
-                                    }
-                                }
-                            }
-                    }
-                    else if showThirdText{
-                        if let firstJoint = viewModel.capturedJoints.first {
-                            GuideLine(
-                                //                    shoulderPoint: firstJoint.shoulder,
-                                wristPoint: firstJoint.wrist,
-                                elbowPoint: firstJoint.elbow
-                            )
-                        }
-                    }
-                    
-                    
-                    
-                    Spacer()
-                    
-                }
-                .frame(maxWidth : .infinity, maxHeight: .infinity)
-                //                .background(.blue)
-                
-                
-                
-                //            HStack{
-                //               Spacer()
-                //                VStack{
-                //
-                //                }.frame(maxWidth :  150, maxHeight: 600)
-                //                    .background(Color.black)
-                //                    .opacity(0.3)
+                //            if viewModel.mulai {
+                //                if let firstJoint = viewModel.capturedJoints.first {
+                //                    GuideLine(
+                //    //                    shoulderPoint: firstJoint.shoulder,
+                //                        wristPoint: firstJoint.wrist,
+                //                        elbowPoint: firstJoint.elbow
+                //                    )
+                //                }
                 //            }
                 
-                
-//                if viewModel.mulai {
-//                    if let firstJoint = viewModel.capturedJoints.first {
-//                        GuideLine(
-//                            //                    shoulderPoint: firstJoint.shoulder,
-//                            wristPoint: firstJoint.wrist,
-//                            elbowPoint: firstJoint.elbow
-//                        )
-//                    }
-//                }
+                if !viewModel.mulai {
+                    ZStack{
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
+                                    startPoint: .trailing,
+                                    endPoint: .leading
+                                ),
+                                lineWidth: 4
+                            )
+                            .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height)
+                        //                    .padding()
+                        //                    .background(Color.red)
+                        VStack{
+                            Circle()
+                                .fill(LinearGradient(
+                                    gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
+                                    startPoint: .trailing,
+                                    endPoint: .leading
+                                ))
+                                .frame(width: 25, height: 25)
+                            
+                                .padding(40)
+                        }
+                        .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height, alignment: .topTrailing)
+                        
+                        
+                        
+                    }
+                }else if viewModel.mulai  && showSecondText{
+                    FrameOverlayAnimation()
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                withAnimation {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                        withAnimation {
+                                            self.showSecondText = false
+                                            showThirdText = true
+                                            
+                                        }
+                                    }
+                                    
+                                }
+                            }
+                        }
+                }
+                else if showThirdText{
+                    if let firstJoint = viewModel.capturedJoints.first {
+                        GuideLine(
+                            //                    shoulderPoint: firstJoint.shoulder,
+                            wristPoint: firstJoint.wrist,
+                            elbowPoint: firstJoint.elbow
+                        )
+                    }
+                }
                 
                 
                 
@@ -217,9 +193,14 @@ struct WorkoutView: View {
             .background(
                 .black.opacity(0.7)
             )
-            //.navigationBarBackButtonHidden(true)
+            .onAppear(){
+                viewModel.config = exerciseManager.exercise.config
+            }
+
         }
         
+        
+                //.navigationBarBackButtonHidden(true)
     }
 }
 
@@ -365,5 +346,5 @@ struct WorkoutView: View {
 //
 //
 //#Preview {
-//    TestSound()
+//    HomeView()
 //}

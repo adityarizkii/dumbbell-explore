@@ -1,12 +1,6 @@
-//
-//  Boarding.swift
-//  vision-explore
-//
-//  Created by Muhammad Chandra Ramadhan on 12/06/25.
-//
-
 import SwiftUI
 import AVKit
+
 
 extension Color {
     init(hex: String) {
@@ -35,25 +29,62 @@ extension Color {
 }
 
 struct TutorialView: View {
+    @EnvironmentObject var routeManager: RouteManager
+    @EnvironmentObject var exerciseManager: ExerciseManager
     @State private var selectedSegment = 0
     
     var body: some View {
+        @State var exercise = exerciseManager.exercise
         ScrollView {
             VStack(spacing: 20) {
-                VideoPlayerView()
+                VideoSection()
                 SegmentedSection(selectedSegment: $selectedSegment)
-                SegmentedContent(selectedSegment: selectedSegment)
+                SegmentedContent(selectedSegment: selectedSegment, exercise: exercise)
+                // Button statis di bawah segmented
+                Button(action: {
+                    routeManager.push("firstguidance")
+                }) {
+                    Text("Start Exercise")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 14)
+                        .background(Color(hex: "#333333"))
+                        .cornerRadius(12)
+                }
+                .padding(.horizontal)
+                .padding(.top, 8)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(hex: "#1a1a1a"))
-        .navigationTitle("BicepCurl")
+        .navigationTitle(exercise.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbarBackground(Color(hex: "#1a1a1a"), for: .navigationBar)
     }
 }
+
+struct VideoSection: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            if let bundleVideoURL = Bundle.main.url(forResource: "sample_video", withExtension: "mp4") {
+                VideoPlayer(player: AVPlayer(url: bundleVideoURL))
+                    .frame(height: 200)
+                    .cornerRadius(12)
+            } else {
+                Text("Local video not found")
+                    .foregroundColor(.gray)
+                    .padding()
+                    .background(Color.black.opacity(0.3))
+                    .cornerRadius(12)
+            }
+        }
+        .padding()
+    }
+}
+
 
 struct SegmentedSection: View {
     @Binding var selectedSegment: Int
@@ -74,22 +105,22 @@ struct SegmentedSection: View {
 
 struct SegmentedContent: View {
     let selectedSegment: Int
+    let exercise: Exercise
     @ViewBuilder
     var body: some View {
         if selectedSegment == 0 {
-            AboutContent()
+            AboutContent(exercise: exercise)
         } else {
-            KeyMomentContent()
+            KeyMomentContent(exercise: exercise)
         }
     }
 }
 
 struct AboutContent: View {
-    @EnvironmentObject var routeManager : RouteManager
-
+    let exercise: Exercise
     var body: some View {
         VStack(spacing: 15) {
-            Text("Seated Bicep Curl")
+            Text(exercise.name)
                 .font(.title2)
                 .fontWeight(.bold)
                 .foregroundColor(.white)
@@ -98,62 +129,40 @@ struct AboutContent: View {
             // Badge horizontal
             HStack(spacing: 10) {
                 BadgeView(text: "8 repetisi")
-                BadgeView(text: "Biceps")
-                BadgeView(text: "Under Arm")
+                ForEach(exercise.muscles, id: \ .self) { muscle in
+                    BadgeView(text: muscle)
+                }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             
-            Text("BicepCurl is a comprehensive fitness app designed to help you perfect your bicep curl form using advanced computer vision technology. The app provides real-time feedback and guidance to ensure you perform each rep with proper technique.")
+            Text(exercise.detail.about)
                 .font(.body)
                 .foregroundColor(.gray)
                 .multilineTextAlignment(.leading)
                 .padding()
                 .background(Color.black.opacity(0.3))
                 .cornerRadius(12)
-            
-            // Button pengganti fitur
-            Button(action: {
-                routeManager.push("firstguidance")
-            }) {
-                Text("Start Exercise")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 14)
-                    .background(Color(hex: "#333333"))
-                    .cornerRadius(12)
-            }
-            .padding(.top, 8)
         }
         .padding()
     }
 }
 
 struct KeyMomentContent: View {
+    let exercise: Exercise
     var body: some View {
         VStack(spacing: 15) {
-            Text("Key Moments in Bicep Curl")
+            Text("Key Moments in \(exercise.name)")
                 .font(.title2)
                 .fontWeight(.bold)
                 .foregroundColor(.white)
             
             VStack(spacing: 12) {
-                KeyMomentCard(
-                    title: "Moment 1: Starting Position",
-                    description: "Stand with feet shoulder-width apart, holding dumbbells at your sides with palms facing forward."
-                )
-                KeyMomentCard(
-                    title: "Moment 2: Curl Up",
-                    description: "Slowly curl the dumbbells up toward your shoulders, keeping your elbows close to your body."
-                )
-                KeyMomentCard(
-                    title: "Moment 3: Peak Contraction",
-                    description: "Hold the position briefly at the top, squeezing your biceps for maximum contraction."
-                )
-                KeyMomentCard(
-                    title: "Moment 4: Controlled Descent",
-                    description: "Slowly lower the dumbbells back to the starting position with controlled movement."
-                )
+                ForEach(exercise.detail.key_moment, id: \ .self) { moment in
+                    KeyMomentCard(
+                        title: moment.key_image,
+                        description: moment.key_description
+                    )
+                }
             }
         }
         .padding()
@@ -214,10 +223,8 @@ struct BadgeView: View {
     }
 }
 
-
-
-
-#Preview {
-    TutorialView()
-        .environmentObject(RouteManager())
-}
+//#Preview {
+//    NavigationStack {
+//        Tuto()
+//    }
+//}

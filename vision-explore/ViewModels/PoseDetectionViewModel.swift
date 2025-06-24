@@ -12,19 +12,28 @@ import CoreGraphics
 import CoreVideo
 
 class PoseDetectionViewModel: NSObject, ObservableObject {
+    
+    
     @Published var feedbackText: String = ""
     @Published var currentPoints: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]? = nil
     @Published var overlayColor: Color = .gray
     @Published var showCompletionAlert: Bool = false
     @Published var repetitionCount: Int = 0
     @Published var repetitionData: [RepetitionData] = []
-    
+    public var config: ExerciseAttribute = curl
+
     @Published var mulai: Bool = false
     
     private let sequenceHandler = VNSequenceRequestHandler()
     private var jointsCaptured = false
+    
 
     @Published var capturedJoints: [(shoulder: CGPoint, elbow: CGPoint, wrist: CGPoint)] = []
+    
+    enum position {
+        case right
+        case left
+    }
     
     var firstJoint: (shoulder: CGPoint, elbow: CGPoint, wrist: CGPoint)? {
         capturedJoints.first
@@ -59,12 +68,9 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
         }
     }
     
-    private let curlUpAngle: CGFloat = 135.0
-    private let curlDownAngle: CGFloat = 65.0
-    private let maxRepetitions: Int = 5
+ 
     
-    private let targetUpDuration: TimeInterval = 2.0
-    private let targetDownDuration: TimeInterval = 3.0
+ 
     private let timingTolerance: TimeInterval = 0.5
     
     private var isInUpPosition: Bool = false
@@ -74,6 +80,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
     private var currentUpDuration: TimeInterval = 0
     private var currentDownDuration: TimeInterval = 0
     private var isAddingRepetition: Bool = false
+    
     
     enum ExercisePhase {
         case none
@@ -116,7 +123,8 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                 let jointPoints = try first.recognizedPoints(.rightArm)
                 
                 if !self.jointsCaptured {
-                    self.capturerightArmJoints(jointPoints: jointPoints)
+                    self.captureArmJoints(jointPoints: jointPoints)
+
                 }
                 
                 print("mulai : \(self.mulai)")
@@ -140,19 +148,23 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
         }
     }
     
-    private func capturerightArmJoints(jointPoints: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]) {
-        // Ensure right shoulder, elbow, and wrist points exist and have a confidence above a threshold
-        if let rightShoulder = jointPoints[.rightShoulder],
-           let rightElbow = jointPoints[.rightElbow],
-           let rightWrist = jointPoints[.rightWrist],
-           rightShoulder.confidence > 0.5,
-           rightElbow.confidence > 0.5,
-           rightWrist.confidence > 0.5 {
+    private func captureArmJoints(position : position = .right ,  jointPoints: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]) {
+    
+        let shoulderPos:VNHumanBodyPoseObservation.JointName = position == .left ? .leftShoulder : .rightShoulder
+        let elbowPos:VNHumanBodyPoseObservation.JointName = position == .left ? .leftElbow :.rightElbow
+        let wristPos:VNHumanBodyPoseObservation.JointName = position == .left ? .leftWrist :.rightWrist
+        
+        if let shoulder = jointPoints[shoulderPos],
+           let elbow = jointPoints[elbowPos],
+           let wrist = jointPoints[wristPos],
+           shoulder.confidence > 0.5,
+           elbow.confidence > 0.5,
+           wrist.confidence > 0.5 {
 
             // Record the first detected right arm joints
-            let shoulderPoint = CGPoint(x: CGFloat(1 - rightShoulder.location.y), y: CGFloat(rightShoulder.location.x))
-            let elbowPoint = CGPoint(x: CGFloat(1 - rightElbow.location.y), y: CGFloat(rightElbow.location.x))
-            let wristPoint = CGPoint(x: CGFloat(1 - rightWrist.location.y), y: CGFloat(rightWrist.location.x))
+            let shoulderPoint = CGPoint(x: CGFloat(1 - shoulder.location.y), y: CGFloat(shoulder.location.x))
+            let elbowPoint = CGPoint(x: CGFloat(1 - elbow.location.y), y: CGFloat(elbow.location.x))
+            let wristPoint = CGPoint(x: CGFloat(1 - wrist.location.y), y: CGFloat(wrist.location.x))
             
             // Append to capturedJoints array
             capturedJoints.append((shoulder: shoulderPoint, elbow: elbowPoint, wrist: wristPoint))
@@ -167,7 +179,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
         let currentTime = Date()
         
         // Update exercise phase
-        if angle < curlDownAngle {
+        if angle < config.downAngle {
             if currentPhase != .lowering {
                 currentPhase = .lowering
                 phaseStartTime = nil  // Reset timer when starting to move
@@ -179,7 +191,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
             
             return ("Turunkan dumbbell", .red)
             
-        } else if angle > curlUpAngle {
+        } else if angle > config.upAngle {
             if currentPhase != .lifting {
                 currentPhase = .lifting
                 phaseStartTime = nil  // Reset timer when starting to move
@@ -207,7 +219,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                 isAddingRepetition = false
 //                print("Reset timer - completed repetition")
                 
-                if repetitionCount >= maxRepetitions {
+                if repetitionCount >= config.repetition {
                     DispatchQueue.main.async {
                         self.showCompletionAlert = true
                     }
@@ -235,7 +247,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                     isAddingRepetition = true
                 }
                 
-                let targetDuration = currentPhase == .lifting ? targetUpDuration : targetDownDuration
+                let targetDuration = currentPhase == .lifting ? config.timeUp : config.timeDown
                 let timeFeedback = getTimingFeedback(duration: duration, targetDuration: targetDuration)
                 return ("Gerakan bagus! (\(String(format: "%.1f", duration))s) - \(timeFeedback)", .green)
             }
@@ -386,7 +398,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                 // print("right Angle: \(rightAngle)")
                 
                 let (feedback, color) = self.evaluateDumbbellCurl(angle: rightAngle)
-                self.feedbackText = "\(feedback) \n\(Int(rightAngle))°- Rep: \(self.repetitionCount)/\(self.maxRepetitions)"
+                self.feedbackText = "\(feedback) \n\(Int(rightAngle))°- Rep: \(self.repetitionCount)/\(self.config.repetition)"
                 self.overlayColor = color
             }
         }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TrialView: View {
     @EnvironmentObject var routeManager: RouteManager
+    @EnvironmentObject var exerciseManager : ExerciseManager
     @StateObject var viewModel = PoseDetectionViewModel()
     var shoulderPoint: CGPoint?
     var elbowPoint: CGPoint?
@@ -98,6 +99,9 @@ struct TrialView: View {
         .background(
             .black.opacity(0.7)
         )
+        .onAppear(){
+            viewModel.config = exerciseManager.exercise.config
+        }
         .navigationBarBackButtonHidden(true)
     }
 }

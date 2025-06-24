@@ -9,4 +9,5 @@ import SwiftUI
 struct RouteModel {
     var name : String
     var view : AnyView
+    var exercise : Exercise?
 }
