@@ -8,11 +8,10 @@
 import SwiftUI
 import Vision
 
-struct PoseOverlayView: View {
+struct PoseOverlay: View {
     let points: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]
     let evaluationColor: Color
 
-    // Only include right arm joint pairs
     let jointPairs: [(VNHumanBodyPoseObservation.JointName, VNHumanBodyPoseObservation.JointName)] = [
         (.rightShoulder, .rightElbow),
         (.rightElbow, .rightWrist),

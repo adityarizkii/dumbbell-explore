@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-struct TestSound: View {
+struct WorkoutView: View {
     @StateObject var viewModel = PoseDetectionViewModel()
     @State var isOn = false
     
@@ -16,9 +16,9 @@ struct TestSound: View {
     
     var body: some View {
         ZStack {
-            CameraPreviewView(viewModel: viewModel)
+            CameraManager(viewModel: viewModel)
             if let points = viewModel.currentPoints {
-                PoseOverlayView(points: points, evaluationColor: viewModel.overlayColor)
+                PoseOverlay(points: points, evaluationColor: viewModel.overlayColor)
             }
             VStack {
                 Text(viewModel.feedbackText)
@@ -52,7 +52,7 @@ struct TestSound: View {
                 Color.black.opacity(0.5)
                     .edgesIgnoringSafeArea(.all)
                 
-                CompletionAlertView(
+                CompletionAlert(
                     onReset: {
                         viewModel.resetExercise()
                     },
@@ -62,7 +62,6 @@ struct TestSound: View {
             
             
             VStack{
-                
                 HStack{
                     VStack{
                         Text("00:02")
@@ -113,7 +112,7 @@ struct TestSound: View {
             .frame(maxWidth : .infinity, alignment : .leading)
             
             if let firstJoint = viewModel.capturedJoints.first {
-                GuidedLineView(
+                GuideLine(
 //                    shoulderPoint: firstJoint.shoulder,
                     wristPoint: firstJoint.wrist,
                     elbowPoint: firstJoint.elbow
@@ -130,7 +129,7 @@ struct TestSound: View {
 
 
 #Preview {
-    TestSound()
+    WorkoutView()
         .environmentObject(RouteManager())
 }
 

@@ -9,6 +9,7 @@ import Foundation
 import Vision
 import SwiftUI
 import CoreGraphics
+import CoreVideo
 
 class PoseDetectionViewModel: NSObject, ObservableObject {
     @Published var feedbackText: String = ""
@@ -21,9 +22,11 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
     private let sequenceHandler = VNSequenceRequestHandler()
     private var jointsCaptured = false
 
-    
     @Published var capturedJoints: [(shoulder: CGPoint, elbow: CGPoint, wrist: CGPoint)] = []
-
+    
+    var firstJoint: (shoulder: CGPoint, elbow: CGPoint, wrist: CGPoint)? {
+        capturedJoints.first
+    }
     
     struct RepetitionData {
         let number: Int
@@ -53,17 +56,14 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
         }
     }
     
-    // Constants for dumbbell curl exercise
-    private let curlUpAngle: CGFloat = 135.0    // Angle threshold for curl up position
-    private let curlDownAngle: CGFloat = 65.0   // Angle threshold for curl down position
+    private let curlUpAngle: CGFloat = 135.0
+    private let curlDownAngle: CGFloat = 65.0
     private let maxRepetitions: Int = 5
     
-    // Timing constants
-    private let targetUpDuration: TimeInterval = 2.0    // 2 seconds for lifting
-    private let targetDownDuration: TimeInterval = 3.0  // 3 seconds for lowering
-    private let timingTolerance: TimeInterval = 0.5     // 0.5 seconds tolerance
+    private let targetUpDuration: TimeInterval = 2.0
+    private let targetDownDuration: TimeInterval = 3.0
+    private let timingTolerance: TimeInterval = 0.5
     
-    // State for tracking exercise phase
     private var isInUpPosition: Bool = false
     private var isInDownPosition: Bool = false
     private var phaseStartTime: Date?

@@ -8,7 +8,7 @@
 import SwiftUI
 import AVFoundation
 
-struct CameraPreviewView: UIViewRepresentable {
+struct CameraManager: UIViewRepresentable {
     let viewModel: PoseDetectionViewModel
 
     func makeUIView(context: Context) -> PreviewView {

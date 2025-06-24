@@ -7,14 +7,11 @@
 
 import SwiftUI
 
-struct OnBoarding : View {
-    @State var index = 0
-    
-    func next(){
-        index = (index + 1) % OBContent.count
-    }
+struct OnBoardingView : View {
     
     var body: some View {
+        var onBoardingViewModel : OnBoardingViewModel = .init()
+
         VStack{
             Spacer()
             Image(systemName : "dumbbell")
@@ -26,17 +23,17 @@ struct OnBoarding : View {
                 )
             Spacer()
             
-            Text(OBContent[index].title)
+            Text(onBoardingViewModel.getCurrentContent().title)
                 .font(.title3.bold())
                 .frame(maxWidth : .infinity, alignment : .leading)
-            Text(OBContent[index].content)
+            Text(onBoardingViewModel.getCurrentContent().content)
                 .font(.caption)
                 .frame(maxWidth : .infinity, alignment : .leading)
             Spacer()
 
             Button(action: {
                 withAnimation(.default){
-                    next()
+                    onBoardingViewModel.nextContent()
                 }
             }) {
                 Text("Get Started")
@@ -57,6 +54,6 @@ struct OnBoarding : View {
 }
 
 #Preview{
-    OnBoarding()
+    OnBoardingView()
         .environmentObject(RouteManager())
 }

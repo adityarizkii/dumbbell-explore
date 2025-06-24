@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct WorkOut: View {
+struct TrialView: View {
     @EnvironmentObject var routeManager: RouteManager
     @StateObject var viewModel = PoseDetectionViewModel()
     var shoulderPoint: CGPoint?
@@ -18,7 +18,7 @@ struct WorkOut: View {
         @State var workoutViewModel : WorkoutViewModel = .init(viewModel : viewModel)
 
         ZStack {
-            CameraPreviewView(viewModel: viewModel)
+            CameraManager(viewModel: viewModel)
 
             workoutViewModel.evaluationLayer()
             
@@ -104,6 +104,6 @@ struct WorkOut: View {
 
 
 #Preview {
-    WorkOut()
+    TrialView()
         .environmentObject(RouteManager())
 }

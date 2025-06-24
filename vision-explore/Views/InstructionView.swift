@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-struct TutorialCamera: View {
+struct InstructionView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var routeManager: RouteManager
     @State private var currentPage = 0
@@ -54,7 +54,7 @@ struct TutorialCamera: View {
                                 if currentPage < totalPages - 1 {
                                     currentPage += 1
                                 } else {
-                                    routeManager.push(path : "workout")
+                                    routeManager.push( "workout")
                                     print("Start real-time guiding")
                                 }
                             }
@@ -165,6 +165,6 @@ struct PageIndicator: View {
 }
 
 #Preview {
-    TutorialCamera()
+    InstructionView()
         .environmentObject(RouteManager())
 }

@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct CompletionAlertView: View {
+struct CompletionAlert: View {
     let onReset: () -> Void
     let repetitionData: [PoseDetectionViewModel.RepetitionData]
     

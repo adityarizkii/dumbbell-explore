@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftUI
 
-struct GuidedLineView: View {
+struct GuideLine: View {
     @State private var count: Int = 3
     @State private var progress: Double = 0.0
     @State private var showReady = false
@@ -35,22 +35,17 @@ struct GuidedLineView: View {
             let width = geometry.size.width
             let height = geometry.size.height
             
-            // Safe unwrap of optional wristPoint and elbowPoint
-            
-            
             if let pointAref = elbowPoint , let pointBref = wristPoint {
-                // Continue the regular logic when both points are available
                 let pointA = CGPoint(
-                    x: pointAref.x * width,   // Scale x-coordinate
-                    y: pointAref.y * height   // Scale y-coordinate
+                    x: pointAref.x * width,
+                    y: pointAref.y * height
                 )
                 
                 let pointB = CGPoint(
-                    x: pointBref.x * width,   // Scale x-coordinate
-                    y: pointBref.y * height   // Scale y-coordinate
+                    x: pointBref.x * width,
+                    y: pointBref.y * height
                 )
                 
-                // Start point of arc
                 let dx = pointB.x - pointA.x
                 let dy = pointB.y - pointA.y
                 let radius = sqrt(dx * dx + dy * dy)
@@ -68,7 +63,6 @@ struct GuidedLineView: View {
                 let endRad = endAngle.radians
                 let delta = endRad - startRad
                 
-                // Centered short arc = from 25% to 75%
                 let midStart = Angle(radians: startRad + 0.25 * delta)
                 let midEnd   = Angle(radians: startRad + 0.75 * delta)
                 
@@ -238,7 +232,7 @@ struct GuidedLineView: View {
 }
 
 #Preview {
-    GuidedLineView()
+    GuideLine()
         .environmentObject(RouteManager())
 
 }

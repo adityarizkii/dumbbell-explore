@@ -17,3 +17,15 @@ class PreviewView: UIView {
         return layer as! AVCaptureVideoPreviewLayer
     }
 }
+
+
+//class PreviewView: UIView {
+//    var videoPreviewLayer: AVCaptureVideoPreviewLayer? {
+//        get { layer as? AVCaptureVideoPreviewLayer }
+//        set { if let newLayer = newValue { layer.addSublayer(newLayer) } }
+//    }
+//
+//    override class var layerClass: AnyClass {
+//        AVCaptureVideoPreviewLayer.self
+//    }
+//}

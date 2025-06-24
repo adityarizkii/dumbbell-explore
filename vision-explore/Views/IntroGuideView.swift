@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SetupCameraView: View {
+struct IntroGuideView: View {
     @EnvironmentObject var routeManager : RouteManager
     var body: some View {
             
@@ -29,11 +29,11 @@ struct SetupCameraView: View {
                     .font(.subheadline)
                     .foregroundStyle(.white)
                     .onTapGesture{
-                        routeManager.push(path : "workout")
+                        routeManager.push("workout")
                     }
                 
                 Button{
-                    routeManager.push(path : "guidance")
+                    routeManager.push("guidance")
                 } label: {
                     Text("Start Guiding")
                         .font(.body)
@@ -62,6 +62,6 @@ struct SetupCameraView: View {
 }
 
 #Preview {
-    SetupCameraView()
+    IntroGuideView()
         .environmentObject(RouteManager())
 }
