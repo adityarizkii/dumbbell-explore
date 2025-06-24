@@ -14,6 +14,8 @@ struct WorkoutView: View {
     var elbowPoint: CGPoint?
     var wristPoint: CGPoint?
     
+    var mulai : Bool = false
+    
     var body: some View {
         ZStack {
             CameraManager(viewModel: viewModel)
@@ -111,19 +113,23 @@ struct WorkoutView: View {
             .padding(20)
             .frame(maxWidth : .infinity, alignment : .leading)
             
-            if let firstJoint = viewModel.capturedJoints.first {
-                GuideLine(
-//                    shoulderPoint: firstJoint.shoulder,
-                    wristPoint: firstJoint.wrist,
-                    elbowPoint: firstJoint.elbow
-                )
+            if viewModel.mulai {
+                if let firstJoint = viewModel.capturedJoints.first {
+                    GuideLine(
+    //                    shoulderPoint: firstJoint.shoulder,
+                        wristPoint: firstJoint.wrist,
+                        elbowPoint: firstJoint.elbow
+                    )
+                }
             }
+            
+
             
         }
         .background(
             .black.opacity(0.7)
         )
-        .navigationBarBackButtonHidden(true)
+        //.navigationBarBackButtonHidden(true)
     }
 }
 

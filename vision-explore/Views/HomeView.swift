@@ -47,7 +47,6 @@ struct HomeView: View {
                         .foregroundColor(.white)
                         
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal)
 
                     ForEach(homeViewModel.getExerciseList(), id: \.name) { exercise in
                         VStack(spacing: 21){
@@ -143,7 +142,7 @@ struct HomeView: View {
                     }
                     
                 }
-                .padding()
+                .padding(.horizontal, 30)
                 .frame(maxHeight:.infinity, alignment: .bottom)
                 .padding(.bottom, 40)
             }

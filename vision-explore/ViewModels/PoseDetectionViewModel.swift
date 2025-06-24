@@ -19,6 +19,8 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
     @Published var repetitionCount: Int = 0
     @Published var repetitionData: [RepetitionData] = []
     
+    @Published var mulai: Bool = false
+    
     private let sequenceHandler = VNSequenceRequestHandler()
     private var jointsCaptured = false
 
@@ -269,10 +271,48 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                 return
             }
             
+            
+            
+            
+            
+            
             // Get right arm points
             let rightShoulder = points[.rightShoulder]
             let rightElbow = points[.rightElbow]
             let rightWrist = points[.rightWrist]
+            
+            func getDistance() -> Double{
+                return distanceBetween(CGPoint(x :( rightElbow?.x ?? 0 ) , y : ( rightElbow?.y ?? 0 ) ),CGPoint(x :( rightWrist?.x ?? 0 ) , y : ( rightWrist?.y ?? 0 ) ))
+            }
+            
+            print("Posisi lengan kanan \( getDistance())")
+
+           
+            
+            if getDistance() < 0.1 {
+                self.feedbackText = "POSISIKAN DIRI MENDEKAT KE KAMERA"
+                self.currentPoints = nil
+                self.overlayColor = .gray
+                
+                return
+            }
+            
+            if getDistance() > 0.4 {
+                self.feedbackText = "POSISIKAN DIRI MENJAUH DARI KAMERA"
+                self.currentPoints = nil
+                self.overlayColor = .gray
+                return
+            }
+            
+            if (rightElbow?.x ?? 0) < 0.4 || (rightElbow?.x ?? 0 ) > 0.6 {
+                self.feedbackText = "POSISIKAN DIRI DITENGAH KAMERA"
+                self.currentPoints = nil
+                self.overlayColor = .gray
+                return
+            }
+            
+            self.mulai = true
+            
 //            print("rightShoulder \(rightShoulder),rightElbow \(rightElbow),rightWrist \(rightWrist)")
             
             // print("Confident: \(rightShoulder?.confidence ?? 0), \(rightElbow?.confidence ?? 0), \(rightWrist?.confidence ?? 0)")
