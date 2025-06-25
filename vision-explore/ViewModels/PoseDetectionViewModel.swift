@@ -21,7 +21,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
     @Published var repetitionCount: Int = 0
     @Published var repetitionData: [RepetitionData] = []
     public var config: ExerciseAttribute = curl
-
+    
     @Published var mulai: Bool = false
     
     private let sequenceHandler = VNSequenceRequestHandler()
@@ -41,6 +41,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
     
     
     struct RepetitionData {
+        
         let number: Int
         let upDuration: TimeInterval
         let downDuration: TimeInterval
@@ -80,6 +81,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
     private var currentUpDuration: TimeInterval = 0
     private var currentDownDuration: TimeInterval = 0
     private var isAddingRepetition: Bool = false
+    @Published var wristJoint : CGPoint?
     
     
     enum ExercisePhase {
@@ -89,6 +91,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
     }
     
     func angleBetweenPoints(pointA: CGPoint, pointB: CGPoint, pointC: CGPoint) -> CGFloat {
+//        let s = currentPoints?[VNHumanBodyPoseObservation.JointName.leftWrist]?.x ?? 0
         let vectorBA = CGVector(dx: pointA.x - pointB.x, dy: pointA.y - pointB.y)
         let vectorBC = CGVector(dx: pointC.x - pointB.x, dy: pointC.y - pointB.y)
         
@@ -284,15 +287,17 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
             let rightElbow = points[.rightElbow]
             let rightWrist = points[.rightWrist]
             
+            self.wristJoint = CGPoint(x: rightWrist?.x ?? 0, y: rightWrist?.y ?? 0)
+
             
             func getDistance() -> Double{
                 return distanceBetween(CGPoint(x :( rightElbow?.x ?? 0 ) , y : ( rightElbow?.y ?? 0 ) ),CGPoint(x :( rightWrist?.x ?? 0 ) , y : ( rightWrist?.y ?? 0 ) ))
             }
             
 //            print("Posisi lengan kanan \( getDistance())")
-            print("Posisi Shulder kanan \(  rightShoulder?.x ?? 0  ) \(  rightShoulder?.y ?? 0  )")
-            print("Posisi elbow kanan \(   rightElbow?.x ?? 0  ) \(  rightElbow?.y ?? 0  )")
-            print( "Posisi Wrist kanan \(  rightWrist?.x ?? 0  ) \(  rightWrist?.y ?? 0  )")
+//            print("Posisi Shulder kanan \(  rightShoulder?.x ?? 0  ) \(  rightShoulder?.y ?? 0  )")
+//            print("Posisi elbow kanan \(   rightElbow?.x ?? 0  ) \(  rightElbow?.y ?? 0  )")
+//            print( "Posisi Wrist kanan \(  rightWrist?.x ?? 0  ) \(  rightWrist?.y ?? 0  )")
 
             
             

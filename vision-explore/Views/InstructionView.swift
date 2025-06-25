@@ -54,7 +54,7 @@ struct InstructionView: View {
                                 if currentPage < totalPages - 1 {
                                     currentPage += 1
                                 } else {
-                                    routeManager.push( "workout")
+                                    routeManager.push( "trial")
                                     print("Start real-time guiding")
                                 }
                             }

@@ -28,7 +28,12 @@ class HomeViewModel: ObservableObject {
                         KeyMoment(key_image: "moment4", key_description: "Turunkan dumbbell perlahan ke posisi awal.")
                     ]
                 ),
-                config: curl
+                config: curl,
+                trialGuidance: [
+                    TrialGuidance(title: "Follow The Path", description: "Lift the dumbbell along the guided line until it reaches the top point."),
+                    TrialGuidance(title: "Reach the Target in Time", description: "Lower the dumbbell according to the countdown."),
+                    TrialGuidance(title: "Maintain Your Posture", description: "Keep the green frame aligned to ensure a stable position."),
+                ]
             ),
             Exercise(
                 name: "Hammer Curl",
@@ -46,7 +51,12 @@ class HomeViewModel: ObservableObject {
                         KeyMoment(key_image: "moment4", key_description: "Turunkan perlahan ke posisi awal.")
                     ]
                 ),
-                config: hammer
+                config: hammer,
+                trialGuidance: [
+                    TrialGuidance(title: "Follow The Path", description: "Lift the dumbbell along the guided line until it reaches the top point."),
+                    TrialGuidance(title: "Reach the Target in Time", description: "Lower the dumbbell according to the countdown."),
+                    TrialGuidance(title: "Maintain Your Posture", description: "Keep the green frame aligned to ensure a stable position."),
+                ]
 
             ),
             Exercise(
@@ -65,7 +75,12 @@ class HomeViewModel: ObservableObject {
                         KeyMoment(key_image: "moment4", key_description: "Turunkan perlahan ke posisi awal.")
                     ]
                 ),
-                config: raise
+                config: raise,
+                trialGuidance: [
+                    TrialGuidance(title: "Follow The Path", description: "Lift the dumbbell along the guided line until it reaches the top point."),
+                    TrialGuidance(title: "Reach the Target in Time", description: "Lower the dumbbell according to the countdown."),
+                    TrialGuidance(title: "Maintain Your Posture", description: "Keep the green frame aligned to ensure a stable position."),
+                ]
 
             )
         ]

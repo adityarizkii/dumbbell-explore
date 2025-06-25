@@ -7,12 +7,18 @@
 
 import SwiftUI
 import SwiftUI
+import Vision
 
-struct GuideLine: View {
+struct TrialGuideLine: View {
+    @StateObject var trialVM : TrialViewModel
+
     @State private var count: Int = 3
     @State private var progress: Double = 0.0
     @State private var showReady = false
     @State private var rotation: Angle = .degrees(0)
+    @Binding var isPaused : Bool
+    @Binding var pointJoint: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]?
+    @Binding var wj : CGPoint?
     
     let totalCount = 3
     
@@ -26,9 +32,15 @@ struct GuideLine: View {
     
     @State private var repeatCount = 0
     
+    @State var pA: CGPoint = CGPoint(x : 0, y : 0)
+    @State var pB: CGPoint = CGPoint(x : 0, y : 0)
+    
+    
     var wristPoint: CGPoint?
     var elbowPoint: CGPoint?
-    
+    @Binding var step : Int
+    @Binding var maxStep : Int
+
     
     var body: some View {
         GeometryReader { geometry in
@@ -41,6 +53,9 @@ struct GuideLine: View {
                     y: pointAref.y * height
                 )
                 
+                let PA = CGPoint(x: pointAref.x, y: pointAref.y)
+                let PB = CGPoint(x: pointBref.x, y: pointBref.y)
+                
                 let pointB = CGPoint(
                     x: pointBref.x * width,
                     y: pointBref.y * height
@@ -51,7 +66,7 @@ struct GuideLine: View {
                 let radius = sqrt(dx * dx + dy * dy)
                 
                 let startAngle = Angle(radians: atan2(dy, dx))
-                let endAngle = Angle(degrees: startAngle.degrees + 135)
+                let endAngle = Angle(degrees: startAngle.degrees + 70)
                 
                 let endRadians = endAngle.radians
                 let endPoint = CGPoint(
@@ -102,18 +117,25 @@ struct GuideLine: View {
                     )
                 }
                 
+                
+                
                 ZStack {
                     // Visual helpers
                     Circle()
                         .fill(Color("Button1"))
                         .frame(width: 30, height: 30)
                         .position(pointA)
+                        .onAppear {
+                            self.pA = PA
+                        }
                     
                     Circle()
                         .fill(Color("Button1"))
                         .frame(width: 20, height: 20)
                         .position(pointB)
-                    
+                        .onAppear {
+                            self.pB = PB
+                        }
                     ZStack {
                         // Arc path
                         Path { path in
@@ -186,6 +208,7 @@ struct GuideLine: View {
                             currentIndex = 0
                             currentTarget = pointB
                             startCountdown()
+                            trialVM.playSound()
                         }
 
                     }
@@ -199,6 +222,7 @@ struct GuideLine: View {
         }
     }
     
+    
     func startCountdown() {
         count = totalCount
         let steps = 60
@@ -207,19 +231,44 @@ struct GuideLine: View {
 
         // Stop any previous timers if needed (not shown here)
         Timer.scheduledTimer(withTimeInterval: stepDuration, repeats: true) { timer in
-            let t = Double(currentStep) / Double(steps)
-            arcProgress = goingForward ? CGFloat(t) : CGFloat(1.0 - t)
+            
+            if step < maxStep{
+                print("Posisi : \( String(describing: wj)) andddddd \(  (step % 2) == 1 ? self.pB : self.pA)")
+                if !isPaused{
+                    let t = Double(currentStep) / Double(steps)
+                    arcProgress = goingForward ? CGFloat(t) : CGFloat(1.0 - t)
 
-            currentStep += 1
-            if currentStep > steps {
-                timer.invalidate()
-                goingForward.toggle()
-                showReady = true
-                repeatCount += 1
-                if repeatCount < 16 {
-                    startCountdown()
+                    currentStep += 1
+                    if currentStep > steps {
+                        timer.invalidate()
+                        goingForward.toggle()
+                        showReady = true
+                        repeatCount += 1
+                        if repeatCount < 16 {
+                            
+                            isPaused = true
+                            startCountdown()
+                        }
+                    }
+                }else{
+                    if (step % 2) == 0 && isPoint(wj ?? CGPoint(x : 0, y : 0), insideCircleWithCenter: self.pB, radius: CGFloat(0.15)){
+                        isPaused = false
+                        step += 1
+                        trialVM.playSound()
+                        
+                    }
+                    
+                    if (step % 2) == 1 && isPoint(wj ?? CGPoint(x : 0, y : 0), insideCircleWithCenter: self.pA, radius: CGFloat(0.15)){
+                        isPaused = false
+                        step += 1
+                        trialVM.playSound()
+                        
+                    }
                 }
             }
+            
+            
+            
         }
 
         for i in 0..<totalCount {

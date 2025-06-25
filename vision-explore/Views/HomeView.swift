@@ -11,7 +11,7 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject var routeManager: RouteManager
     @EnvironmentObject var exerciseManager: ExerciseManager
-    
+
     var body: some View {
         @State var homeViewModel = HomeViewModel()
 
@@ -175,6 +175,7 @@ struct HomeView: View {
             }
         }
         .onAppear(){
+           
             homeViewModel = HomeViewModel()
         }
       

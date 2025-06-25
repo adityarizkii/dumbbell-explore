@@ -24,4 +24,10 @@ struct Exercise: Hashable {
     var muscles: [String]
     var detail: ExerciseDetail
     var config : ExerciseAttribute
+    var trialGuidance : [TrialGuidance]
+}
+
+struct TrialGuidance : Hashable {
+    var title : String
+    var description : String
 }
