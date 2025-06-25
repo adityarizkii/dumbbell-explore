@@ -127,11 +127,7 @@ struct SegmentedContent: View {
         if selectedSegment == 0 {
             AboutContent(exercise: exercise)
         } else {
-           
-               
             KeyMomentContent(exercise: exercise)
-        
-            
         }
     }
 }
@@ -172,10 +168,11 @@ struct KeyMomentContent: View {
         ZStack{
             HStack{
                 Rectangle()
+                    .fill(.black)
                     .frame(width : 10)
                     .padding(.leading , 26)
                     .padding(.vertical, 50)
-                
+
                 Spacer()
             }
         
@@ -241,7 +238,7 @@ struct KeyMomentCard: View {
                     .cornerRadius(10)
                 VStack(alignment: .leading, spacing: 8) {
                     Text(description)
-                        .font(.body)
+                        .font(.subheadline)
                         .foregroundColor(.gray)
                         .multilineTextAlignment(.leading)
                 }

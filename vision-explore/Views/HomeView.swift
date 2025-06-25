@@ -56,7 +56,7 @@ struct HomeView: View {
                                     VStack(alignment: .leading, spacing: 5){
                                         Text(exercise.name)
                                             .foregroundColor(.white)
-                                            .font(.body)
+                                            .font(.body.bold())
                                             .font(.system(size: 17, weight: .bold, design: .default))
                                         Text(exercise.description)
                                             .foregroundColor(.white)

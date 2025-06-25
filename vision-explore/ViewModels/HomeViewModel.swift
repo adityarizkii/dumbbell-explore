@@ -17,7 +17,7 @@ class HomeViewModel: ObservableObject {
                 image: "DumbbellCurl",
                 path: "dumble",
                 workoutPath: "workout1",
-                description: "Latihan biceps dengan mengangkat dumbbell ke arah bahu, telapak tangan menghadap atas.",
+                description: "Build strength in your arms while learning proper form step-by-step.",
                 muscles: ["Biceps", "Under Arm"],
                 detail: ExerciseDetail(
                     about: "Seated bicep curls are a strength-training exercise that targets your biceps, the muscles in the front part of your upper arms. By sitting down while doing this movement, your body stays more stable, minimizing the involvement of other muscles and allowing for better isolation of the biceps.\n\nThis exercise is great for building arm strength and shaping your biceps, especially if you perform it with slow, controlled movements.",
@@ -39,7 +39,7 @@ class HomeViewModel: ObservableObject {
                 image: "HammerCurl",
                 path: "hammer",
                 workoutPath: "workout2",
-                description: "Variasi curl dengan telapak tangan netral. Melatih biceps dan otot lengan samping.",
+                description: "Focus on control and posture as you train your arms and shoulders.",
                 muscles: ["Biceps", "Under Arm"],
                 detail: ExerciseDetail(
                     about: "Hammer Curl menargetkan otot biceps dan brachialis dengan posisi telapak tangan netral.",
@@ -63,7 +63,7 @@ class HomeViewModel: ObservableObject {
                 image: "ForearmRaise",
                 path: "forearm",
                 workoutPath: "workout3",
-                description: "Latihan lengan bawah dengan mengangkat pergelangan tangan sambil memegang dumbbell.",
+                description: "Improve shoulder stability with guided movement tracking.",
                 muscles: ["Shoulder", "Upper Arm"],
                 detail: ExerciseDetail(
                     about: "Forearm Raise fokus pada penguatan otot lengan bawah dan pergelangan tangan.",

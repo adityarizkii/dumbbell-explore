@@ -2,8 +2,11 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        //WorkoutView()
-        HomeView()
+        WorkoutView()
+            .environmentObject(RouteManager())
+            .environmentObject(ExerciseManager())
+        //HomeView()
+            //.preferredColorScheme(.dark)
     }
 }
 
