@@ -21,7 +21,7 @@ struct Rectmask: View {
                        .padding(.horizontal, 20)
                        .padding(.vertical, 50)
                        .offset(y : 10)
-                       .frame(maxWidth : .infinity, maxHeight : geo.size.height * 0.8)
+                       .frame(maxWidth : .infinity, maxHeight : geo.size.height * 0.75 )
                        .blendMode(.destinationOut) // Ini kuncinya!
                }
                .compositingGroup() // Diperlukan untuk blend mode bekerja

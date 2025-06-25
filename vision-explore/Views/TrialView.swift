@@ -146,10 +146,11 @@ struct TrialView: View {
                             isPaused: $isPaused,
                             pointJoint : $viewModel.currentPoints,
                             wj: $viewModel.wristJoint,
-                            wristPoint: firstJoint.wrist,
-                            elbowPoint: firstJoint.elbow,
                             step : $trialViewModel.step,
-                            maxStep : $trialViewModel.maxStep
+                            maxStep : $trialViewModel.maxStep,
+                            wristPoint: firstJoint.wrist,
+                            elbowPoint: firstJoint.elbow
+                            
                             
                         )
                     }
@@ -203,7 +204,7 @@ struct TrialView: View {
                         VStack{
                             Text(trialViewModel.getCurrentGuidance()?.title ?? "")
                                 .multilineTextAlignment(.center)
-                                .font(.largeTitle.bold())
+                                .font(.title.bold())
                                 .frame(maxWidth : .infinity, alignment: .center)
                             Text(trialViewModel.getCurrentGuidance()?.description ?? "")
                                 .multilineTextAlignment(.center)

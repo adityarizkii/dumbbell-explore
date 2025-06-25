@@ -12,7 +12,7 @@ struct FrameOverlay: View {
     
     var body: some View {
         GeometryReader { geo in
-            let frameHeight = geo.size.height * 0.8
+            let frameHeight = geo.size.height * 0.75
 //            let frameHeight: CGFloat = 680
             let cornerRadius: CGFloat = 15
 
