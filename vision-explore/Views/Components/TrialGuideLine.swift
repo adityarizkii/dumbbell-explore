@@ -8,6 +8,7 @@ import Vision
 
 struct TrialGuideLine: View {
     @StateObject var trialVM: TrialViewModel
+    @EnvironmentObject var exerciseManager : ExerciseManager
 
     @State private var count: Int = 3
     @State private var progress: Double = 0.0
@@ -42,7 +43,7 @@ struct TrialGuideLine: View {
                 let radius = sqrt(dx * dx + dy * dy)
 
                 let startAngle = Angle(radians: atan2(dy, dx))
-                let endAngle = Angle(degrees: startAngle.degrees + 70)
+                let endAngle = Angle(degrees: startAngle.degrees + abs(exerciseManager.exercise.config.upAngle - exerciseManager.exercise.config.downAngle))
 
                 let animatedAngle = CGFloat(startAngle.radians + arcProgress * (endAngle.radians - startAngle.radians))
                 let animatedPoint = CGPoint(
@@ -51,6 +52,7 @@ struct TrialGuideLine: View {
                 )
 
                 ZStack {
+                    
                     // Elbow point visual
                     Circle()
                         .fill(Color("Button1"))
@@ -129,6 +131,13 @@ struct TrialGuideLine: View {
                             trialVM.playSound()
                         }
                     }
+//                    let rectSize = CGSize(width: 0.5, height: 0.15) // bisa di-tweak sesuai kebutuhan
+//
+//                    Rectangle()
+//                        .stroke(Color.red.opacity(0.3), lineWidth: 2)
+//                        .frame(width: rectSize.width * width, height: rectSize.height * height)
+//                        .position(CGPoint(x: wristPoint!.x * width, y: wristPoint!.y * height))
+
                 }
                 .onChange(of: wj) { newWrist in
                     // optionally: log atau update sesuatu jika perlu
@@ -170,10 +179,12 @@ struct TrialGuideLine: View {
                     }
                 } else {
                     guard let wrist = wj else { return }
-                    let radius: CGFloat = 0.15
+                    let radius: CGFloat = 0.2
+                    let rectSize = CGSize(width: 0.5, height: 0.15) // bisa di-tweak sesuai kebutuhan
 
-                    if (step % 2 == 0 && isPoint(wrist, insideCircleWithCenter: wristPoint ?? .zero, radius: radius)) ||
-                       (step % 2 == 1 && isPoint(wrist, insideCircleWithCenter: elbowPoint ?? .zero, radius: radius)) {
+                    if (step % 2 == 0 && isPoint(wrist, insideRectWithCenter: wristPoint ?? .zero, size: rectSize)) ||
+                       (step % 2 == 1 && isPoint(wrist, insideRectWithCenter: elbowPoint ?? .zero, size: rectSize)) {
+
                         isPaused = false
                         step += 1
                         trialVM.playSound()
@@ -185,10 +196,9 @@ struct TrialGuideLine: View {
         }
     }
 
-    // MARK: - Helper: Point in Circle
-    func isPoint(_ point: CGPoint, insideCircleWithCenter center: CGPoint, radius: CGFloat) -> Bool {
-        let dx = point.x - center.x
-        let dy = point.y - center.y
-        return dx * dx + dy * dy <= radius * radius
+    func isPoint(_ point: CGPoint, insideRectWithCenter center: CGPoint, size: CGSize) -> Bool {
+        let dx = abs(point.x - center.x)
+        let dy = abs(point.y - center.y)
+        return dx <= size.width / 2 && dy <= size.height / 2
     }
 }

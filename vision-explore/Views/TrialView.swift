@@ -12,7 +12,7 @@ struct TrialView: View {
     @EnvironmentObject var routeManager: RouteManager
     @EnvironmentObject var exerciseManager : ExerciseManager
     @State var isOn = false
-    @StateObject var viewModel  = PoseDetectionViewModel()
+    @StateObject var viewModel  = PoseDetectionViewModelTrial()
     var shoulderPoint: CGPoint?
     var elbowPoint: CGPoint?
     var wristPoint: CGPoint?

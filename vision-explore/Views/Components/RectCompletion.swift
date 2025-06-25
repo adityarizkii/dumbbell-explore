@@ -13,37 +13,107 @@ struct FrameOverlayAnimation: View {
     let totalCount = 1
     
     var body: some View {
-        GeometryReader { geo in
-            let frameHeight = geo.size.height * 0.8
-            let cornerRadius: CGFloat = 15
+        GeometryReader { geometry in
+            let frameHeight = geometry.size.height * 0.8
+            let height = geometry.size.height
+            let width = geometry.size.width/2
+            let cornerRadius: CGFloat = 10
 
             ZStack {
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 50)
-                    .offset(y: 10)
-                    .frame(maxWidth: .infinity, maxHeight: frameHeight)
-                    .blendMode(.destinationOut)
+                
+//                RoundedRectangle(cornerRadius: cornerRadius)
+//                    .padding(.horizontal, 20)
+//                    .padding(.vertical, 50)
+//                    .offset(y: 10)
+//                    .frame(maxWidth: .infinity, maxHeight: frameHeight)
+//                    .blendMode(.destinationOut)
 
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .trim(from: 0.0, to: progress)
-                    .stroke(
-                        LinearGradient(
-                            gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
-                            startPoint: .trailing,
-                            endPoint: .leading
-                        ),
-                        lineWidth: 4
-                    )
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 50)
-                    .offset(y: 10)
-                    .frame(maxWidth: .infinity, maxHeight: frameHeight)
-                    .animation(.linear(duration: Double(totalCount)), value: progress)
+                
+                
+                ZStack{
+                    VStack{
+                        HStack{
+                            VStack{
+                                
+                            }
+                            .frame(width: 134, height: 60)
+//                            .background(Color.black)
+                            .cornerRadius(14)
+                            
+                            Spacer()
+                            VStack{}
+                            .frame(width: 134, height: 60)
+//                            .background(Color.black)
+                            .cornerRadius(14)
+                        }
+                        Spacer()
+                        
+                    }
+//                    .padding(20)
+                    .frame(maxWidth : .infinity, alignment : .leading)
+                    VStack{
+                        ZStack{
+                            RoundedRectangle(cornerRadius: cornerRadius)
+                                .trim(from: 0.0, to: progress)
+                                .stroke(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
+                                        startPoint: .trailing,
+                                        endPoint: .leading
+                                    ),
+                                    lineWidth: 4
+                                )
+//                                .padding(.horizontal, 20)
+//                                .padding(.vertical, 50)
+                                .offset(y: 10)
+                                .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height)
+                                .animation(.linear(duration: Double(totalCount)), value: progress)
+                            
+//                            RoundedRectangle(cornerRadius: 10)
+//                                .stroke(
+//                                    LinearGradient(
+//                                        gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
+//                                        startPoint: .trailing,
+//                                        endPoint: .leading
+//                                    ),
+//                                    lineWidth: 4
+//                                )
+//                                .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height)
+//                            //                    .padding()
+//                                .background(LinearGradient(
+//                                    gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
+//                                    startPoint: .trailing,
+//                                    endPoint: .leading
+//                                ))
+//                                .opacity(0.2)
+                            
+                            VStack{
+//                                Circle()
+//                                    .fill(LinearGradient(
+//                                        gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
+//                                        startPoint: .trailing,
+//                                        endPoint: .leading
+//                                    ))
+//                                    .frame(width: 25, height: 25)
+//                                
+//                                    .padding(40)
+                            }
+                            .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height, alignment: .top)
+                            .padding()
+//                                .background(.red)
+                        }
+                        .padding(.top,100)
+//                        Spacer()
+
+                    }
+                    .frame(maxWidth : .infinity, alignment : .trailing)
+                    
+                    
+                }
             }
-            .frame(width: geo.size.width, height: geo.size.height)
+            .frame(width: geometry.size.width, height: geometry.size.height)
             .compositingGroup()
-            .position(x: geo.size.width / 2, y: geo.size.height / 2)
+            .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
             .onAppear {
                 startCountdown()
             }
