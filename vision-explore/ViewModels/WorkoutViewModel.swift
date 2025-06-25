@@ -34,16 +34,5 @@ class WorkoutViewModel: ObservableObject {
         }
     }
     
-    func handleguidanceLayer()-> some View{
-        VStack{
-            if let firstJoint = self.viewModel.capturedJoints.first {
-                 GuideLine(
-    //                    shoulderPoint: firstJoint.shoulder,
-                    wristPoint: firstJoint.wrist,
-                    elbowPoint: firstJoint.elbow
-                )
-            }
-        }
-        
-    }
+    
 }

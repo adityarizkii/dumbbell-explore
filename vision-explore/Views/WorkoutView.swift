@@ -20,7 +20,8 @@ struct WorkoutView: View {
     var shoulderPoint: CGPoint?
     var elbowPoint: CGPoint?
     var wristPoint: CGPoint?
-    
+    @StateObject var trialViewModel  = TrialViewModel()
+
     //    var mulai : Bool = false
     var mulai : Bool = true
     @State var showSecondText : Bool = true
@@ -28,6 +29,8 @@ struct WorkoutView: View {
     
     @State var anglePosture : Bool = false
     @State var showArmArea : Bool = false
+    @State var isPaused : Bool = false
+    @State var rep : Int! = 0
     
     var body: some View {
         GeometryReader { geometry in
@@ -117,7 +120,7 @@ struct WorkoutView: View {
                                     )
                                 )
                                 .mask(
-                                    Text("0/\(viewModel.config.repetition)")
+                                    Text("\(rep)/\(viewModel.config.repetition)")
                                 )
                                 .font(.largeTitle)
                                 .font(.system(size: 10, weight: .light, design: .default))
@@ -207,8 +210,18 @@ struct WorkoutView: View {
                     if let firstJoint = viewModel.capturedJoints.first {
                         GuideLine(
                             //                    shoulderPoint: firstJoint.shoulder,
+                            
+                            trialVM : trialViewModel,
+                            isPaused: $isPaused,
+                            pointJoint : $viewModel.currentPoints,
+                            wj: $viewModel.wristJoint,
+                            step : $trialViewModel.step,
+                            maxStep : $trialViewModel.maxStep,
                             wristPoint: firstJoint.wrist,
-                            elbowPoint: firstJoint.elbow
+                            elbowPoint: firstJoint.elbow,
+                            totalCount : 3,
+                            repetition : $rep,
+                            maxRepetition : exerciseManager.exercise.config.repetition
                         )
                     }
                 }

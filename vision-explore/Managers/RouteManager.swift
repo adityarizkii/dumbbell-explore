@@ -23,6 +23,7 @@ class RouteManager: ObservableObject {
         routeService.addRoute(name: "firstguidance", view: IntroGuideView())
         routeService.addRoute(name: "guidance", view: InstructionView())
         routeService.addRoute(name: "workout", view: WorkoutView())
+        routeService.addRoute(name: "finished", view: FinishView())
     }
 
     func getView(for routeName: String) -> AnyView {
@@ -31,6 +32,10 @@ class RouteManager: ObservableObject {
 
     func push(_ route: String) {
         path.append(route)
+    }
+    
+    func clear(){
+        path.removeLast(path.count)
     }
 
     func pop() {
