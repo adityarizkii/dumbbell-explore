@@ -85,52 +85,52 @@ struct InstructionView: View {
                     .frame(maxHeight: .infinity)
                     .ignoresSafeArea()
 
-                    VStack{
-                        
-                        PageIndicator(currentPage: currentPage, totalPages: totalPages)
-
-                        VStack(spacing: 12) {
-                            Text(pageTitle(for: currentPage))
-                                .font(.system(size: 22, weight: .bold))
-                                .foregroundColor(.white)
-                                .multilineTextAlignment(.center)
-
-                            Text(pageSubtitle(for: currentPage))
-                                .font(.system(size: 16))
-                                .foregroundColor(.white.opacity(0.8))
-                                .multilineTextAlignment(.center)
-                                .padding(.horizontal, 24)
-                        }
-                        .padding(.top, 20)
-                        
-
-
-                        Spacer()
-
-                        Button(action: {
-                            withAnimation {
-                                if currentPage < totalPages - 1 {
-                                    currentPage += 1
-                                } else {
-                                    routeManager.push( "trial")
-                                    print("Start real-time guiding")
-                                }
-                            }
-                        }) {
-                            Text(buttonText(for: currentPage))
-                                .foregroundColor(.black)
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(LinearGradient(
-                                    gradient: Gradient(colors: [Color("Button1"),Color("Button2") ]),
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                ))
-                                .cornerRadius(10)
-                                .padding(.horizontal, 40)
-                        }
-                        .padding(.bottom, 40)
-                    }
+//                    VStack{
+//                        
+//                        PageIndicator(currentPage: currentPage, totalPages: totalPages)
+//
+//                        VStack(spacing: 12) {
+//                            Text(pageTitle(for: currentPage))
+//                                .font(.system(size: 22, weight: .bold))
+//                                .foregroundColor(.white)
+//                                .multilineTextAlignment(.center)
+//
+//                            Text(pageSubtitle(for: currentPage))
+//                                .font(.system(size: 16))
+//                                .foregroundColor(.white.opacity(0.8))
+//                                .multilineTextAlignment(.center)
+//                                .padding(.horizontal, 24)
+//                        }
+//                        .padding(.top, 20)
+//                        
+//
+//
+//                        Spacer()
+//
+//                        Button(action: {
+//                            withAnimation {
+//                                if currentPage < totalPages - 1 {
+//                                    currentPage += 1
+//                                } else {
+//                                    routeManager.push( "trial")
+//                                    print("Start real-time guiding")
+//                                }
+//                            }
+//                        }) {
+//                            Text(buttonText(for: currentPage))
+//                                .foregroundColor(.black)
+//                                .padding()
+//                                .frame(maxWidth: .infinity)
+//                                .background(LinearGradient(
+//                                    gradient: Gradient(colors: [Color("Button1"),Color("Button2") ]),
+//                                    startPoint: .leading,
+//                                    endPoint: .trailing
+//                                ))
+//                                .cornerRadius(10)
+//                                .padding(.horizontal, 40)
+//                        }
+//                        .padding(.bottom, 40)
+//                    }
                 }
 
             }

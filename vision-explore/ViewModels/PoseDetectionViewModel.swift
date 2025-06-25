@@ -483,11 +483,6 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                 return
             }
             
-            
-            
-            
-            
-            
             // Get right arm points
             let rightShoulder = points[.rightShoulder]
             let rightElbow = points[.rightElbow]
