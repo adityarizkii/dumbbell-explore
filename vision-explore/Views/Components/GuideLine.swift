@@ -28,6 +28,7 @@ struct GuideLine: View {
     
     var wristPoint: CGPoint?
     var elbowPoint: CGPoint?
+    var shoulderPoint: CGPoint?
     
     
     var body: some View {
@@ -35,7 +36,7 @@ struct GuideLine: View {
             let width = geometry.size.width
             let height = geometry.size.height
             
-            if let pointAref = elbowPoint , let pointBref = wristPoint {
+            if let pointAref = elbowPoint , let pointBref = wristPoint, let pointCref = shoulderPoint {
                 let pointA = CGPoint(
                     x: pointAref.x * width,
                     y: pointAref.y * height
@@ -44,6 +45,11 @@ struct GuideLine: View {
                 let pointB = CGPoint(
                     x: pointBref.x * width,
                     y: pointBref.y * height
+                )
+                
+                let pointC = CGPoint(
+                    x: pointCref.x * width,
+                    y: pointCref.y * height
                 )
                 
                 let dx = pointB.x - pointA.x
@@ -104,6 +110,12 @@ struct GuideLine: View {
                 
                 ZStack {
                     // Visual helpers
+                    Circle()
+                        .fill(Color("Button1"))
+                        .frame(width: 30, height: 30)
+                        .position(pointC)
+                    
+                    
                     Circle()
                         .fill(Color("Button1"))
                         .frame(width: 30, height: 30)
