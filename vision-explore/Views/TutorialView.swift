@@ -35,12 +35,17 @@ struct TutorialView: View {
     
     var body: some View {
         @State var exercise = exerciseManager.exercise
-        ScrollView {
-            VStack(spacing: 20) {
+            VStack(spacing: 10) {
                 VideoSection()
                 SegmentedSection(selectedSegment: $selectedSegment)
-                SegmentedContent(selectedSegment: selectedSegment, exercise: exercise)
+                    .frame(maxWidth : .infinity)
+                ScrollView {
+                    SegmentedContent(selectedSegment: selectedSegment, exercise: exercise)
+                }
+               
                 // Button statis di bawah segmented
+                Spacer()
+                
                 Button(action: {
                     routeManager.push("firstguidance")
                 }) {
@@ -61,7 +66,7 @@ struct TutorialView: View {
                 .padding(.horizontal)
                 .padding(.top, 8)
             }
-        }
+        
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(hex: "#1a1a1a"))
         .navigationTitle(exercise.name)
@@ -75,7 +80,7 @@ struct TutorialView: View {
 struct VideoSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            if let bundleVideoURL = Bundle.main.url(forResource: "sample_video", withExtension: "mp4") {
+            if let bundleVideoURL = Bundle.main.url(forResource: "dumbbell", withExtension: "mp4") {
                 VideoPlayer(player: AVPlayer(url: bundleVideoURL))
                     .frame(height: 200)
                     .cornerRadius(12)
@@ -97,13 +102,18 @@ struct SegmentedSection: View {
     var body: some View {
         VStack {
             Picker("Select View", selection: $selectedSegment) {
-                Text("About").tag(0)
-                Text("Key Moment").tag(1)
+                Text("About")
+                    .font(.title)
+                    .tag(0)
+                    
+                Text("Key Moment")
+                    .font(.title)
+                    .tag(1)
             }
             .pickerStyle(SegmentedPickerStyle())
             .colorScheme(.dark)
+            .frame(maxWidth : .infinity)
         }
-        .padding(.horizontal)
         .cornerRadius(8)
         .padding(.horizontal)
     }
@@ -117,7 +127,11 @@ struct SegmentedContent: View {
         if selectedSegment == 0 {
             AboutContent(exercise: exercise)
         } else {
+           
+               
             KeyMomentContent(exercise: exercise)
+        
+            
         }
     }
 }
@@ -153,16 +167,33 @@ struct AboutContent: View {
 
 struct KeyMomentContent: View {
     let exercise: Exercise
+    var idx = 1
     var body: some View {
-        VStack(spacing: 12) {
-            ForEach(exercise.detail.key_moment, id: \ .self) { moment in
-                KeyMomentCard(
-                    title: "Image",
-                    description: moment.key_description
-                )
+        ZStack{
+            HStack{
+                Rectangle()
+                    .frame(width : 10)
+                    .padding(.leading , 26)
+                    .padding(.vertical, 50)
+                
+                Spacer()
             }
+        
+            
+            VStack(spacing: 12) {
+                ForEach(Array(exercise.detail.key_moment.enumerated()), id: \.offset) { index, moment in
+                    KeyMomentCard(
+                        title: moment.key_image,
+                        description: moment.key_description,
+                        idx: index+1
+                    )
+                }
+
+            }
+            .padding()
         }
-        .padding()
+        .frame(alignment : .leading)
+        
     }
 }
 
@@ -188,26 +219,40 @@ struct FeatureRow: View {
 struct KeyMomentCard: View {
     let title: String // key_image
     let description: String
+    let idx: Int
     
     var body: some View {
-        HStack(alignment: .top, spacing: 16) {
-            Image(title)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 64, height: 64)
-                .cornerRadius(10)
-                .background(Color.gray.opacity(0.2))
-            VStack(alignment: .leading, spacing: 8) {
-                Text(description)
-                    .font(.body)
-                    .foregroundColor(.gray)
-                    .multilineTextAlignment(.leading)
+        HStack{
+            Text("\(idx)")
+                .foregroundStyle(.white)
+                .background(
+                    Circle()
+                        .fill(.black)
+                        .frame(width: 30, height: 30)
+                )
+                .padding(.horizontal, 10)
+            
+            HStack(alignment: .center, spacing: 16) {
+                    
+                Image(title)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 102, height: 64)
+                    .cornerRadius(10)
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(description)
+                        .font(.body)
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.leading)
+                }
+                Spacer()
             }
-            Spacer()
+            .padding()
+            .background(Color.black.opacity(0.3))
+            .cornerRadius(12)
         }
-        .padding()
-        .background(Color.black.opacity(0.3))
-        .cornerRadius(12)
+        
+        
     }
 }
 
@@ -225,8 +270,10 @@ struct BadgeView: View {
     }
 }
 
-//#Preview {
-//    NavigationStack {
-//        Tuto()
-//    }
-//}
+#Preview {
+    NavigationStack {
+        TutorialView()
+            .environmentObject(RouteManager())
+            .environmentObject(ExerciseManager())
+    }
+}
