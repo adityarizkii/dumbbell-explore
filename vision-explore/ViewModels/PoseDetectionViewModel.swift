@@ -207,22 +207,22 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
     
     private func getAngleBody(jointPoints: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]){
         let rightshoulderPos:VNHumanBodyPoseObservation.JointName =  .rightShoulder
-        let rightelbowPos:VNHumanBodyPoseObservation.JointName = .rightElbow
-        let rightwristPos:VNHumanBodyPoseObservation.JointName = .rightWrist
+//        let rightelbowPos:VNHumanBodyPoseObservation.JointName = .rightElbow
+//        let rightwristPos:VNHumanBodyPoseObservation.JointName = .rightWrist
         let leftshoulderPos:VNHumanBodyPoseObservation.JointName =  .leftShoulder
-        let leftelbowPos:VNHumanBodyPoseObservation.JointName = .leftElbow
-        let leftwristPos:VNHumanBodyPoseObservation.JointName = .leftWrist
-        // Calculate the difference in the x and y coordinates of the shoulders
+//        let leftelbowPos:VNHumanBodyPoseObservation.JointName = .leftElbow
+//        let leftwristPos:VNHumanBodyPoseObservation.JointName = .leftWrist
         
         let rightShoulder = jointPoints[rightshoulderPos]!
         let leftShoulder = jointPoints[leftshoulderPos]!
         let xDiff = abs(leftShoulder.location.x - rightShoulder.location.x)
         let yDiff = abs(leftShoulder.location.y - rightShoulder.location.y)
         
-        // Set a tolerance for error (the threshold for being considered aligned)
-        let tolerance: CGFloat = 0.1  // Allow a little tolerance for error in alignment
+        print("X DIFF : \(leftShoulder.location.x) - \(rightShoulder.location.x)")
+        print("Y DIFF : \(leftShoulder.location.y) - \(rightShoulder.location.y)")
+
+        let tolerance: CGFloat = 0.05
         
-        // Check if both shoulders are close to each other on the x-axis (indicating a 90-degree alignment)
         if xDiff < tolerance && yDiff < tolerance {
             DispatchQueue.main.async {
                 self.is90degree = true
@@ -403,6 +403,26 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
             let elbowX = 1-(  rightElbow?.y ?? 0  )
             let wristX = 1-(  rightWrist?.y ?? 0  )
             
+            if round(shoulderX * 100) / 100 <= 0.73 {
+                DispatchQueue.main.async {
+                    self.feedbackText = "Move Backward to the box"
+                }
+            }
+            
+            if round(shoulderX * 100) / 100 >= 0.78 {
+                DispatchQueue.main.async {
+                    self.feedbackText = "Move Forward to the box"
+                }
+            }
+            
+            if round(wristX * 100) / 100 <= 0.73 {
+                DispatchQueue.main.async {
+                    self.feedbackText = "Move Forward to the box"
+                }
+            }
+            
+            
+            
             if round(shoulderX * 100) / 100 >= 0.73 && round(shoulderX * 100) / 100 <= 0.78 && round(elbowX * 100) / 100 >= 0.73 && round(elbowX * 100) / 100 <= 0.78 && round(wristX * 100) / 100 >= 0.73 && round(wristX * 100) / 100 <= 0.78
             {
                 //                self.feedbackText = "POSISI OKKEEEE"
@@ -414,9 +434,11 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                     }
                 }
             }else{
-                //                print(round(shoulderX * 100) / 100)
-                //                print(round(shoulderX * 100)/100)
-                //                print(round(wristX * 100) / 100 )
+                DispatchQueue.main.async {
+                    self.feedbackText = "Straighten your arm"
+                    self.mulai = true
+                    self.showArmArea = false
+                }
             }
             
             //                // Calculate the differences in the x-axis between the joints
