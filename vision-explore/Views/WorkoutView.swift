@@ -178,14 +178,14 @@ struct WorkoutView: View {
                                 }
                                 .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height, alignment: .top)
                                 .padding()
-//                                .background(.red)
+                                //                                .background(.red)
                             }
                             .padding(.top,100)
                         }
                         .frame(maxWidth : .infinity, alignment : .trailing)
-
+                        
                     }
-//                    .background()
+                    //                    .background()
                 }else if viewModel.mulai  && showSecondText{
                     FrameOverlayAnimation()
                         .onAppear {
@@ -206,9 +206,10 @@ struct WorkoutView: View {
                 else if showThirdText{
                     if let firstJoint = viewModel.capturedJoints.first {
                         GuideLine(
-                            //                    shoulderPoint: firstJoint.shoulder,
                             wristPoint: firstJoint.wrist,
-                            elbowPoint: firstJoint.elbow
+                            elbowPoint: firstJoint.elbow,
+                            shoulderPoint: firstJoint.shoulder
+                            
                         )
                     }
                 }
@@ -217,7 +218,7 @@ struct WorkoutView: View {
                 if !viewModel.is90degree{
                     SetupOverlay()
                 }
-                    
+                
                 
                 
                 

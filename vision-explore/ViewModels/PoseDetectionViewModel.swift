@@ -113,7 +113,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
             guard let observations = request.results as? [VNHumanBodyPoseObservation],
                   let first = observations.first else {
                 DispatchQueue.main.async {
-//                    self.feedbackText = "Get on the Frame"
+                    //                    self.feedbackText = "Get on the Frame"
                     self.currentPoints = nil
                     self.overlayColor = .gray
                 }
@@ -130,13 +130,13 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                 let jointPoints = try first.recognizedPoints(.all)
                 
                 // Retrieve the positions of the left and right shoulders
-                guard let leftShoulder = jointPoints[.leftShoulder],
-                      let rightShoulder = jointPoints[.rightShoulder] else {
-                    DispatchQueue.main.async {
-                        self.feedbackText = "Shoulder joints not detected"
-                    }
-                    return
-                }
+//                guard let leftShoulder = jointPoints[.leftShoulder],
+//                      let rightShoulder = jointPoints[.rightShoulder] else {
+//                    DispatchQueue.main.async {
+//                        self.feedbackText = "Shoulder joints not detected"
+//                    }
+//                    return
+//                }
                 
                 //                // Calculate the difference in the x and y coordinates of the shoulders
                 //                let xDiff = abs(leftShoulder.location.x - rightShoulder.location.x)
@@ -179,20 +179,20 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                         self.captureArmJoints(jointPoints: jointPoints)
                     }
                 }
-
                 
-//                if !self.jointsCaptured {
-//                    DispatchQueue.main.async {
-//                        self.captureArmJoints(jointPoints: jointPoints)
-//                    }
-//                }
-//                
-//                print("is really captured  ??: \(self.jointsCaptured)")
-//                //
-//                self.checkPosition(points: jointPoints)
-//                
-//                
-//                
+                
+                //                if !self.jointsCaptured {
+                //                    DispatchQueue.main.async {
+                //                        self.captureArmJoints(jointPoints: jointPoints)
+                //                    }
+                //                }
+                //
+                //                print("is really captured  ??: \(self.jointsCaptured)")
+                //                //
+                //                self.checkPosition(points: jointPoints)
+                //
+                //
+                //
             } catch {
                 print("Error: \(error)")
             }
@@ -207,11 +207,11 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
     
     private func getAngleBody(jointPoints: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]){
         let rightshoulderPos:VNHumanBodyPoseObservation.JointName =  .rightShoulder
-//        let rightelbowPos:VNHumanBodyPoseObservation.JointName = .rightElbow
-//        let rightwristPos:VNHumanBodyPoseObservation.JointName = .rightWrist
+        //        let rightelbowPos:VNHumanBodyPoseObservation.JointName = .rightElbow
+        //        let rightwristPos:VNHumanBodyPoseObservation.JointName = .rightWrist
         let leftshoulderPos:VNHumanBodyPoseObservation.JointName =  .leftShoulder
-//        let leftelbowPos:VNHumanBodyPoseObservation.JointName = .leftElbow
-//        let leftwristPos:VNHumanBodyPoseObservation.JointName = .leftWrist
+        //        let leftelbowPos:VNHumanBodyPoseObservation.JointName = .leftElbow
+        //        let leftwristPos:VNHumanBodyPoseObservation.JointName = .leftWrist
         
         let rightShoulder = jointPoints[rightshoulderPos]!
         let leftShoulder = jointPoints[leftshoulderPos]!
@@ -220,7 +220,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
         
         print("X DIFF : \(leftShoulder.location.x) - \(rightShoulder.location.x)")
         print("Y DIFF : \(leftShoulder.location.y) - \(rightShoulder.location.y)")
-
+        
         let tolerance: CGFloat = 0.05
         
         if xDiff < tolerance && yDiff < tolerance {
@@ -231,7 +231,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
             }
         } else {
             DispatchQueue.main.async {
-//                self.feedbackText = "Body is not aligned at 90 degrees"
+                //                self.feedbackText = "Body is not aligned at 90 degrees"
                 
                 self.overlayColor = .red
             }
@@ -385,7 +385,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
             }
             
             //            print("Posisi lengan kanan \( getDistance())")
-            //            print("Posisi Shulder kanan \(  rightShoulder?.x ?? 0  ) \(  rightShoulder?.y ?? 0  )")
+            //                        print("Posisi Shulder kanan \(  rightShoulder?.x ?? 0  ) \(  rightShoulder?.y ?? 0  )")
             //            print("Posisi elbow kanan \(   rightElbow?.x ?? 0  ) \(  rightElbow?.y ?? 0  )")
             //            print( "Posisi Wrist kanan \(  rightWrist?.x ?? 0  ) \(  rightWrist?.y ?? 0  )")
             
@@ -403,63 +403,61 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
             let elbowX = 1-(  rightElbow?.y ?? 0  )
             let wristX = 1-(  rightWrist?.y ?? 0  )
             
-            if round(shoulderX * 100) / 100 <= 0.73 {
-                DispatchQueue.main.async {
-                    self.feedbackText = "Move Backward to the box"
-                }
-            }
+            print("jarak sumbu x : \(shoulderX)")
             
-            if round(shoulderX * 100) / 100 >= 0.78 {
-                DispatchQueue.main.async {
-                    self.feedbackText = "Move Forward to the box"
-                }
-            }
-            
-            if round(wristX * 100) / 100 <= 0.73 {
-                DispatchQueue.main.async {
-                    self.feedbackText = "Move Forward to the box"
-                }
-            }
-            
-            
-            
-            if round(shoulderX * 100) / 100 >= 0.73 && round(shoulderX * 100) / 100 <= 0.78 && round(elbowX * 100) / 100 >= 0.73 && round(elbowX * 100) / 100 <= 0.78 && round(wristX * 100) / 100 >= 0.73 && round(wristX * 100) / 100 <= 0.78
-            {
-                //                self.feedbackText = "POSISI OKKEEEE"
-                if !self.mulai {
+            if !self.mulai{
+                if round(shoulderX * 100) / 100 <= 0.70 {
                     DispatchQueue.main.async {
-                        self.feedbackText = "Correct Position, Keep it up!"
-                        self.mulai = true
-                        self.showArmArea = false
+                        self.feedbackText = "Move backward to Center of Yellow area"
                     }
+                } else if round(shoulderX * 100) / 100 >= 0.78 {
+                    DispatchQueue.main.async {
+                        self.feedbackText = "Move forward to Center of Yellow area."
+                        print(shoulderX)
+                    }
+                }else {
+//                    DispatchQueue.main.async {
+//                        self.feedbackText = "Adjust your arm"
+//                    }
+//                    Move closer to the camera.
+//                    Move away from the camera
+                    
+                    
+                    // Calculate the differences in the x-axis between the joints
+                    
+                    let shoulderElbowDiff = abs(shoulderX - elbowX)
+                    let elbowWristDiff = abs(elbowX - wristX)
+                    
+                    // Set a tolerance for error (the threshold for being considered aligned)
+                    let tolerance: CGFloat = 0.05  // Allow a little tolerance for error in vertical alignment
+                    
+                    // Check if all joints are aligned vertically (within the tolerance on the x-axis)
+                    if shoulderElbowDiff < tolerance && elbowWristDiff < tolerance {
+                        DispatchQueue.main.async {
+                            self.overlayColor = .green // Set overlay color to green when aligned
+                            self.feedbackText = "Good Position!"
+                            self.showArmArea = false
+                            self.mulai = true
+                        }
+                    }
+                    
+                    
+                    return
+                    
                 }
-            }else{
-                DispatchQueue.main.async {
-                    self.feedbackText = "Straighten your arm"
-                    self.mulai = true
-                    self.showArmArea = false
-                }
+                
+                
+    //            else {
+    //                DispatchQueue.main.async {
+    //                    self.overlayColor = .red // Set overlay color to red when not aligned
+    //                    self.showArmArea = false
+    //                }
+    //            }
+                
+                
             }
+
             
-            //                // Calculate the differences in the x-axis between the joints
-            //                let shoulderElbowDiff = abs(shoulderX - elbowX)
-            //                let elbowWristDiff = abs(elbowX - wristX)
-            //
-            //                // Set a tolerance for error (the threshold for being considered aligned)
-            //                let tolerance: CGFloat = 0.05  // Allow a little tolerance for error in vertical alignment
-            //
-            //                // Check if all joints are aligned vertically (within the tolerance on the x-axis)
-            //                if shoulderElbowDiff < tolerance && elbowWristDiff < tolerance {
-            //                    DispatchQueue.main.async {
-            //                        self.overlayColor = .green // Set overlay color to green when aligned
-            //                        self.showArmArea = true
-            //                    }
-            //                } else {
-            //                    DispatchQueue.main.async {
-            //                        self.overlayColor = .red // Set overlay color to red when not aligned
-            //                        self.showArmArea = false
-            //                    }
-            //                }
         }
         
     }
