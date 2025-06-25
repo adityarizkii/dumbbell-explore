@@ -171,6 +171,9 @@ struct HomeView: View {
             .navigationDestination(for: Exercise.self) { exercise in
                 AnyView(TutorialView(exercise: exercise).environmentObject(routeManager))
             }
+            .navigationDestination(for: String.self) { routeName in
+                routeManager.getView(for: routeName)
+            }
         }
         .onAppear(){
             homeViewModel = HomeViewModel()
