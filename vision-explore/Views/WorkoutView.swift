@@ -26,6 +26,9 @@ struct WorkoutView: View {
     @State var showSecondText : Bool = true
     @State var showThirdText : Bool = false
     
+    @State var anglePosture : Bool = false
+    @State var showArmArea : Bool = false
+    
     var body: some View {
         GeometryReader { geometry in
             let height = geometry.size.height
@@ -37,28 +40,31 @@ struct WorkoutView: View {
                     PoseOverlay(points: points, evaluationColor: viewModel.overlayColor)
                 }
                 VStack {
-                    Text(viewModel.feedbackText)
-                        .padding()
-                        .background(Color.black.opacity(0.7))
-                        .cornerRadius(10)
-                        .font(.title3)
-                        .overlay(
-                            LinearGradient(
-                                colors: [Color("Button1"),Color("Button2")],
-                                startPoint: .leading,
-                                endPoint: .trailing
+                    if viewModel.is90degree {
+                        Text(viewModel.feedbackText)
+                            .padding()
+                            .background(Color.black.opacity(0.7))
+                            .cornerRadius(10)
+                            .font(.title3)
+                            .overlay(
+                                LinearGradient(
+                                    colors: [Color("Button1"),Color("Button2")],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
                             )
-                        )
-                        .mask(
-                            Text(viewModel.feedbackText)
-                        )
-                        .font(.title3)
-                        .font(.system(size: 10, weight: .light, design: .default))
-                        .background(Color.black.opacity(0.7))
-                        .cornerRadius(10)
-                        .padding()
-                        .padding(.top, 120)
-                    Spacer()
+                            .mask(
+                                Text(viewModel.feedbackText)
+                            )
+                            .font(.title3)
+                            .font(.system(size: 10, weight: .light, design: .default))
+                            .background(Color.black.opacity(0.7))
+                            .cornerRadius(10)
+                            .padding()
+                            .padding(.top, 100)
+                        Spacer()
+                    }
+                    
                     
                     
                 }
@@ -137,12 +143,10 @@ struct WorkoutView: View {
                 //                }
                 //            }
                 
-                if !viewModel.mulai {
+                if viewModel.showArmArea {
                     ZStack{
                         VStack{
                             ZStack{
-                                
-                                
                                 RoundedRectangle(cornerRadius: 10)
                                     .stroke(
                                         LinearGradient(
@@ -181,12 +185,13 @@ struct WorkoutView: View {
                         .frame(maxWidth : .infinity, alignment : .trailing)
 
                     }
+//                    .background()
                 }else if viewModel.mulai  && showSecondText{
                     FrameOverlayAnimation()
                         .onAppear {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                                 withAnimation {
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0) {
                                         withAnimation {
                                             self.showSecondText = false
                                             showThirdText = true
@@ -207,6 +212,12 @@ struct WorkoutView: View {
                         )
                     }
                 }
+                
+                
+                if !viewModel.is90degree{
+                    SetupOverlay()
+                }
+                    
                 
                 
                 

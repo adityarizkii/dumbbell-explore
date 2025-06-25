@@ -17,7 +17,7 @@ class RouteManager: ObservableObject {
     }
 
     private func setupRoutes() {
-        routeService.addRoute(name: "home", view: HomeView())
+        routeService.addRoute(name: "home", view: WorkoutView())
         routeService.addRoute(name: "tutorial", view: TutorialView())
         routeService.addRoute(name: "firstguidance", view: IntroGuideView())
         routeService.addRoute(name: "guidance", view: InstructionView())
