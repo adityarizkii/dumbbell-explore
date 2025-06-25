@@ -46,10 +46,16 @@ struct TutorialView: View {
                 }) {
                     Text("Start Exercise")
                         .font(.headline)
-                        .foregroundColor(.white)
+                        .foregroundColor(.black)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
-                        .background(Color(hex: "#333333"))
+                        .background(
+                            LinearGradient(
+                                gradient: Gradient(colors: [Color("Button1"),Color("Button2") ]),
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
                         .cornerRadius(12)
                 }
                 .padding(.horizontal)
@@ -139,30 +145,21 @@ struct AboutContent: View {
                 .font(.body)
                 .foregroundColor(.gray)
                 .multilineTextAlignment(.leading)
-                .padding()
-                .background(Color.black.opacity(0.3))
                 .cornerRadius(12)
         }
-        .padding()
+        .padding(24)
     }
 }
 
 struct KeyMomentContent: View {
     let exercise: Exercise
     var body: some View {
-        VStack(spacing: 15) {
-            Text("Key Moments in \(exercise.name)")
-                .font(.title2)
-                .fontWeight(.bold)
-                .foregroundColor(.white)
-            
-            VStack(spacing: 12) {
-                ForEach(exercise.detail.key_moment, id: \ .self) { moment in
-                    KeyMomentCard(
-                        title: moment.key_image,
-                        description: moment.key_description
-                    )
-                }
+        VStack(spacing: 12) {
+            ForEach(exercise.detail.key_moment, id: \ .self) { moment in
+                KeyMomentCard(
+                    title: "Image",
+                    description: moment.key_description
+                )
             }
         }
         .padding()
@@ -189,19 +186,24 @@ struct FeatureRow: View {
 }
 
 struct KeyMomentCard: View {
-    let title: String
+    let title: String // key_image
     let description: String
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(title)
-                .font(.headline)
-                .foregroundColor(.white)
-            
-            Text(description)
-                .font(.body)
-                .foregroundColor(.gray)
-                .multilineTextAlignment(.leading)
+        HStack(alignment: .top, spacing: 16) {
+            Image(title)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 64, height: 64)
+                .cornerRadius(10)
+                .background(Color.gray.opacity(0.2))
+            VStack(alignment: .leading, spacing: 8) {
+                Text(description)
+                    .font(.body)
+                    .foregroundColor(.gray)
+                    .multilineTextAlignment(.leading)
+            }
+            Spacer()
         }
         .padding()
         .background(Color.black.opacity(0.3))

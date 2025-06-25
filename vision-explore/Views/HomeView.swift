@@ -173,6 +173,9 @@ struct HomeView: View {
             .navigationDestination(for: String.self) { exercise in
                 AnyView(routeManager.getView(for: exercise))
             }
+            .navigationDestination(for: String.self) { routeName in
+                routeManager.getView(for: routeName)
+            }
         }
         .onAppear(){
            

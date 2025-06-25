@@ -20,7 +20,7 @@ class HomeViewModel: ObservableObject {
                 description: "Latihan biceps dengan mengangkat dumbbell ke arah bahu, telapak tangan menghadap atas.",
                 muscles: ["Biceps", "Under Arm"],
                 detail: ExerciseDetail(
-                    about: "Seated bicep curls are a strength-training exercise that targets your biceps, the muscles in the front part of your upper arms. By sitting down while doing this movement, your body stays more stable, minimizing the involvement of other muscles and allowing for better isolation of the biceps.\n\n This exercise is great for building arm strength and shaping your biceps, especially if you perform it with slow, controlled movements.",
+                    about: "Seated bicep curls are a strength-training exercise that targets your biceps, the muscles in the front part of your upper arms. By sitting down while doing this movement, your body stays more stable, minimizing the involvement of other muscles and allowing for better isolation of the biceps.\n\nThis exercise is great for building arm strength and shaping your biceps, especially if you perform it with slow, controlled movements.",
                     key_moment: [
                         KeyMoment(key_image: "moment1", key_description: "Posisi awal berdiri tegak, dumbbell di samping tubuh."),
                         KeyMoment(key_image: "moment2", key_description: "Angkat dumbbell ke arah bahu dengan siku tetap di samping tubuh."),
