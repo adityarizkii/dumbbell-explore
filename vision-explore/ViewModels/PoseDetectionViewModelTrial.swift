@@ -278,7 +278,7 @@ class PoseDetectionViewModelTrial: PoseDetectionViewModel {
         
     }
     
-    private func evaluatePose(points: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]) {
+    override func evaluatePose(points: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]) {
         DispatchQueue.main.async {
             self.currentPoints = points
             

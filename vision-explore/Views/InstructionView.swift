@@ -60,11 +60,8 @@ struct InstructionView: View {
                                     if currentPage < totalPages - 1 {
                                         currentPage += 1
                                     } else {
-<<<<<<< HEAD
                                         routeManager.push( "trial")
-=======
-                                        routeManager.push( "workout")
->>>>>>> c698ccbb3e1766b407f9f2b99a2543cd982c44d3
+
                                         print("Start real-time guiding")
                                     }
                                 }
@@ -137,11 +134,8 @@ struct InstructionView: View {
 //                        }
 //                        .padding(.bottom, 40)
 //                    }
-<<<<<<< HEAD
             }
-=======
-                }
->>>>>>> c698ccbb3e1766b407f9f2b99a2543cd982c44d3
+
 
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -266,9 +260,7 @@ struct PageIndicator: View {
             }
         }
     }
+    
 }
 
-#Preview {
-    InstructionView()
-        .environmentObject(RouteManager())
-}
+

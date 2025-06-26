@@ -20,26 +20,19 @@ struct WorkoutView: View {
     var shoulderPoint: CGPoint?
     var elbowPoint: CGPoint?
     var wristPoint: CGPoint?
-<<<<<<< HEAD
     @StateObject var trialViewModel  = TrialViewModel()
 
     //    var mulai : Bool = false
     var mulai : Bool = true
-=======
-    
-    //    var mulai : Bool = false
-//    var mulai : Bool = true
->>>>>>> c698ccbb3e1766b407f9f2b99a2543cd982c44d3
+
     @State var showSecondText : Bool = true
     @State var showThirdText : Bool = false
     
     @State var anglePosture : Bool = false
     @State var showArmArea : Bool = false
-<<<<<<< HEAD
     @State var isPaused : Bool = false
     @State var rep : Int! = 0
-=======
->>>>>>> c698ccbb3e1766b407f9f2b99a2543cd982c44d3
+
     
     var body: some View {
         GeometryReader { geometry in
@@ -82,17 +75,17 @@ struct WorkoutView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 
-                if viewModel.showCompletionAlert {
-                    Color.black.opacity(0.5)
-                        .edgesIgnoringSafeArea(.all)
-                    
-                    CompletionAlert(
-                        onReset: {
-                            viewModel.resetExercise()
-                        },
-                        repetitionData: viewModel.repetitionData
-                    )
-                }
+//                if viewModel.showCompletionAlert {
+//                    Color.black.opacity(0.5)
+//                        .edgesIgnoringSafeArea(.all)
+//                    
+//                    CompletionAlert(
+//                        onReset: {
+//                            viewModel.resetExercise()
+//                        },
+//                        repetitionData: viewModel.repetitionData
+//                    )
+//                }
                 
                 
                 VStack{
@@ -190,16 +183,7 @@ struct WorkoutView: View {
                                 }
                                 .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height, alignment: .top)
                                 .padding()
-<<<<<<< HEAD
-//                                .background(.red)
-                            }
-                            .padding(.top,100)
-                        }
-                        .frame(maxWidth : .infinity, alignment : .trailing)
 
-                    }
-//                    .background()
-=======
                                 //                                .background(.red)
                             }
                             .padding(.top,100)
@@ -211,7 +195,6 @@ struct WorkoutView: View {
                     }
                     
                     //                    .background()
->>>>>>> c698ccbb3e1766b407f9f2b99a2543cd982c44d3
                 }else if viewModel.mulai  && showSecondText{
                     FrameOverlayAnimation()
                         .scaleEffect(x: viewModel.currentSide == .left ? -1 : 1, y: 1)
@@ -231,63 +214,57 @@ struct WorkoutView: View {
                         }
                 }
                 else if showThirdText{
-<<<<<<< HEAD
-                    if let firstJoint = viewModel.capturedJoints.first {
-                        GuideLine(
-                            //                    shoulderPoint: firstJoint.shoulder,
-                            
-                            trialVM : trialViewModel,
-                            isPaused: $isPaused,
-                            pointJoint : $viewModel.currentPoints,
-                            wj: $viewModel.wristJoint,
-                            step : $trialViewModel.step,
-                            maxStep : $trialViewModel.maxStep,
-                            wristPoint: firstJoint.wrist,
-                            elbowPoint: exerciseManager.exercise.path == "forearm" ? firstJoint.shoulder : firstJoint.elbow,
-                            totalCount : 3,
-                            repetition : $rep,
-                            maxRepetition : exerciseManager.exercise.config.repetition
-                        )
-=======
+
                     if viewModel.mulai{
                         if let firstJoint = viewModel.capturedJoints.first {
                             GuideLine(
+                                //                    shoulderPoint: firstJoint.shoulder,
+                                
+                                trialVM : trialViewModel,
+                                isPaused: $isPaused,
+                                pointJoint : $viewModel.currentPoints,
+                                wj: $viewModel.wristJoint,
+                                step : $trialViewModel.step,
+                                maxStep : $trialViewModel.maxStep,
                                 wristPoint: firstJoint.wrist,
-                                elbowPoint: firstJoint.elbow,
-                                shoulderPoint: firstJoint.shoulder,
-                                side: viewModel.currentSide, 
+                                elbowPoint: exerciseManager.exercise.path == "forearm" ? firstJoint.shoulder : firstJoint.elbow,
+                                shoulderPoint : firstJoint.shoulder,
+                                totalCount : 3,
+                                repetition : $rep,
+                                maxRepetition : exerciseManager.exercise.config.repetition,
+                                side : viewModel.currentSide
                             )
 //                            .background(.red)
 //                            .scaleEffect(x: viewModel.currentSide == .left ? -1 : 1, y: 1)
-                            
+
                         }
 
->>>>>>> c698ccbb3e1766b407f9f2b99a2543cd982c44d3
+
+                    }else{
+
                     }
+                    
                 }
                 
                 
                 if !viewModel.is90degree{
                     SetupOverlay()
                 }
-<<<<<<< HEAD
-                    
-=======
+
                 
-                Button{
-                    
-                } label: {
-                    Text("Left Arm Turn!")
-                        
-                }
-                .padding()
-                .foregroundColor(.black)
-                .bold()
-                .background()
-                .cornerRadius(20)
->>>>>>> c698ccbb3e1766b407f9f2b99a2543cd982c44d3
-                
-                
+//                Button{
+//                    
+//                } label: {
+//                    Text("Left Arm Turn!")
+//                        
+//                }
+//                .padding()
+//                .foregroundColor(.black)
+//                .bold()
+//                .background()
+//                .cornerRadius(20)
+////                
+            
                 
             }
             .background(
