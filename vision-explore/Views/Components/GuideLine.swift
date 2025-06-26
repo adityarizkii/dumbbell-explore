@@ -33,7 +33,7 @@ struct GuideLine: View {
     
     var totalCount : Int!
     @Binding var repetition : Int!
-    var maxRepetition : Int!
+    @State var maxRepetition : Int!
     
     @State var pA: CGPoint = CGPoint(x : 0, y : 0)
     @State var pB: CGPoint = CGPoint(x : 0, y : 0)
@@ -262,8 +262,7 @@ struct GuideLine: View {
                         
                         if repeatCount < 16 {
                             timer.invalidate()
-                            routeManager.clear()
-                            routeManager.push("finished")
+                           
                             isPaused = true
                             startCountdown()
                         }
@@ -286,16 +285,16 @@ struct GuideLine: View {
 
                         if hitA {
                             repetition += 1
-                            if repetition >= maxRepetition{
-                                routeManager.clear()
-                                routeManager.push("finished")
-                                timer.invalidate()
-                                
-                            }
+                            
                         }
                         isPaused = false
                         step += 1
-                        
+                        if repetition >= maxRepetition{
+                            routeManager.clear()
+                            routeManager.push("finished")
+                            timer.invalidate()
+                            
+                        }
                     }
                     
                     
