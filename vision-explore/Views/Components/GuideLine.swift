@@ -287,9 +287,10 @@ struct GuideLine: View {
                         if hitA {
                             repetition += 1
                             if repetition >= maxRepetition{
-                                timer.invalidate()
                                 routeManager.clear()
                                 routeManager.push("finished")
+                                timer.invalidate()
+                                
                             }
                         }
                         isPaused = false
