@@ -22,7 +22,7 @@ struct WorkoutView: View {
     var wristPoint: CGPoint?
     
     //    var mulai : Bool = false
-    var mulai : Bool = true
+//    var mulai : Bool = true
     @State var showSecondText : Bool = true
     @State var showThirdText : Bool = false
     
@@ -37,7 +37,7 @@ struct WorkoutView: View {
             ZStack {
                 CameraManager(viewModel: viewModel)
                 if let points = viewModel.currentPoints {
-                    PoseOverlay(points: points, evaluationColor: viewModel.overlayColor)
+                    PoseOverlay(position: viewModel.currentSide, points: points, evaluationColor: viewModel.overlayColor)
                 }
                 VStack {
                     if viewModel.is90degree {
@@ -182,12 +182,16 @@ struct WorkoutView: View {
                             }
                             .padding(.top,100)
                         }
-                        .frame(maxWidth : .infinity, alignment : .trailing)
+                        .frame(maxWidth: .infinity, alignment:  (viewModel.currentSide == .right ? .trailing : .leading))
+
+
                         
                     }
+                    
                     //                    .background()
                 }else if viewModel.mulai  && showSecondText{
                     FrameOverlayAnimation()
+                        .scaleEffect(x: viewModel.currentSide == .left ? -1 : 1, y: 1)
                         .onAppear {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                                 withAnimation {
@@ -204,13 +208,19 @@ struct WorkoutView: View {
                         }
                 }
                 else if showThirdText{
-                    if let firstJoint = viewModel.capturedJoints.first {
-                        GuideLine(
-                            wristPoint: firstJoint.wrist,
-                            elbowPoint: firstJoint.elbow,
-                            shoulderPoint: firstJoint.shoulder
+                    if viewModel.mulai{
+                        if let firstJoint = viewModel.capturedJoints.first {
+                            GuideLine(
+                                wristPoint: firstJoint.wrist,
+                                elbowPoint: firstJoint.elbow,
+                                shoulderPoint: firstJoint.shoulder,
+                                side: viewModel.currentSide, 
+                            )
+//                            .background(.red)
+//                            .scaleEffect(x: viewModel.currentSide == .left ? -1 : 1, y: 1)
                             
-                        )
+                        }
+
                     }
                 }
                 

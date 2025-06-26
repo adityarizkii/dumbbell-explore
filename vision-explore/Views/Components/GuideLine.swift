@@ -30,6 +30,11 @@ struct GuideLine: View {
     var elbowPoint: CGPoint?
     var shoulderPoint: CGPoint?
     
+//    var wristPoint: CGPoint? = CGPoint(x: 0.5, y: 0.8)
+//    var elbowPoint: CGPoint? = CGPoint(x: 0.5, y: 0.5)
+//    var shoulderPoint: CGPoint? = CGPoint(x: 0.5, y: 0.2)
+    
+    var side : position
     
     var body: some View {
         GeometryReader { geometry in
@@ -56,8 +61,10 @@ struct GuideLine: View {
                 let dy = pointB.y - pointA.y
                 let radius = sqrt(dx * dx + dy * dy)
                 
+                let sideangle = side == .left ? -135.0 : 135.0
+                
                 let startAngle = Angle(radians: atan2(dy, dx))
-                let endAngle = Angle(degrees: startAngle.degrees + 135)
+                let endAngle = Angle(degrees: startAngle.degrees + sideangle)
                 
                 let endRadians = endAngle.radians
                 let endPoint = CGPoint(
@@ -134,7 +141,8 @@ struct GuideLine: View {
                                 radius: radius,
                                 startAngle: startAngle,
                                 endAngle: endAngle,
-                                clockwise: false
+                                clockwise: side == .left
+                                
                             )
                         }
                         .stroke(
@@ -150,7 +158,7 @@ struct GuideLine: View {
                                 radius: radius,
                                 startAngle: startAngle,
                                 endAngle: endAngle,
-                                clockwise: false
+                                clockwise: side == .left
                             )
                         }
                         .trim(from: 0.0, to: arcProgress)
@@ -202,11 +210,6 @@ struct GuideLine: View {
 
                     }
                 }
-            } else {
-                // Display message if wrist or elbow points are not available
-                Text("Wrist or Elbow point not detected")
-                    .foregroundColor(.white)
-                    .padding()
             }
         }
     }
@@ -243,7 +246,7 @@ struct GuideLine: View {
 }
 
 #Preview {
-    GuideLine()
+    GuideLine(side: .left)
         .environmentObject(RouteManager())
 
 }

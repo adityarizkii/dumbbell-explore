@@ -31,7 +31,7 @@ struct TrialView: View {
             ZStack {
                 CameraManager(viewModel: viewModel)
                 if let points = viewModel.currentPoints {
-                    PoseOverlay(points: points, evaluationColor: viewModel.overlayColor)
+                    PoseOverlay(position: viewModel.currentSide, points: points, evaluationColor: viewModel.overlayColor)
 //                        .onAppear{
 //                            print("Posisi \(String(describing: points[.rightWrist]?.x)) y : \(String(describing: points[.rightWrist]?.y))")
 //                    }
