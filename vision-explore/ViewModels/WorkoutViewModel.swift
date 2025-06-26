@@ -17,7 +17,7 @@ class WorkoutViewModel: ObservableObject {
     func evaluationLayer()-> some View{
         ZStack{
             if let points = viewModel.currentPoints {
-                PoseOverlay(points: points, evaluationColor: viewModel.overlayColor)
+                PoseOverlay(position: viewModel.currentSide, points: points, evaluationColor: viewModel.overlayColor)
             }
             
             if viewModel.showCompletionAlert {
@@ -34,5 +34,22 @@ class WorkoutViewModel: ObservableObject {
         }
     }
     
+<<<<<<< HEAD
     
+=======
+    func handleguidanceLayer()-> some View{
+        VStack{
+            if let firstJoint = self.viewModel.capturedJoints.first {
+                 GuideLine(
+    //                    shoulderPoint: firstJoint.shoulder,
+                    wristPoint: firstJoint.wrist,
+                    elbowPoint: firstJoint.elbow,
+                    side : self.viewModel.currentSide,
+                    
+                )
+            }
+        }
+        
+    }
+>>>>>>> c698ccbb3e1766b407f9f2b99a2543cd982c44d3
 }

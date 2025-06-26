@@ -9,24 +9,49 @@ import SwiftUI
 import Vision
 
 struct PoseOverlay: View {
+    let position : position
     let points: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]
     let evaluationColor: Color
-
-    let jointPairs: [(VNHumanBodyPoseObservation.JointName, VNHumanBodyPoseObservation.JointName)] = [
-        (.rightShoulder, .rightElbow),
-        (.rightElbow, .rightWrist),
+    
+//
+//    let jointPairs: [(VNHumanBodyPoseObservation.JointName, VNHumanBodyPoseObservation.JointName)] = [
+//        (.rightShoulder, .rightElbow),
+//        (.rightElbow, .rightWrist),
 //        (.leftShoulder, .leftElbow),
 //        (.leftElbow, .leftWrist),
-//        (.leftShoulder, .rightShoulder),
-//        (.leftHip, .rightHip),
-//        (.leftShoulder, .leftHip),
-//        (.rightShoulder, .rightHip)
-    ]
+////        (.leftShoulder, .rightShoulder),
+////        (.leftHip, .rightHip),
+////        (.leftShoulder, .leftHip),
+////        (.rightShoulder, .rightHip)
+//    ]
+    
+    let leftSideJoints: [(VNHumanBodyPoseObservation.JointName, VNHumanBodyPoseObservation.JointName)] = [
+            (.leftShoulder, .leftElbow),
+            (.leftElbow, .leftWrist)
+        ]
+        
+        let rightSideJoints: [(VNHumanBodyPoseObservation.JointName, VNHumanBodyPoseObservation.JointName)] = [
+            (.rightShoulder, .rightElbow),
+            (.rightElbow, .rightWrist)
+        ]
+
+        // Define joint points for both sides
+        let leftSidePoints: [VNHumanBodyPoseObservation.JointName] = [
+            .leftShoulder,
+            .leftElbow,
+            .leftWrist
+        ]
+        
+        let rightSidePoints: [VNHumanBodyPoseObservation.JointName] = [
+            .rightShoulder,
+            .rightElbow,
+            .rightWrist
+        ]
 
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-
+                let jointPairs = self.position == .left ? leftSideJoints : rightSideJoints
                 ForEach(Array(jointPairs.enumerated()), id: \.offset) { _, pair in
                     let jointA = pair.0
                     let jointB = pair.1
@@ -48,9 +73,8 @@ struct PoseOverlay: View {
                 }
 
                 // Draw joint points (only right arm)
-                ForEach([VNHumanBodyPoseObservation.JointName.rightShoulder,
-                        .rightElbow,
-                        .rightWrist], id: \.self) { key in
+                let jointPoints = self.position == .left ? leftSidePoints : rightSidePoints
+                ForEach(jointPoints, id: \.self) { key in
                     if let point = points[key], point.confidence > 0.1 {
                         let rotatedX = 1 - point.location.y
                         let rotatedY = point.location.x

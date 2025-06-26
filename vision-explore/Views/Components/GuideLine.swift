@@ -51,6 +51,50 @@ struct GuideLine: View {
                 let dx = pointB.x - pointA.x
                 let dy = pointB.y - pointA.y
                 let radius = sqrt(dx * dx + dy * dy)
+            var shoulderPoint: CGPoint?
+            
+            var side : position
+    
+            
+            if let pointAref = elbowPoint , let pointBref = wristPoint, let pointCref = shoulderPoint {
+                let pointA = CGPoint(
+                    x: pointAref.x * width,
+                    y: pointAref.y * height
+                )
+                
+                let pointB = CGPoint(
+                    x: pointBref.x * width,
+                    y: pointBref.y * height
+                )
+                
+                let pointC = CGPoint(
+                    x: pointCref.x * width,
+                    y: pointCref.y * height
+                )
+                
+                let dx = pointB.x - pointA.x
+                let dy = pointB.y - pointA.y
+                let radius = sqrt(dx * dx + dy * dy)
+                
+                let sideangle = side == .left ? -135.0 : 135.0
+                
+                let startAngle = Angle(radians: atan2(dy, dx))
+                let endAngle = Angle(degrees: startAngle.degrees + sideangle)
+                
+                let endRadians = endAngle.radians
+                let endPoint = CGPoint(
+                    x: pointA.x + radius * cos(endRadians),
+                    y: pointA.y + radius * sin(endRadians)
+                )
+                
+                let startRad = startAngle.radians
+                let endRad = endAngle.radians
+                let delta = endRad - startRad
+                
+                let midStart = Angle(radians: startRad + 0.25 * delta)
+                let midEnd   = Angle(radians: startRad + 0.75 * delta)
+                
+                let midEndRadians = CGFloat(midEnd.radians)
 
                 let startAngle = Angle(radians: atan2(dy, dx))
                 let endAngle = Angle(degrees: startAngle.degrees + abs(exerciseManager.exercise.config.upAngle - exerciseManager.exercise.config.downAngle))
@@ -64,6 +108,12 @@ struct GuideLine: View {
                 ZStack {
                     
                     // Elbow point visual
+                    Circle()
+                        .fill(Color("Button1"))
+                        .frame(width: 30, height: 30)
+                        .position(pointC)
+                    
+                    
                     Circle()
                         .fill(Color("Button1"))
                         .frame(width: 30, height: 30)
@@ -87,6 +137,40 @@ struct GuideLine: View {
                             startAngle: startAngle,
                             endAngle: endAngle,
                             clockwise: false
+                            )
+                    
+                    ZStack {
+                        // Arc path
+                        Path { path in
+                            path.addArc(
+                                center: pointA,
+                                radius: radius,
+                                startAngle: startAngle,
+                                endAngle: endAngle,
+                                clockwise: side == .left
+                                
+                            )
+                        }
+                        .stroke(
+                            Color.white.opacity(0.4),
+                            style: StrokeStyle(
+                                lineWidth: 30,
+                                lineCap: .round
+                            )
+                        )
+                        Path { path in
+                            path.addArc(
+                                center: pointA,
+                                radius: radius,
+                                startAngle: startAngle,
+                                endAngle: endAngle,
+                                clockwise: side == .left
+                            )
+                        }
+                        .trim(from: 0.0, to: arcProgress)
+                        .stroke(
+                            Color("Button1"),
+                            style: StrokeStyle(lineWidth: 15, lineCap: .round)
                         )
                     }
                     .stroke(Color.white.opacity(0.4), style: StrokeStyle(lineWidth: 30, lineCap: .round))
@@ -156,10 +240,6 @@ struct GuideLine: View {
              
                 
 
-            } else {
-                Text("Wrist or Elbow not detected")
-                    .foregroundColor(.white)
-                    .padding()
             }
         }
     }
@@ -226,12 +306,11 @@ struct GuideLine: View {
             
         }
     }
-//    
-//    func isPoint(_ point: CGPoint, insideCircleWithCenter center: CGPoint, radius: CGFloat) -> Bool {
-//            let dx = point.x - center.x
-//            let dy = point.y - center.y
-//            return dx * dx + dy * dy <= radius * radius
-//        }
+}
+
+#Preview {
+    GuideLine(side: .left)
+        .environmentObject(RouteManager())
 
     func isPoint(_ point: CGPoint, insideRectWithCenter center: CGPoint, size: CGSize) -> Bool {
         let dx = abs(point.x - center.x)

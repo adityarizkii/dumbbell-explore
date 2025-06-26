@@ -47,7 +47,7 @@ struct CompletionAlert: View {
             .frame(maxHeight: 200)
             
             Button(action: onReset) {
-                Text("Mulai Set Baru")
+                Text("left Side Turn!")
                     .font(.headline)
                     .foregroundColor(.white)
                     .padding()

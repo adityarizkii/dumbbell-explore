@@ -20,17 +20,26 @@ struct WorkoutView: View {
     var shoulderPoint: CGPoint?
     var elbowPoint: CGPoint?
     var wristPoint: CGPoint?
+<<<<<<< HEAD
     @StateObject var trialViewModel  = TrialViewModel()
 
     //    var mulai : Bool = false
     var mulai : Bool = true
+=======
+    
+    //    var mulai : Bool = false
+//    var mulai : Bool = true
+>>>>>>> c698ccbb3e1766b407f9f2b99a2543cd982c44d3
     @State var showSecondText : Bool = true
     @State var showThirdText : Bool = false
     
     @State var anglePosture : Bool = false
     @State var showArmArea : Bool = false
+<<<<<<< HEAD
     @State var isPaused : Bool = false
     @State var rep : Int! = 0
+=======
+>>>>>>> c698ccbb3e1766b407f9f2b99a2543cd982c44d3
     
     var body: some View {
         GeometryReader { geometry in
@@ -40,7 +49,7 @@ struct WorkoutView: View {
             ZStack {
                 CameraManager(viewModel: viewModel)
                 if let points = viewModel.currentPoints {
-                    PoseOverlay(points: points, evaluationColor: viewModel.overlayColor)
+                    PoseOverlay(position: viewModel.currentSide, points: points, evaluationColor: viewModel.overlayColor)
                 }
                 VStack {
                     if viewModel.is90degree {
@@ -181,6 +190,7 @@ struct WorkoutView: View {
                                 }
                                 .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height, alignment: .top)
                                 .padding()
+<<<<<<< HEAD
 //                                .background(.red)
                             }
                             .padding(.top,100)
@@ -189,8 +199,22 @@ struct WorkoutView: View {
 
                     }
 //                    .background()
+=======
+                                //                                .background(.red)
+                            }
+                            .padding(.top,100)
+                        }
+                        .frame(maxWidth: .infinity, alignment:  (viewModel.currentSide == .right ? .trailing : .leading))
+
+
+                        
+                    }
+                    
+                    //                    .background()
+>>>>>>> c698ccbb3e1766b407f9f2b99a2543cd982c44d3
                 }else if viewModel.mulai  && showSecondText{
                     FrameOverlayAnimation()
+                        .scaleEffect(x: viewModel.currentSide == .left ? -1 : 1, y: 1)
                         .onAppear {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                                 withAnimation {
@@ -207,6 +231,7 @@ struct WorkoutView: View {
                         }
                 }
                 else if showThirdText{
+<<<<<<< HEAD
                     if let firstJoint = viewModel.capturedJoints.first {
                         GuideLine(
                             //                    shoulderPoint: firstJoint.shoulder,
@@ -223,6 +248,21 @@ struct WorkoutView: View {
                             repetition : $rep,
                             maxRepetition : exerciseManager.exercise.config.repetition
                         )
+=======
+                    if viewModel.mulai{
+                        if let firstJoint = viewModel.capturedJoints.first {
+                            GuideLine(
+                                wristPoint: firstJoint.wrist,
+                                elbowPoint: firstJoint.elbow,
+                                shoulderPoint: firstJoint.shoulder,
+                                side: viewModel.currentSide, 
+                            )
+//                            .background(.red)
+//                            .scaleEffect(x: viewModel.currentSide == .left ? -1 : 1, y: 1)
+                            
+                        }
+
+>>>>>>> c698ccbb3e1766b407f9f2b99a2543cd982c44d3
                     }
                 }
                 
@@ -230,7 +270,22 @@ struct WorkoutView: View {
                 if !viewModel.is90degree{
                     SetupOverlay()
                 }
+<<<<<<< HEAD
                     
+=======
+                
+                Button{
+                    
+                } label: {
+                    Text("Left Arm Turn!")
+                        
+                }
+                .padding()
+                .foregroundColor(.black)
+                .bold()
+                .background()
+                .cornerRadius(20)
+>>>>>>> c698ccbb3e1766b407f9f2b99a2543cd982c44d3
                 
                 
                 
