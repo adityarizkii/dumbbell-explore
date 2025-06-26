@@ -14,7 +14,7 @@ final class SpeechManager {
     /// - Parameters:
     ///   - text: Kalimat yang akan diucapkan
     ///   - language: Kode bahasa (contoh: `"en-US"`, `"id-ID"`)
-    func speak(_ text: String, language: String = "en-US") {
+    func speak(_ text: String, language: String = "en-GB") {
         guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             print("⚠️ Teks kosong. Tidak ada yang dibacakan.")
             return

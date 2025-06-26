@@ -28,7 +28,7 @@ class TrialViewModel : ObservableObject{
     
     func playSound(){
         if !self.speechManager.isSpeaking() {
-            self.speechManager.speak(self.getCurrentGuidance()?.description ?? "Great Job, Lets start your first exercie")
+            self.speechManager.speak(self.getCurrentGuidance()?.description ?? "Great Job, Lets start your first exercise")
         }
     }
     

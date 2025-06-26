@@ -13,9 +13,9 @@ struct ExerciseAttribute : Hashable{
     var timeDown : Double
 }
 
-var curl : ExerciseAttribute = ExerciseAttribute(upAngle: 155, downAngle: 65, repetition: 8, timeUp: 10, timeDown: 10)
-var hammer : ExerciseAttribute = ExerciseAttribute(upAngle: 155, downAngle: 65, repetition: 10, timeUp: 10, timeDown: 10)
-var raise : ExerciseAttribute = ExerciseAttribute(upAngle: 135, downAngle: 65, repetition: 10, timeUp: 10, timeDown: 10)
+var curl : ExerciseAttribute = ExerciseAttribute(upAngle: 165, downAngle: 65, repetition: 8, timeUp: 10, timeDown: 10)
+var hammer : ExerciseAttribute = ExerciseAttribute(upAngle: 165, downAngle: 65, repetition: 8, timeUp: 10, timeDown: 10)
+var raise : ExerciseAttribute = ExerciseAttribute(upAngle: 155, downAngle: 65, repetition: 8, timeUp: 10, timeDown: 10)
 
 
 

@@ -21,6 +21,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
     @Published var repetitionCount: Int = 0
     @Published var repetitionData: [RepetitionData] = []
     public var config: ExerciseAttribute = curl
+    public var speechManager : SpeechManager = SpeechManager()
     
     @Published var mulai: Bool = false
     @Published var is90degree: Bool = false
@@ -52,7 +53,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
     func updateFeedback(_ text : String) {
         if getTimeLapsed()/1000 > 1 {
             self.feedbackText = text
-
+            speechManager.speak(text)
         }
     }
     
@@ -131,7 +132,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                   let first = observations.first else {
                 DispatchQueue.main.async {
                     //print("get on the frame \(String(describing: error))")
-                    self.feedbackText = "Get on the Frame"
+                    self.updateFeedback("Get on the Frame")
                     self.currentPoints = nil
                     self.jointsCaptured = false
                     self.overlayColor = .gray
@@ -151,7 +152,8 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                 guard let leftShoulder = jointPoints[.leftShoulder],
                       let rightShoulder = jointPoints[.rightShoulder] else {
                     DispatchQueue.main.async {
-                        self.feedbackText = "Shoulder joints not detected"
+                        
+                        self.updateFeedback("Shoulder joints not detected")
                     }
                     return
                 }
@@ -198,7 +200,8 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                 if self.is90degree && self.showArmArea == false {
                     DispatchQueue.main.async {
                         print("Nice move ")
-                        self.feedbackText = "Nice move!"
+                        
+                        self.updateFeedback("Nice move!")
                         self.captureArmJoints(jointPoints: jointPoints)
                     }
                 }
@@ -429,7 +432,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
             {
                 //                self.feedbackText = "POSISI OKKEEEE"
                 if !self.mulai {
-                        self.feedbackText = "Correct Position, Keep it up!"
+                    self.updateFeedback("Correct Position, Keep it up!")
                         self.mulai = true
                         self.showArmArea = false
                 }
@@ -472,7 +475,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
             points[.rightWrist] != nil
             
             guard hasrightArm else {
-                self.feedbackText = "Tidak ada pose terdeteksi"
+                self.updateFeedback( "Tidak ada pose terdeteksi")
                 self.currentPoints = nil
                 self.overlayColor = .gray
                 return
@@ -530,7 +533,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
             rightWrist?.confidence ?? 0 > 0.1
             
             guard rightArmDetected else {
-                self.feedbackText = "Pose tidak jelas"
+                self.updateFeedback("Pose tidak jelas")
                 self.overlayColor = .gray
                 return
             }
@@ -546,7 +549,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                 // print("right Angle: \(rightAngle)")
                 
                 let (feedback, color) = self.evaluateDumbbellCurl(angle: rightAngle)
-                self.feedbackText = "\(feedback) \n\(Int(rightAngle))°- Rep: \(self.repetitionCount)/\(self.config.repetition)"
+//                self.feedbackText = "\(feedback) \n\(Int(rightAngle))°- Rep: \(self.repetitionCount)/\(self.config.repetition)"
                 self.overlayColor = color
             }
         }

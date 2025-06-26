@@ -12,6 +12,7 @@ struct GuideLine: View {
     @StateObject var trialVM: TrialViewModel
     @EnvironmentObject var routeManager : RouteManager
     @EnvironmentObject var exerciseManager : ExerciseManager
+    let speechManager: SpeechManager = SpeechManager()
 
     @State private var count: Int = 3
     @State private var progress: Double = 0.0
@@ -152,10 +153,7 @@ struct GuideLine: View {
 //                        .position(CGPoint(x: wristPoint!.x * width, y: wristPoint!.y * height))
 
                 }
-                .onChange(of: wj) { newWrist in
-                    // optionally: log atau update sesuatu jika perlu
-                    print("Wrist updated: \(String(describing: newWrist))")
-                }
+             
                 
 
             } else {
@@ -174,6 +172,8 @@ struct GuideLine: View {
         var currentStep = 0
 
         Timer.scheduledTimer(withTimeInterval: stepDuration, repeats: true) { timer in
+            print("Wrist updated: \(String(describing: wj)) , \(String(describing: wristPoint))")
+
                 if !isPaused {
                     let t = Double(currentStep) / Double(steps)
                     arcProgress = goingForward ? CGFloat(t) : CGFloat(1.0 - t)
@@ -192,8 +192,8 @@ struct GuideLine: View {
                     }
                 } else {
                     guard let wrist = wj else { return }
-                    let radius: CGFloat = 0.3
-                    let rectSize = CGSize(width: 0.8, height: 0.2) // bisa di-tweak sesuai kebutuhan
+                    let radius: CGFloat = 0.2
+                    let rectSize = CGSize(width: 0.5, height: 0.2) // bisa di-tweak sesuai kebutuhan
 
                     let hitA = (step % 2 == 0 && isPoint(wrist, insideRectWithCenter: wristPoint ?? .zero, size: rectSize))
                     let hitB = (step % 2 == 1 && isPoint(wrist, insideRectWithCenter: elbowPoint ?? .zero, size: rectSize))
@@ -205,16 +205,19 @@ struct GuideLine: View {
                     if  hitA || hitB
                         {
                         if hitA {
+                            speechManager.speak("Move your wrist up")
                             repetition += 1
                             if repetition >= maxRepetition{
                                 timer.invalidate()
                                 routeManager.clear()
                                 routeManager.push("finished")
                             }
+                        }else{
+                            speechManager.speak("Move your wrist down")
+
                         }
                         isPaused = false
                         step += 1
-                        trialVM.playSound()
                         
                     }
                     

@@ -120,7 +120,7 @@ struct WorkoutView: View {
                                     )
                                 )
                                 .mask(
-                                    Text("\(rep)/\(viewModel.config.repetition)")
+                                    Text("\(rep)/\(exerciseManager.exercise.config.repetition)")
                                 )
                                 .font(.largeTitle)
                                 .font(.system(size: 10, weight: .light, design: .default))
@@ -218,7 +218,7 @@ struct WorkoutView: View {
                             step : $trialViewModel.step,
                             maxStep : $trialViewModel.maxStep,
                             wristPoint: firstJoint.wrist,
-                            elbowPoint: firstJoint.elbow,
+                            elbowPoint: exerciseManager.exercise.path == "forearm" ? firstJoint.shoulder : firstJoint.elbow,
                             totalCount : 3,
                             repetition : $rep,
                             maxRepetition : exerciseManager.exercise.config.repetition

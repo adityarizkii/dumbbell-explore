@@ -23,7 +23,7 @@ class RouteManager: ObservableObject {
         routeService.addRoute(name: "firstguidance", view: IntroGuideView())
         routeService.addRoute(name: "guidance", view: InstructionView())
         routeService.addRoute(name: "workout", view: WorkoutView())
-        routeService.addRoute(name: "finished", view: FinishView())
+        routeService.addRoute(name: "finished", view: HomeView())
     }
 
     func getView(for routeName: String) -> AnyView {
