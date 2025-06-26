@@ -99,8 +99,10 @@ struct HomeView: View {
                                             VStack{
                                                 Spacer()
                                                 Button {
-                                                    self.routeManager.push("tutorial")
                                                     exerciseManager.exercise = exercise
+                                                    exerciseManager.side = .left
+                                                    self.routeManager.push("tutorial")
+                                                    
                                                     print("Route : \(exercise.path)")
                                                 } label: {
                                                     Text("Start Exercise")
@@ -178,7 +180,6 @@ struct HomeView: View {
             }
         }
         .onAppear(){
-           
             homeViewModel = HomeViewModel()
         }
       

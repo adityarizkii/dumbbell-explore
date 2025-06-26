@@ -10,6 +10,7 @@ import Foundation
 class TrialViewModel : ObservableObject{
     @Published var step : Int
     @Published var maxStep : Int
+    @Published var isMuted : Bool = false
     @Published var trialGuidance : [TrialGuidance]
     let speechManager : SpeechManager
     
@@ -27,7 +28,8 @@ class TrialViewModel : ObservableObject{
     }
     
     func playSound(){
-        if !self.speechManager.isSpeaking() {
+        
+        if !self.speechManager.isSpeaking() && isMuted == false {
             self.speechManager.speak(self.getCurrentGuidance()?.description ?? "Great Job, Lets start your first exercise")
         }
     }

@@ -41,6 +41,7 @@ final class SpeechManager {
     func stop() {
         synthesizer.stopSpeaking(at: .immediate)
     }
+   
 
     /// Mengecek apakah sedang berbicara
     func isSpeaking() -> Bool {

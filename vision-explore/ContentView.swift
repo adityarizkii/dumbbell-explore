@@ -2,9 +2,9 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-    //WorkoutView()
+    WorkoutView()
            
-    HomeView()
+    //HomeView()
     //        //.preferredColorScheme(.dark)
     }
 }

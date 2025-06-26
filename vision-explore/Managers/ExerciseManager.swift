@@ -9,6 +9,7 @@ import Foundation
 
 class ExerciseManager : ObservableObject{
     var exercise : Exercise
+    var side : position = .left
     
     init() {
         self.exercise = Exercise(

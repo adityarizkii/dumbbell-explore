@@ -11,7 +11,8 @@ struct TrialView: View {
     @State var isPaused = false
     @EnvironmentObject var routeManager: RouteManager
     @EnvironmentObject var exerciseManager : ExerciseManager
-    @State var isOn = false
+    @State var speechManger = SpeechManager()
+    @State var isOn = true
     @StateObject var viewModel  = PoseDetectionViewModelTrial()
     var shoulderPoint: CGPoint?
     var elbowPoint: CGPoint?
@@ -182,6 +183,14 @@ struct TrialView: View {
                             endPoint: .trailing
                         ))
                         .frame(width : 120)
+                        .onChange(of : isOn){
+                            trialViewModel.isMuted = !isOn
+                            
+                            if !isOn{
+                                
+                                trialViewModel.speechManager.stop()
+                            }
+                        }
                         
                         Spacer()
                         ZStack{
@@ -246,6 +255,7 @@ struct TrialView: View {
             .navigationBarBackButtonHidden(true)
         }
         .onAppear {
+            trialViewModel.isMuted = isOn
             trialViewModel.updateGuidance( exerciseManager.exercise.trialGuidance)
         }
     }

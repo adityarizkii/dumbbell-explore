@@ -27,9 +27,9 @@ struct GuideLine: View {
     @Binding var step: Int
     @Binding var maxStep: Int
     
-    var wristPoint: CGPoint?
-    var elbowPoint: CGPoint?
-    var shoulderPoint: CGPoint?
+    @State var wristPoint: CGPoint?
+    @State var elbowPoint: CGPoint?
+    @State var shoulderPoint: CGPoint?
     
     var totalCount : Int!
     @Binding var repetition : Int!
@@ -70,7 +70,7 @@ struct GuideLine: View {
                 let dy = pointB.y - pointA.y
                 let radius = sqrt(dx * dx + dy * dy)
                 
-                let sideangle = side == .left ? -135.0 : 135.0
+                var sideangle = exerciseManager.exercise.config.upAngle * ( side == .left ? -1 : 1)
                 
                 let startAngle = Angle(radians: atan2(dy, dx))
                 let endAngle = Angle(degrees: startAngle.degrees + sideangle)
@@ -79,6 +79,11 @@ struct GuideLine: View {
                 let endPoint = CGPoint(
                     x: pointA.x + radius * cos(endRadians),
                     y: pointA.y + radius * sin(endRadians)
+                )
+                
+                let endPoints = CGPoint(
+                    x: 1 - ((pointA.x + radius * cos(endRadians))/width),
+                    y: (pointA.y + radius * sin(endRadians))/height
                 )
                 
                 let startRad = startAngle.radians
@@ -183,6 +188,15 @@ struct GuideLine: View {
                             .fill(Color("Button1"))
                             .frame(width: 50, height: 50)
                             .position(endPoint)
+                            .onAppear(){
+                                
+                                let pb = CGPoint(
+                                    x : 1 - pointBref.x,
+                                    y : pointBref.y
+                                )
+                                self.pA = endPoints
+                                self.pB = pb
+                            }
                         
                         ZStack {
                             Circle()
@@ -234,7 +248,6 @@ struct GuideLine: View {
             var currentStep = 0
             
             Timer.scheduledTimer(withTimeInterval: stepDuration, repeats: true) { timer in
-                print("Wrist updated: \(String(describing: wj)) , \(String(describing: wristPoint))")
                 
                 if !isPaused {
                     let t = Double(currentStep) / Double(steps)
@@ -248,35 +261,36 @@ struct GuideLine: View {
                         repeatCount += 1
                         
                         if repeatCount < 16 {
+                            timer.invalidate()
+                            routeManager.clear()
+                            routeManager.push("finished")
                             isPaused = true
                             startCountdown()
                         }
                     }
                 } else {
                     guard let wrist = wj else { return }
-                    let radius: CGFloat = 0.2
+                    let radius: CGFloat = 0.1
                     let rectSize = CGSize(width: 0.5, height: 0.2) // bisa di-tweak sesuai kebutuhan
                     
-                    let hitA = (step % 2 == 0 && isPoint(wrist, insideRectWithCenter: wristPoint ?? .zero, size: rectSize))
-                    let hitB = (step % 2 == 1 && isPoint(wrist, insideRectWithCenter: elbowPoint ?? .zero, size: rectSize))
+//                    let hitA = (step % 2 == 0 && isPoint(wrist, insideRectWithCenter: wristPoint ?? .zero, size: rectSize))
+//                    let hitB = (step % 2 == 1 && isPoint(wrist, insideRectWithCenter: elbowPoint ?? .zero, size: rectSize))
                     //
-                    //                    let hitA = (step % 2 == 0 && isPoint(wrist, insideCircleWithCenter: wristPoint ?? .zero, radius: radius))
-                    //                    let hitB = (step % 2 == 1 && isPoint(wrist, insideCircleWithCenter: elbowPoint ?? .zero, radius: radius))
+                    let hitA = (step % 2 == 0 && self.isPoint(wrist, insideCircleWithCenter: self.pA ?? .zero, radius: radius))
+                    let hitB = (step % 2 == 1 && self.isPoint(wrist, insideCircleWithCenter: self.pB ?? .zero, radius: radius))
                     
                     
                     if  hitA || hitB
                     {
+                        speechManager.speak(step % 2 == 0 ? "Move your wrist down"  : "Move your wrist up")
+
                         if hitA {
-                            speechManager.speak("Move your wrist up")
                             repetition += 1
                             if repetition >= maxRepetition{
                                 timer.invalidate()
                                 routeManager.clear()
                                 routeManager.push("finished")
                             }
-                        }else{
-                            speechManager.speak("Move your wrist down")
-                            
                         }
                         isPaused = false
                         step += 1
@@ -289,12 +303,19 @@ struct GuideLine: View {
             }
         }
     
-
-    func isPoint(_ point: CGPoint, insideRectWithCenter center: CGPoint, size: CGSize) -> Bool {
-        let dx = abs(point.x - center.x)
-        let dy = abs(point.y - center.y)
-        return dx <= size.width / 2 && dy <= size.height / 2
-    }
+        func isPoint(_ point: CGPoint, insideCircleWithCenter center: CGPoint, radius: CGFloat) -> Bool {
+            let dx = point.y - center.x
+            let dy = point.x - center.y
+            print("Hell nah :  \(dx * dx + dy * dy <= radius * radius)")
+            
+            return dx * dx + dy * dy <= radius * radius
+        }
+    
+//    func isPoint(_ point: CGPoint, insideRectWithCenter center: CGPoint, size: CGSize) -> Bool {
+//        let dx = abs(point.x - center.x)
+//        let dy = abs(point.y - center.y)
+//        return dx <= size.width / 2 && dy <= size.height / 2
+//    }
 }
 //
 //#Preview {

@@ -78,9 +78,10 @@ struct TutorialView: View {
 }
 
 struct VideoSection: View {
+    @EnvironmentObject var exerciseManager: ExerciseManager
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            if let bundleVideoURL = Bundle.main.url(forResource: "dumbbell", withExtension: "mp4") {
+            if let bundleVideoURL = Bundle.main.url(forResource: exerciseManager.exercise.image, withExtension: "mp4") {
                 VideoPlayer(player: AVPlayer(url: bundleVideoURL))
                     .frame(height: 200)
                     .cornerRadius(12)

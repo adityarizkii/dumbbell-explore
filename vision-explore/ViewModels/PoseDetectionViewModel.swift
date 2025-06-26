@@ -185,9 +185,9 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                 //                }
                 
                 
-                print("Mulai : \(self.mulai )")
-                print("State : is90degree \(self.is90degree ) showArmArea \(self.showArmArea )")
-                
+//                print("Mulai : \(self.mulai )")
+//                print("State : is90degree \(self.is90degree ) showArmArea \(self.showArmArea )")
+//                
                 if !self.is90degree {
                     DispatchQueue.main.async {
                         self.getAngleBody(jointPoints: jointPoints)

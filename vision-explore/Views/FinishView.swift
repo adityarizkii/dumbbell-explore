@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct FinishView: View {
+    @EnvironmentObject var routeManager : RouteManager
     var body: some View {
-        NavigationStack {
             VStack {
                 Spacer()
                 VStack(spacing: 10){
@@ -36,7 +36,9 @@ struct FinishView: View {
                     .background(Color("gray"))
                     .cornerRadius(14)
                     
-                    Button{} label: {
+                    Button{
+                        routeManager.clear()
+                    } label: {
                         Text("Done")
                             .foregroundStyle(.black)
                             .font(.system(size: 17, weight: .semibold, design: .default ))
@@ -55,9 +57,9 @@ struct FinishView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(.black)
-        }
+            .navigationBarBackButtonHidden(true)
 
-    }
+        }
 }
 
 #Preview {
