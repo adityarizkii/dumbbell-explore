@@ -219,6 +219,17 @@ struct WorkoutView: View {
                     SetupOverlay()
                 }
                 
+                Button{
+                    
+                } label: {
+                    Text("Left Arm Turn!")
+                        
+                }
+                .padding()
+                .foregroundColor(.black)
+                .bold()
+                .background()
+                .cornerRadius(20)
                 
                 
                 

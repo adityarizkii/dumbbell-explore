@@ -29,6 +29,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
     private let sequenceHandler = VNSequenceRequestHandler()
     private var jointsCaptured = false
     
+    @State private var currentSide: position = .right
     
     var capturedJoints: [(shoulder: CGPoint, elbow: CGPoint, wrist: CGPoint)] = []
     
@@ -84,6 +85,8 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
     private var currentDownDuration: TimeInterval = 0
     private var isAddingRepetition: Bool = false
     @Published var wristJoint : CGPoint?
+    
+    
     
     
     enum ExercisePhase {
@@ -183,6 +186,12 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
                     }
                 }
                 
+                if mulai {
+                    DispatchQueue.main.async {
+                        self.evaluatePose(points: jointPoints)
+                    }
+                }
+                
                 
                 //                if !self.jointsCaptured {
                 //                    DispatchQueue.main.async {
@@ -236,40 +245,44 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
             DispatchQueue.main.async {
                 //                self.feedbackText = "Body is not aligned at 90 degrees"
                 
-                self.overlayColor = .red
+//                self.overlayColor = .red
             }
         }
     }
     
-    private func captureArmJoints(  jointPoints: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]) {
+    private func captureArmJoints(position : position = .right , jointPoints: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]) {
         
-        let rightshoulderPos:VNHumanBodyPoseObservation.JointName =  .rightShoulder
-        let rightelbowPos:VNHumanBodyPoseObservation.JointName = .rightElbow
-        let rightwristPos:VNHumanBodyPoseObservation.JointName = .rightWrist
-        let leftshoulderPos:VNHumanBodyPoseObservation.JointName =  .leftShoulder
-        let leftelbowPos:VNHumanBodyPoseObservation.JointName = .leftElbow
-        let leftwristPos:VNHumanBodyPoseObservation.JointName = .leftWrist
+        let shoulderPos:VNHumanBodyPoseObservation.JointName = position == .left ? .leftShoulder : .rightShoulder
+        let elbowPos:VNHumanBodyPoseObservation.JointName = position == .left ? .leftElbow :.rightElbow
+        let wristPos:VNHumanBodyPoseObservation.JointName = position == .left ? .leftWrist :.rightWrist
         
-        
-        if let rightshoulder = jointPoints[rightshoulderPos],
-           let rightelbow = jointPoints[rightelbowPos],
-           let rightwrist = jointPoints[rightwristPos],
-           rightshoulder.confidence > 0.5,
-           rightelbow.confidence > 0.5,
-           rightwrist.confidence > 0.5 {
+//        let rightshoulderPos:VNHumanBodyPoseObservation.JointName =  .rightShoulder
+//        let rightelbowPos:VNHumanBodyPoseObservation.JointName = .rightElbow
+//        let rightwristPos:VNHumanBodyPoseObservation.JointName = .rightWrist
+//        let leftshoulderPos:VNHumanBodyPoseObservation.JointName =  .leftShoulder
+//        let leftelbowPos:VNHumanBodyPoseObservation.JointName = .leftElbow
+//        let leftwristPos:VNHumanBodyPoseObservation.JointName = .leftWrist
+//        
+//        
+        if let shoulder = jointPoints[shoulderPos],
+           let elbow = jointPoints[elbowPos],
+           let wrist = jointPoints[wristPos],
+           shoulder.confidence > 0.5,
+           elbow.confidence > 0.5,
+           wrist.confidence > 0.5 {
             
             
             // Record the first detected right arm joints
-            let shoulderPoint = CGPoint(x: CGFloat(1 - rightshoulder.location.y), y: CGFloat(rightshoulder.location.x))
-            let elbowPoint = CGPoint(x: CGFloat(1 - rightelbow.location.y), y: CGFloat(rightelbow.location.x))
-            let wristPoint = CGPoint(x: CGFloat(1 - rightwrist.location.y), y: CGFloat(rightwrist.location.x))
+            let shoulderPoint = CGPoint(x: CGFloat(1 - shoulder.location.y), y: CGFloat(shoulder.location.x))
+            let elbowPoint = CGPoint(x: CGFloat(1 - elbow.location.y), y: CGFloat(elbow.location.x))
+            let wristPoint = CGPoint(x: CGFloat(1 - wrist.location.y), y: CGFloat(wrist.location.x))
             
             // Append to capturedJoints array
             self.capturedJoints.append((shoulder: shoulderPoint, elbow: elbowPoint, wrist: wristPoint))
             self.jointsCaptured = true
-            print("Captured right arm joints shoulder : \(self.capturedJoints[0].shoulder.x) , \(self.capturedJoints[0].shoulder.y)")
-            print("Captured right arm joints elbow : \(self.capturedJoints[0].elbow.x) , \(self.capturedJoints[0].elbow.y)")
-            print("Captured right arm joints wrist : \(self.capturedJoints[0].wrist.x) , \(self.capturedJoints[0].wrist.y)")
+            print("Captured arm joints shoulder : \(self.capturedJoints[0].shoulder.x) , \(self.capturedJoints[0].shoulder.y)")
+            print("Captured arm joints elbow : \(self.capturedJoints[0].elbow.x) , \(self.capturedJoints[0].elbow.y)")
+            print("Captured arm joints wrist : \(self.capturedJoints[0].wrist.x) , \(self.capturedJoints[0].wrist.y)")
         }
     }
     
@@ -373,6 +386,12 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
         repetitionData.removeAll()
         currentUpDuration = 0
         currentDownDuration = 0
+        mulai = false
+        is90degree = false
+        showArmArea = false
+        jointsCaptured = false
+        
+        
     }
     
     private func checkPosition(points: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]){
