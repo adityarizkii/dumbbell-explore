@@ -172,9 +172,6 @@ struct HomeView: View {
                 .scaleEffect(x: 1.5, y: 1.0)
             )
             .ignoresSafeArea()
-            .navigationDestination(for: String.self) { exercise in
-                AnyView(routeManager.getView(for: exercise))
-            }
             .navigationDestination(for: String.self) { routeName in
                 routeManager.getView(for: routeName)
             }
