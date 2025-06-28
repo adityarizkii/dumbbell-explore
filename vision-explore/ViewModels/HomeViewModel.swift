@@ -44,17 +44,10 @@ class HomeViewModel: ObservableObject {
                 detail: ExerciseDetail(
                     about: "Hammer Curl menargetkan otot biceps dan brachialis dengan posisi telapak tangan netral.",
                     key_moment: [
-<<<<<<< Updated upstream
-                        KeyMoment(key_image: "Hammer1", key_description: "Posisi awal berdiri, dumbbell di samping tubuh, telapak tangan menghadap ke dalam."),
-                        KeyMoment(key_image: "Hammer2", key_description: "Angkat dumbbell ke arah bahu dengan posisi netral."),
-//                        KeyMoment(key_image: "Hammer3", key_description: "Tahan di atas, rasakan kontraksi pada lengan bawah."),
-                        KeyMoment(key_image: "Hammer3", key_description: "Turunkan perlahan ke posisi awal.")
-=======
                         KeyMoment(key_image: "moment1", key_description: "Start standing, dumbbells at sides, palms facing in."),
                         KeyMoment(key_image: "moment2", key_description: "Curl dumbbells up in a neutral grip."),
                         KeyMoment(key_image: "moment3", key_description: "Hold at the top and feel the forearm contraction."),
                         KeyMoment(key_image: "moment4", key_description: "Lower slowly back to start."),
->>>>>>> Stashed changes
                     ]
                 ),
                 config: hammer,
@@ -75,17 +68,11 @@ class HomeViewModel: ObservableObject {
                 detail: ExerciseDetail(
                     about: "Forearm Raise fokus pada penguatan otot lengan bawah dan pergelangan tangan.",
                     key_moment: [
-<<<<<<< Updated upstream
-                        KeyMoment(key_image: "Forearm1", key_description: "Posisi awal duduk, lengan di atas paha, telapak tangan menghadap ke atas."),
-                        KeyMoment(key_image: "Forearm2", key_description: "Angkat pergelangan tangan ke atas tanpa menggerakkan lengan bawah."),
-//                        KeyMoment(key_image: "moment3", key_description: "Tahan di atas, kontraksikan otot lengan bawah."),
-                        KeyMoment(key_image: "Forearm3", key_description: "Turunkan perlahan ke posisi awal.")
-=======
                         KeyMoment(key_image: "moment1", key_description: "Sit down, forearms on thighs, palms facing up."),
                         KeyMoment(key_image: "moment2", key_description: "Curl wrists upward without moving forearms."),
                         KeyMoment(key_image: "moment3", key_description: "Hold at the top, squeeze your forearms."),
                         KeyMoment(key_image: "moment4", key_description: "Lower slowly to starting position.")
->>>>>>> Stashed changes
+
                     ]
                 ),
                 config: raise,

@@ -23,6 +23,7 @@ class RouteManager: ObservableObject {
         routeService.addRoute(name: "firstguidance", view: IntroGuideView())
         routeService.addRoute(name: "guidance", view: InstructionView())
         routeService.addRoute(name: "workout", view: WorkoutView())
+        routeService.addRoute(name: "leftworkout", view: LeftWorkoutView())
         routeService.addRoute(name: "finished", view: FinishView())
     }
 

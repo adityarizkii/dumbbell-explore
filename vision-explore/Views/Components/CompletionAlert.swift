@@ -3,6 +3,13 @@ import SwiftUI
 struct CompletionAlert: View {
     let onReset: () -> Void
     let repetitionData: [PoseDetectionViewModel.RepetitionData]
+    let side: position?
+    
+    init(onReset: @escaping () -> Void, repetitionData: [PoseDetectionViewModel.RepetitionData], side: position? = nil) {
+        self.onReset = onReset
+        self.repetitionData = repetitionData
+        self.side = side
+    }
     
     var body: some View {
         VStack {
@@ -47,7 +54,7 @@ struct CompletionAlert: View {
             .frame(maxHeight: 200)
             
             Button(action: onReset) {
-                Text("left Side Turn!")
+                Text(side == .left ? "Right Side Turn!" : "Finish!")
                     .font(.headline)
                     .foregroundColor(.white)
                     .padding()

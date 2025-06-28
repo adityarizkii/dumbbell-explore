@@ -290,10 +290,15 @@ struct GuideLine: View {
                         isPaused = false
                         step += 1
                         if repetition >= maxRepetition{
-                            routeManager.clear()
-                            routeManager.push("finished")
+                            if side == .left {
+                                // Setelah lengan kanan selesai (user menghadap kiri), lanjut ke lengan kiri
+                                routeManager.push("leftworkout")
+                            } else {
+                                // Setelah lengan kiri selesai (user menghadap kanan), lanjut ke finished
+                                routeManager.clear()
+                                routeManager.push("finished")
+                            }
                             timer.invalidate()
-                            
                         }
                     }
                     
