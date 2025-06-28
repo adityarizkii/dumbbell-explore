@@ -17,7 +17,7 @@ class HomeViewModel: ObservableObject {
                 image: "DumbbellCurl",
                 path: "dumble",
                 workoutPath: "workout1",
-                description: "Build strength in your arms while learning proper form step-by-step.",
+                description: "Build strength in your arms while learning proper form step by step.",
                 muscles: ["Biceps", "Under Arm"],
                 detail: ExerciseDetail(
                     about: "Seated bicep curls are a strength-training exercise that targets your biceps, the muscles in the front part of your upper arms. By sitting down while doing this movement, your body stays more stable, minimizing the involvement of other muscles and allowing for better isolation of the biceps.\n\nThis exercise is great for building arm strength and shaping your biceps, especially if you perform it with slow, controlled movements.",

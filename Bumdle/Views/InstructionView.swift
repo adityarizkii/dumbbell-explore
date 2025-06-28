@@ -27,7 +27,7 @@ struct InstructionView: View {
                         VStack{
                             Image(pageImage(for: currentPage))
                                 .resizable()
-                                .frame(width: 300, height: 300)
+                                .frame(width: currentPage == 2 ? 270 : 300, height: currentPage == 2 ? 270 :  300)
                                 .padding(.bottom, 24)
                         }
                         Spacer()
@@ -36,24 +36,21 @@ struct InstructionView: View {
                             
                             PageIndicator(currentPage: currentPage, totalPages: totalPages)
 
-                            VStack(spacing: 12) {
+                            VStack(alignment: .leading, spacing: 12) {
                                 Text(pageTitle(for: currentPage))
                                     .font(.system(size: 22, weight: .bold))
                                     .foregroundColor(.white)
-                                    .multilineTextAlignment(.center)
 
                                 Text(pageSubtitle(for: currentPage))
                                     .font(.system(size: 16))
                                     .foregroundColor(.white.opacity(0.8))
-                                    .multilineTextAlignment(.center)
-                                    .padding(.horizontal, 24)
+                                    .multilineTextAlignment(.leading)
                             }
+                            .frame(maxWidth: .infinity, maxHeight: 120, alignment : .top)
                             .padding(.top, 20)
                             .padding(.bottom, 24)
+                            .padding(.horizontal, 40)
                             
-
-
-//                            Spacer()
 
                             Button(action: {
                                 withAnimation {
@@ -78,9 +75,9 @@ struct InstructionView: View {
                                     .cornerRadius(10)
                                     .padding(.horizontal, 40)
                             }
-                            .padding(.bottom, 40)
+                            .padding(.bottom, 50)
                         }
-                        Spacer()
+
 
                     }
                     .frame(maxHeight: .infinity)
@@ -261,6 +258,11 @@ struct PageIndicator: View {
         }
     }
     
+}
+
+#Preview {
+    InstructionView()
+        .environmentObject(RouteManager())
 }
 
 

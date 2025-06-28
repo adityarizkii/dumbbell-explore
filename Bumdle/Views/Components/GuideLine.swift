@@ -43,7 +43,15 @@ struct GuideLine: View {
     @State private var currentIndex: Int = 0
     
     @State private var points: [CGPoint] = []
-        
+//    @State var check : CGPoint
+    
+    @State private var currentAnimatedPoint: CGPoint = .zero
+    
+    @State private var cachedPointA: CGPoint = .zero
+    @State private var cachedRadius: CGFloat = 0
+    @State private var cachedStartAngle: Double = 0
+    @State private var cachedEndAngle: Double = 0
+    
     
     var body: some View {
         GeometryReader { geometry in
@@ -90,10 +98,10 @@ struct GuideLine: View {
                 let endRad = endAngle.radians
                 let delta = endRad - startRad
                 
-//                let midStart = Angle(radians: startRad + 0.25 * delta)
+                //                let midStart = Angle(radians: startRad + 0.25 * delta)
                 let midEnd   = Angle(radians: startRad + 0.75 * delta)
                 
-//                let midEndRadians = CGFloat(midEnd.radians)
+                //                let midEndRadians = CGFloat(midEnd.radians)
                 
                 let angleRad = CGFloat(midEnd.radians)
                 let trianglePoint = CGPoint(
@@ -110,7 +118,7 @@ struct GuideLine: View {
                 
                 let dx2 = futurePoint.x - trianglePoint.x
                 let dy2 = futurePoint.y - trianglePoint.y
-//                let triangleAngle = Angle(radians: atan2(dy2, dx2)) + .degrees(90)
+                //                let triangleAngle = Angle(radians: atan2(dy2, dx2)) + .degrees(90)
                 
                 let angle = startAngle.radians + Double(arcProgress)
                 
@@ -200,7 +208,7 @@ struct GuideLine: View {
                         
                         ZStack {
                             Circle()
-                                .fill(Color("Button1"))
+                                .fill(wj == animatedMovingPoint ? Color("Button1") : Color.red)
                                 .frame(width: 50, height: 50)
                             
                             Circle()
@@ -229,98 +237,121 @@ struct GuideLine: View {
                             currentIndex = 0
                             currentTarget = pointB
                             startCountdown()
-                        }
-                        
-                    }
-                }
-            }
-        }
-            
-            // MARK: - Countdown & Progress
-            
-        }
-    
-
-        func startCountdown() {
-            count = totalCount
-            let steps = 60
-            let stepDuration = Double(totalCount) / Double(steps)
-            var currentStep = 0
-            
-            Timer.scheduledTimer(withTimeInterval: stepDuration, repeats: true) { timer in
-                
-                if !isPaused {
-                    let t = Double(currentStep) / Double(steps)
-                    arcProgress = goingForward ? CGFloat(t) : CGFloat(1.0 - t)
-                    
-                    currentStep += 1
-                    if currentStep > steps {
-                        timer.invalidate()
-                        goingForward.toggle()
-                        showReady = true
-                        repeatCount += 1
-                        
-                        if repeatCount < 16 {
-                            timer.invalidate()
-                           
-                            isPaused = true
-                            startCountdown()
-                        }
-                    }
-                } else {
-                    guard let wrist = wj else { return }
-                    let radius: CGFloat = 0.1
-                    let rectSize = CGSize(width: 0.5, height: 0.2) // bisa di-tweak sesuai kebutuhan
-                    
-//                    let hitA = (step % 2 == 0 && isPoint(wrist, insideRectWithCenter: wristPoint ?? .zero, size: rectSize))
-//                    let hitB = (step % 2 == 1 && isPoint(wrist, insideRectWithCenter: elbowPoint ?? .zero, size: rectSize))
-                    //
-                    let hitA = (step % 2 == 0 && self.isPoint(wrist, insideCircleWithCenter: self.pA ?? .zero, radius: radius))
-                    let hitB = (step % 2 == 1 && self.isPoint(wrist, insideCircleWithCenter: self.pB ?? .zero, radius: radius))
-                    
-                    
-                    if  hitA || hitB
-                    {
-                        speechManager.speak(step % 2 == 0 ? "Move your wrist down"  : "Move your wrist up")
-
-                        if hitA {
-                            repetition += 1
+//                            check = animatedMovingPoint
                             
                         }
-                        isPaused = false
-                        step += 1
-                        if repetition >= maxRepetition{
-                            if side == .left {
-                                // Setelah lengan kanan selesai (user menghadap kiri), lanjut ke lengan kiri
-                                routeManager.push("leftworkout")
-                            } else {
-                                // Setelah lengan kiri selesai (user menghadap kanan), lanjut ke finished
-                                routeManager.clear()
-                                routeManager.push("finished")
-                            }
-                            timer.invalidate()
-                        }
+                        
                     }
-                    
-                    
                 }
-                
             }
         }
+        
+        // MARK: - Countdown & Progress
+        
+    }
     
-        func isPoint(_ point: CGPoint, insideCircleWithCenter center: CGPoint, radius: CGFloat) -> Bool {
-            let dx = point.y - center.x
-            let dy = point.x - center.y
-            print("Hell nah :  \(dx * dx + dy * dy <= radius * radius)")
+    
+    func startCountdown() {
+        count = totalCount
+        let steps = 60
+        let stepDuration = Double(totalCount) / Double(steps)
+        var currentStep = 0
+        
+        Timer.scheduledTimer(withTimeInterval: stepDuration, repeats: true) { timer in
             
-            return dx * dx + dy * dy <= radius * radius
+            if !isPaused {
+                let t = Double(currentStep) / Double(steps)
+                arcProgress = goingForward ? CGFloat(t) : CGFloat(1.0 - t)
+                
+                
+                
+                currentStep += 1
+                if currentStep > steps {
+                    timer.invalidate()
+                    goingForward.toggle()
+                    showReady = true
+                    repeatCount += 1
+                    
+                    if repeatCount < 16 {
+                        timer.invalidate()
+                        
+                        isPaused = true
+                        startCountdown()
+                    }
+                }
+            } else {
+                guard let wrist = wj else { return }
+                let radius: CGFloat = 0.1
+                let rectSize = CGSize(width: 0.5, height: 0.2) // bisa di-tweak sesuai kebutuhan
+                
+                //                    let hitA = (step % 2 == 0 && isPoint(wrist, insideRectWithCenter: wristPoint ?? .zero, size: rectSize))
+                //                    let hitB = (step % 2 == 1 && isPoint(wrist, insideRectWithCenter: elbowPoint ?? .zero, size: rectSize))
+                //
+                
+                
+                
+                let hitA = (step % 2 == 0 && self.isPoint(wrist, insideCircleWithCenter: self.pA ?? .zero, radius: radius))
+                let hitB = (step % 2 == 1 && self.isPoint(wrist, insideCircleWithCenter: self.pB ?? .zero, radius: radius))
+                
+                print("point a : \(String(describing: self.pA)) point b : \(String(describing: self.pB))")
+                
+                
+                if  hitA || hitB
+                {
+                    speechManager.speak(step % 2 == 0 ? "Move your wrist down"  : "Move your wrist up")
+                    
+                    if hitA {
+                        repetition += 1
+                        
+                    }
+                    isPaused = false
+                    step += 1
+                    if repetition >= maxRepetition{
+                        if side == .left {
+                            // Setelah lengan kanan selesai (user menghadap kiri), lanjut ke lengan kiri
+                            routeManager.push("leftworkout")
+                        } else {
+                            // Setelah lengan kiri selesai (user menghadap kanan), lanjut ke finished
+                            routeManager.clear()
+                            routeManager.push("finished")
+                        }
+                        timer.invalidate()
+                    }
+                }
+                
+                
+            }
+            
         }
+    }
     
-//    func isPoint(_ point: CGPoint, insideRectWithCenter center: CGPoint, size: CGSize) -> Bool {
-//        let dx = abs(point.x - center.x)
-//        let dy = abs(point.y - center.y)
-//        return dx <= size.width / 2 && dy <= size.height / 2
+    func isPoint(_ point: CGPoint, insideCircleWithCenter center: CGPoint, radius: CGFloat) -> Bool {
+        let dx = point.y - center.x
+        let dy = point.x - center.y
+        print("Hell nah :  \(dx * dx + dy * dy <= radius * radius)")
+        
+        return dx * dx + dy * dy <= radius * radius
+    }
+    
+//    func isWristFollowingAnimatedPoint(width: CGFloat, height: CGFloat) -> Bool {
+//        guard let wrist = wj else { return false }
+//
+//        // Convert wrist ke screen space
+//        let wristScreenPoint = CGPoint(x: wrist.x * width, y: wrist.y * height)
+//
+//        let dx = wristScreenPoint.x - check.x
+//        let dy = wristScreenPoint.y - check.y
+//        let distance = sqrt(dx * dx + dy * dy)
+//
+//        return distance <= 20 // 20 points hit radius (sesuaikan kalau perlu)
 //    }
+    
+    
+    //    func isPoint(_ point: CGPoint, insideRectWithCenter center: CGPoint, size: CGSize) -> Bool {
+    //        let dx = abs(point.x - center.x)
+    //        let dy = abs(point.y - center.y)
+    //        return dx <= size.width / 2 && dy <= size.height / 2
+    //    }
 }
 //
 //#Preview {

@@ -31,7 +31,7 @@ struct HomeView: View {
                             .bold()
                             .font(.system(size: 24, weight: .bold, design: .default))
                         
-                        Text("Track your form, improve your \nposture, and build\nconfidence—one rep at a time.")
+                        Text("Track your form, improve your \nposture, and build\nconfidence one rep at a time.")
                             .font(.system(size: 14, weight: .light, design: .default))
                     }
                     .padding(.top, 100)
@@ -52,8 +52,9 @@ struct HomeView: View {
                     ForEach(homeViewModel.getExerciseList(), id: \.name) { exercise in
                         VStack(spacing: 21){
                             VStack{
-                                HStack{
-                                    VStack(alignment: .leading, spacing: 5){
+                                HStack(spacing: 0){
+//                                    Spacer()
+                                    VStack(alignment: .leading, spacing: 10){
                                         Text(exercise.name)
                                             .foregroundColor(.white)
                                             .font(.body.bold())
@@ -61,11 +62,12 @@ struct HomeView: View {
                                         Text(exercise.description)
                                             .foregroundColor(.white)
                                             .font(.system(size: 12,weight: .light, design: .default))
-                                            .padding(.bottom, 5)
+//                                            .padding(.bottom, 5)
 
                                         HStack{
                                             ForEach(exercise.muscles, id: \.self){index in
                                                 Text(index)
+                                                    
                                                     .font(.system(size: 10, weight: .light)) // optional styling
                                                     .overlay(
                                                         LinearGradient(
@@ -81,21 +83,25 @@ struct HomeView: View {
                                                     .font(.system(size: 10, weight: .light, design: .default))
                                                     .padding(.horizontal, 10)
                                                     .padding(.vertical,3)
+                                                    .background(Color("gray"))
+                                                    .cornerRadius(20)
                                                     .overlay(RoundedRectangle(cornerRadius: 10).stroke(style: StrokeStyle(lineWidth: 0.5))
-                                                        .foregroundColor(.gray),alignment: .center)
+                                                        .foregroundColor(.gray.opacity(0.5)),alignment: .center)
                                             
                                             }
                                         }
-                                        
-                                        
-                                        
+ 
                                     }
-                                    Spacer()
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.leading, 10)
+                                    
+                                    
                                     VStack(alignment: .trailing){
                                         ZStack{
                                             Image(exercise.image)
                                                 .resizable()
                                                 .frame(width: 150, height: 150)
+//                                                .background(.pink)
                                             VStack{
                                                 Spacer()
                                                 Button {
@@ -123,18 +129,16 @@ struct HomeView: View {
                                                 .padding(.bottom,15)
                                             }
                                             .frame(maxHeight: .infinity)
-                                            
+  
                                         }
                                     }
-                                    
+//                                    .frame(maxWidth: .infinity)
                                     
                                 }
                                 .frame(maxWidth: .infinity)
-            //                                .background(.gray.opacity(0.2))
-                                
                             }
                             .frame(maxWidth: .infinity, maxHeight: 132)
-                            .padding(.horizontal, 20)
+//                            .padding(.horizontal, 20)
                             .padding(.vertical, 10)
                             .background(RadialGradient(
                                 gradient: Gradient(colors: [Color("neon"), .darkgreen]),
@@ -144,7 +148,9 @@ struct HomeView: View {
                             ))
                             .cornerRadius(14)
                         }
+                        .frame(maxWidth:.infinity)
                     }
+                    .frame(maxWidth:.infinity)
                     
                 }
                 .padding(.horizontal, 30)
