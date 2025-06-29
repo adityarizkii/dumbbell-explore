@@ -11,6 +11,7 @@ import Vision
 struct GuideLine: View {
     @StateObject var trialVM: TrialViewModel
     @EnvironmentObject var routeManager : RouteManager
+    @EnvironmentObject var phoneSessionManager : PhoneSessionManager
     @EnvironmentObject var exerciseManager : ExerciseManager
     let speechManager: SpeechManager = SpeechManager()
     
@@ -43,14 +44,6 @@ struct GuideLine: View {
     @State private var currentIndex: Int = 0
     
     @State private var points: [CGPoint] = []
-//    @State var check : CGPoint
-    
-    @State private var currentAnimatedPoint: CGPoint = .zero
-    
-    @State private var cachedPointA: CGPoint = .zero
-    @State private var cachedRadius: CGFloat = 0
-    @State private var cachedStartAngle: Double = 0
-    @State private var cachedEndAngle: Double = 0
     
     
     var body: some View {
@@ -208,7 +201,7 @@ struct GuideLine: View {
                         
                         ZStack {
                             Circle()
-                                .fill(wj == animatedMovingPoint ? Color("Button1") : Color.red)
+                                .fill(Color("Button1"))
                                 .frame(width: 50, height: 50)
                             
                             Circle()
@@ -237,8 +230,6 @@ struct GuideLine: View {
                             currentIndex = 0
                             currentTarget = pointB
                             startCountdown()
-//                            check = animatedMovingPoint
-                            
                         }
                         
                     }
@@ -263,8 +254,6 @@ struct GuideLine: View {
                 let t = Double(currentStep) / Double(steps)
                 arcProgress = goingForward ? CGFloat(t) : CGFloat(1.0 - t)
                 
-                
-                
                 currentStep += 1
                 if currentStep > steps {
                     timer.invalidate()
@@ -274,35 +263,31 @@ struct GuideLine: View {
                     
                     if repeatCount < 16 {
                         timer.invalidate()
-                        
+                        let hit = isInPoint()
+                        if hit[0] || hit[1] {
+                            PhoneSessionManager.shared.sendVibrationCommand("success")
+                        }else{
+                            PhoneSessionManager.shared.sendVibrationCommand("fail")
+                        }
                         isPaused = true
                         startCountdown()
                     }
                 }
             } else {
-                guard let wrist = wj else { return }
-                let radius: CGFloat = 0.1
-                let rectSize = CGSize(width: 0.5, height: 0.2) // bisa di-tweak sesuai kebutuhan
                 
                 //                    let hitA = (step % 2 == 0 && isPoint(wrist, insideRectWithCenter: wristPoint ?? .zero, size: rectSize))
                 //                    let hitB = (step % 2 == 1 && isPoint(wrist, insideRectWithCenter: elbowPoint ?? .zero, size: rectSize))
                 //
+                let hit = isInPoint()
                 
                 
-                
-                let hitA = (step % 2 == 0 && self.isPoint(wrist, insideCircleWithCenter: self.pA ?? .zero, radius: radius))
-                let hitB = (step % 2 == 1 && self.isPoint(wrist, insideCircleWithCenter: self.pB ?? .zero, radius: radius))
-                
-                print("point a : \(String(describing: self.pA)) point b : \(String(describing: self.pB))")
-                
-                
-                if  hitA || hitB
+                if  hit[0] || hit[1]
                 {
                     speechManager.speak(step % 2 == 0 ? "Move your wrist down"  : "Move your wrist up")
                     
-                    if hitA {
+                    if hit[0]  {
                         repetition += 1
-                        
+                        phoneSessionManager.sendData("repetition", "\(repetition ?? 0)")
                     }
                     isPaused = false
                     step += 1
@@ -318,12 +303,20 @@ struct GuideLine: View {
                         timer.invalidate()
                     }
                 }
-                
-                
             }
             
         }
+        
+        func isInPoint() -> [Bool]{
+            guard let wrist = wj else { return [false, false]}
+            let radius: CGFloat = 0.1
+            let rectSize = CGSize(width: 0.5, height: 0.2) // bisa di-tweak sesuai kebutuhan
+            
+            return [(step % 2 == 0 && self.isPoint(wrist, insideCircleWithCenter: self.pA ?? .zero, radius: radius))
+                    , (step % 2 == 1 && self.isPoint(wrist, insideCircleWithCenter: self.pB ?? .zero, radius: radius))]
+        }
     }
+    
     
     func isPoint(_ point: CGPoint, insideCircleWithCenter center: CGPoint, radius: CGFloat) -> Bool {
         let dx = point.y - center.x
@@ -332,26 +325,6 @@ struct GuideLine: View {
         
         return dx * dx + dy * dy <= radius * radius
     }
-    
-//    func isWristFollowingAnimatedPoint(width: CGFloat, height: CGFloat) -> Bool {
-//        guard let wrist = wj else { return false }
-//
-//        // Convert wrist ke screen space
-//        let wristScreenPoint = CGPoint(x: wrist.x * width, y: wrist.y * height)
-//
-//        let dx = wristScreenPoint.x - check.x
-//        let dy = wristScreenPoint.y - check.y
-//        let distance = sqrt(dx * dx + dy * dy)
-//
-//        return distance <= 20 // 20 points hit radius (sesuaikan kalau perlu)
-//    }
-    
-    
-    //    func isPoint(_ point: CGPoint, insideRectWithCenter center: CGPoint, size: CGSize) -> Bool {
-    //        let dx = abs(point.x - center.x)
-    //        let dy = abs(point.y - center.y)
-    //        return dx <= size.width / 2 && dy <= size.height / 2
-    //    }
 }
 //
 //#Preview {

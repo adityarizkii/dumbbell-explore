@@ -11,6 +11,7 @@ import SwiftUI
 struct HomeView: View {
     @EnvironmentObject var routeManager: RouteManager
     @EnvironmentObject var exerciseManager: ExerciseManager
+    @EnvironmentObject var phoneManager:PhoneSessionManager
 
     var body: some View {
         @State var homeViewModel = HomeViewModel()
@@ -105,6 +106,7 @@ struct HomeView: View {
                                             VStack{
                                                 Spacer()
                                                 Button {
+                                                    phoneManager.sendMessage( "Start Exercise")
                                                     exerciseManager.exercise = exercise
                                                     exerciseManager.side = .left
                                                     self.routeManager.push("tutorial")
@@ -183,6 +185,8 @@ struct HomeView: View {
             }
         }
         .onAppear(){
+            phoneManager.sendData("exercise", "")
+            phoneManager.sendMessage( "Connected, ready to start your workout!")
             homeViewModel = HomeViewModel()
         }
       
