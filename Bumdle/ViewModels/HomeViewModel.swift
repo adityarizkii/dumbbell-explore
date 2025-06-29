@@ -13,7 +13,7 @@ class HomeViewModel: ObservableObject {
     init() {
         self.exercises = [
             Exercise(
-                name: "Dumbbell Curl",
+                name: "Seat Bicep Curl",
                 image: "DumbbellCurl",
                 path: "dumble",
                 workoutPath: "workout1",
@@ -59,7 +59,7 @@ class HomeViewModel: ObservableObject {
 
             ),
             Exercise(
-                name: "Forearm Raise",
+                name: "Front Raises",
                 image: "ForearmRaise",
                 path: "forearm",
                 workoutPath: "workout3",
