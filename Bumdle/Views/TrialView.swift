@@ -94,36 +94,40 @@ struct TrialView: View {
                 
                 if !viewModel.mulai {
                     ZStack{
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
-                                    startPoint: .trailing,
-                                    endPoint: .leading
-                                ),
-                                lineWidth: 4
-                            )
-                            .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height)
-                        //                    .padding()
-                        //                    .background(Color.red)
-                        VStack{
-                            Circle()
-                                .fill(LinearGradient(
-                                    gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
-                                    startPoint: .trailing,
-                                    endPoint: .leading
-                                ))
-                                .frame(width: 25, height: 25)
-                            
-                                .padding(40)
-                        }
-                        .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height, alignment: .topTrailing)
-                        
-                        
-                        
-                    }
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .fill(
+                                                    LinearGradient(
+                                                        gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
+                                                        startPoint: .trailing,
+                                                        endPoint: .leading
+                                                    )
+                                                    .opacity(0.3),
+                    //                                lineWidth: 4
+                                                )
+                                                .frame(maxWidth : 0.8 * width/2, maxHeight: 0.5 *  height)
+                                            //                    .padding()
+                                            //                    .background(Color.red)
+                    //                        VStack{
+                    //                            Circle()
+                    //                                .fill(LinearGradient(
+                    //                                    gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
+                    //                                    startPoint: .trailing,
+                    //                                    endPoint: .leading
+                    //                                ))
+                    //                                .frame(width: 25, height: 25)
+                    //
+                    //                        }
+                                            
+
+                                        }
+                                        .padding(.trailing, 40)
+                                        .padding(.top, 40)
+                                        .frame(maxWidth : .infinity, maxHeight: .infinity, alignment: .trailing)
+
+
+
                 }else if viewModel.mulai  && showSecondText{
-                    FrameOverlayAnimation()
+                    TrialOverlay()
                         .onAppear {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                                 withAnimation {
@@ -196,10 +200,10 @@ struct TrialView: View {
                         ZStack{
                             Circle()
                                 .fill(Color.black)
-                                .frame(width: 39, height: 39)
+                                .frame(width: 50, height: 50)
                             Image(systemName: "xmark.circle")
                                 .foregroundStyle(.white)
-                                .font(.system(size: 16, weight: .semibold, design: .default ))
+                                .font(.system(size: 24, weight: .semibold, design: .default ))
                         }
                         .onTapGesture {
                             routeManager.pop()

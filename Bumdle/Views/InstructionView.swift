@@ -40,11 +40,13 @@ struct InstructionView: View {
                                 Text(pageTitle(for: currentPage))
                                     .font(.system(size: 22, weight: .bold))
                                     .foregroundColor(.white)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
 
                                 Text(pageSubtitle(for: currentPage))
                                     .font(.system(size: 16))
                                     .foregroundColor(.white.opacity(0.8))
                                     .multilineTextAlignment(.leading)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                             }
                             .frame(maxWidth: .infinity, maxHeight: 120, alignment : .top)
                             .padding(.top, 20)
@@ -80,7 +82,7 @@ struct InstructionView: View {
 
 
                     }
-                    .frame(maxHeight: .infinity)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .ignoresSafeArea()
                     
                     
