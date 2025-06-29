@@ -203,7 +203,7 @@ struct TrialView: View {
                                 .frame(width: 50, height: 50)
                             Image(systemName: "xmark.circle")
                                 .foregroundStyle(.white)
-                                .font(.system(size: 24, weight: .semibold, design: .default ))
+                                .font(.system(size: 20, weight: .semibold, design: .default ))
                         }
                         .onTapGesture {
                             routeManager.pop()
