@@ -16,7 +16,10 @@ struct FrameOverlayAnimation: View {
         GeometryReader { geometry in
 //            let frameHeight = geometry.size.height * 0.8
             let height = geometry.size.height
+            let height_2 = geometry.size.height/3.5
             let width = geometry.size.width/2
+            let width_2 = geometry.size.width
+            
             let cornerRadius: CGFloat = 10
 
             ZStack {
@@ -52,58 +55,39 @@ struct FrameOverlayAnimation: View {
 //                    .padding(20)
                     .frame(maxWidth : .infinity, alignment : .leading)
                     VStack{
-                        ZStack{
-                            RoundedRectangle(cornerRadius: cornerRadius)
-                                .trim(from: 0.0, to: progress)
-                                .stroke(
-                                    LinearGradient(
-                                        gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
-                                        startPoint: .trailing,
-                                        endPoint: .leading
-                                    ),
-                                    lineWidth: 4
-                                )
-//                                .padding(.horizontal, 20)
-//                                .padding(.vertical, 50)
-                                .offset(y: 10)
-                                .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height)
-                                .animation(.linear(duration: Double(totalCount)), value: progress)
-                            
-//                            RoundedRectangle(cornerRadius: 10)
-//                                .stroke(
-//                                    LinearGradient(
-//                                        gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
-//                                        startPoint: .trailing,
-//                                        endPoint: .leading
-//                                    ),
-//                                    lineWidth: 4
-//                                )
-//                                .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height)
-//                            //                    .padding()
-//                                .background(LinearGradient(
-//                                    gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
-//                                    startPoint: .trailing,
-//                                    endPoint: .leading
-//                                ))
-//                                .opacity(0.2)
-                            
-                            VStack{
-//                                Circle()
-//                                    .fill(LinearGradient(
-//                                        gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
-//                                        startPoint: .trailing,
-//                                        endPoint: .leading
-//                                    ))
-//                                    .frame(width: 25, height: 25)
-//                                
-//                                    .padding(40)
+                            ZStack{
+                                RoundedRectangle(cornerRadius: cornerRadius)
+                                    .trim(from: 0.0, to: progress)
+                                    .stroke(
+                                        LinearGradient(
+                                            gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
+                                            startPoint: .trailing,
+                                            endPoint: .leading
+                                        ),
+                                        lineWidth: 4
+                                    )
+    //                                .padding(.horizontal, 20)
+    //                                .padding(.vertical, 50)
+    //                                .offset(y: 10)
+                                    .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height)
+                                    .animation(.linear(duration: Double(totalCount)), value: progress)
+                                
+    
+                                VStack{
+    //                                Circle()
+    //                                    .fill(LinearGradient(
+    //                                        gradient: Gradient(colors: [Color("Button1"), Color("Button2")]),
+    //                                        startPoint: .trailing,
+    //                                        endPoint: .leading
+    //                                    ))
+    //                                    .frame(width: 25, height: 25)
+    //
+    //                                    .padding(40)
+                                }
+                                .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height, alignment: .top)
+                                .padding()
                             }
-                            .frame(maxWidth : 0.8 * width, maxHeight: 0.6 *  height, alignment: .top)
-                            .padding()
-//                                .background(.red)
-                        }
-                        .padding(.top,100)
-//                        Spacer()
+                            .padding(.top,100)
 
                     }
                     .frame(maxWidth : .infinity, alignment : .trailing)
@@ -118,7 +102,7 @@ struct FrameOverlayAnimation: View {
                 startCountdown()
             }
         }
-        .ignoresSafeArea()
+//        .ignoresSafeArea()
     }
     
     func startCountdown() {
