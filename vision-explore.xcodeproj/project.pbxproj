@@ -6,11 +6,59 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		08B69E482E100D3300CB1F55 /* BumdleWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 08B69E3B2E100D3300CB1F55 /* BumdleWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		08B69EDC2E103AC500CB1F55 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08B69EDB2E103AC500CB1F55 /* WatchConnectivity.framework */; };
+		08B69EF12E103E1700CB1F55 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08B69EF02E103E1700CB1F55 /* WatchConnectivity.framework */; platformFilters = (ios, xros, ); };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		08B69E462E100D3300CB1F55 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 34643FA32DDFF712008EB80A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 08B69E3A2E100D3300CB1F55;
+			remoteInfo = "BumdleWatch Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		08B69E492E100D3300CB1F55 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				08B69E482E100D3300CB1F55 /* BumdleWatch Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		08B69EEF2E103C6C00CB1F55 /* Embed ExtensionKit Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(EXTENSIONS_FOLDER_PATH)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			name = "Embed ExtensionKit Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		08B69E3B2E100D3300CB1F55 /* BumdleWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BumdleWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		08B69EDB2E103AC500CB1F55 /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = Platforms/WatchOS.platform/Developer/SDKs/WatchOS11.2.sdk/System/Library/Frameworks/WatchConnectivity.framework; sourceTree = DEVELOPER_DIR; };
+		08B69EF02E103E1700CB1F55 /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.2.sdk/System/Library/Frameworks/WatchConnectivity.framework; sourceTree = DEVELOPER_DIR; };
 		34643FAB2DDFF712008EB80A /* vision-explore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "vision-explore.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		08B69E3C2E100D3300CB1F55 /* BumdleWatch Watch App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "BumdleWatch Watch App";
+			sourceTree = "<group>";
+		};
 		34643FAD2DDFF712008EB80A /* vision-explore */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "vision-explore";
@@ -19,20 +67,40 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		08B69E382E100D3300CB1F55 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				08B69EDC2E103AC500CB1F55 /* WatchConnectivity.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		34643FA82DDFF712008EB80A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08B69EF12E103E1700CB1F55 /* WatchConnectivity.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		08B69EDA2E103AC500CB1F55 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				08B69EF02E103E1700CB1F55 /* WatchConnectivity.framework */,
+				08B69EDB2E103AC500CB1F55 /* WatchConnectivity.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		34643FA22DDFF712008EB80A = {
 			isa = PBXGroup;
 			children = (
 				34643FAD2DDFF712008EB80A /* vision-explore */,
+				08B69E3C2E100D3300CB1F55 /* BumdleWatch Watch App */,
+				08B69EDA2E103AC500CB1F55 /* Frameworks */,
 				34643FAC2DDFF712008EB80A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				34643FAB2DDFF712008EB80A /* vision-explore.app */,
+				08B69E3B2E100D3300CB1F55 /* BumdleWatch Watch App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,6 +117,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		08B69E3A2E100D3300CB1F55 /* BumdleWatch Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 08B69E4C2E100D3300CB1F55 /* Build configuration list for PBXNativeTarget "BumdleWatch Watch App" */;
+			buildPhases = (
+				08B69E372E100D3300CB1F55 /* Sources */,
+				08B69E382E100D3300CB1F55 /* Frameworks */,
+				08B69E392E100D3300CB1F55 /* Resources */,
+				08B69EEF2E103C6C00CB1F55 /* Embed ExtensionKit Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				08B69E3C2E100D3300CB1F55 /* BumdleWatch Watch App */,
+			);
+			name = "BumdleWatch Watch App";
+			packageProductDependencies = (
+			);
+			productName = "BumdleWatch Watch App";
+			productReference = 08B69E3B2E100D3300CB1F55 /* BumdleWatch Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
 		34643FAA2DDFF712008EB80A /* vision-explore */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 34643FBA2DDFF712008EB80A /* Build configuration list for PBXNativeTarget "vision-explore" */;
@@ -55,10 +147,12 @@
 				34643FA72DDFF712008EB80A /* Sources */,
 				34643FA82DDFF712008EB80A /* Frameworks */,
 				34643FA92DDFF712008EB80A /* Resources */,
+				08B69E492E100D3300CB1F55 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				08B69E472E100D3300CB1F55 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				34643FAD2DDFF712008EB80A /* vision-explore */,
@@ -80,6 +174,9 @@
 				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
+					08B69E3A2E100D3300CB1F55 = {
+						CreatedOnToolsVersion = 16.2;
+					};
 					34643FAA2DDFF712008EB80A = {
 						CreatedOnToolsVersion = 16.2;
 					};
@@ -100,11 +197,19 @@
 			projectRoot = "";
 			targets = (
 				34643FAA2DDFF712008EB80A /* vision-explore */,
+				08B69E3A2E100D3300CB1F55 /* BumdleWatch Watch App */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		08B69E392E100D3300CB1F55 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		34643FA92DDFF712008EB80A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -115,6 +220,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		08B69E372E100D3300CB1F55 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		34643FA72DDFF712008EB80A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -124,7 +236,76 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		08B69E472E100D3300CB1F55 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 08B69E3A2E100D3300CB1F55 /* BumdleWatch Watch App */;
+			targetProxy = 08B69E462E100D3300CB1F55 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		08B69E4A2E100D3300CB1F55 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"BumdleWatch Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = 5S8FM9N45F;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = BumdleWatch;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.adityarizki.vision-explore";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.adityarizki.vision-explore.watch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.2;
+			};
+			name = Debug;
+		};
+		08B69E4B2E100D3300CB1F55 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"BumdleWatch Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = 5S8FM9N45F;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = BumdleWatch;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.adityarizki.vision-explore";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.adityarizki.vision-explore.watch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 11.2;
+			};
+			name = Release;
+		};
 		34643FB82DDFF712008EB80A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -248,10 +429,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"vision-explore/Preview Content\"";
-				DEVELOPMENT_TEAM = C7TA5L5N53;
+				DEVELOPMENT_TEAM = 5S8FM9N45F;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app needs camera access";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -261,8 +443,8 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -271,10 +453,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.adityarizki.vision-explore";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TARGETED_DEVICE_FAMILY = 1;
 				XROS_DEPLOYMENT_TARGET = 2.2;
 			};
 			name = Debug;
@@ -288,10 +471,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"vision-explore/Preview Content\"";
-				DEVELOPMENT_TEAM = C7TA5L5N53;
+				DEVELOPMENT_TEAM = 5S8FM9N45F;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app needs camera access";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -301,8 +485,8 @@
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
@@ -311,10 +495,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.adityarizki.vision-explore";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TARGETED_DEVICE_FAMILY = 1;
 				XROS_DEPLOYMENT_TARGET = 2.2;
 			};
 			name = Release;
@@ -322,6 +507,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		08B69E4C2E100D3300CB1F55 /* Build configuration list for PBXNativeTarget "BumdleWatch Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				08B69E4A2E100D3300CB1F55 /* Debug */,
+				08B69E4B2E100D3300CB1F55 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		34643FA62DDFF712008EB80A /* Build configuration list for PBXProject "vision-explore" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

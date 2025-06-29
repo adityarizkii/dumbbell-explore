@@ -17,7 +17,7 @@ enum position {
 }
 
 class PoseDetectionViewModel: NSObject, ObservableObject {
-    
+    @State var phoneManager:PhoneSessionManager?
     @Published var feedbackText: String = ""
     @Published var currentPoints: [VNHumanBodyPoseObservation.JointName: VNRecognizedPoint]? = nil
     @Published var overlayColor: Color = .gray
@@ -52,6 +52,8 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
     
     func updateFeedback(_ text : String) {
         if getTimeLapsed()/1000 > 1 {
+            phoneManager?.sendData("feeedback", text)
+
             self.feedbackText = text
             speechManager.speak(text)
         }

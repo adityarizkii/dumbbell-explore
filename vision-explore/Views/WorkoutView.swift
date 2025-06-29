@@ -17,6 +17,7 @@ struct WorkoutView: View {
     @EnvironmentObject var exerciseManager : ExerciseManager
     @State var isOn = false
     @StateObject var viewModel  = PoseDetectionViewModel()
+    @EnvironmentObject var phoneManager: PhoneSessionManager
     var shoulderPoint: CGPoint?
     var elbowPoint: CGPoint?
     var wristPoint: CGPoint?
@@ -67,6 +68,10 @@ struct WorkoutView: View {
                             .cornerRadius(10)
                             .padding()
                             .padding(.top, 100)
+                            .onChange(of: viewModel.feedbackText){
+                                print(viewModel.feedbackText)
+                                phoneManager.sendData("feeedback", viewModel.feedbackText)
+                            }
                         Spacer()
                     }
                     
@@ -271,6 +276,8 @@ struct WorkoutView: View {
                 .black.opacity(0.7)
             )
             .onAppear(){
+                phoneManager.sendData("exercise", "exercise")
+                viewModel.phoneManager = phoneManager
                 viewModel.config = exerciseManager.exercise.config
                 // Set untuk latihan lengan kanan (user menghadap kiri)
                 viewModel.currentSide = .left
