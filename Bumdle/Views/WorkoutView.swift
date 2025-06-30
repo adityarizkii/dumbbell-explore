@@ -280,7 +280,7 @@ struct WorkoutView: View {
                 viewModel.phoneManager = phoneManager
                 viewModel.config = exerciseManager.exercise.config
                 // Set untuk latihan lengan kanan (user menghadap kiri)
-                viewModel.currentSide = .left
+                viewModel.currentSide = .right
             }
             
         }
