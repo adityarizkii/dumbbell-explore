@@ -1,11 +1,14 @@
 import SwiftUI
 
 struct ContentView: View {
+    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
+
     var body: some View {
-    //WorkoutView()
-           
-    HomeView()
-    //        //.preferredColorScheme(.dark)
+        if hasCompletedOnboarding{
+            HomeView()
+        }else{
+            OnBoardingView()
+        }
     }
 }
 
