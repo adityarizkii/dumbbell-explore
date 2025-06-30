@@ -6,11 +6,45 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		081A0C922E12761A0078546B /* BumdleWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 081A0C882E12761A0078546B /* BumdleWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		081A0C902E12761A0078546B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 34643FA32DDFF712008EB80A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 081A0C872E12761A0078546B;
+			remoteInfo = "BumdleWatch Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		081A0C932E12761A0078546B /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				081A0C922E12761A0078546B /* BumdleWatch Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		081A0C882E12761A0078546B /* BumdleWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BumdleWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		34643FAB2DDFF712008EB80A /* Bumdle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bumdle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		081A0C892E12761A0078546B /* BumdleWatch Watch App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "BumdleWatch Watch App";
+			sourceTree = "<group>";
+		};
 		34643FAD2DDFF712008EB80A /* Bumdle */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Bumdle;
@@ -19,6 +53,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		081A0C852E12761A0078546B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		34643FA82DDFF712008EB80A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -33,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				34643FAD2DDFF712008EB80A /* Bumdle */,
+				081A0C892E12761A0078546B /* BumdleWatch Watch App */,
 				34643FAC2DDFF712008EB80A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				34643FAB2DDFF712008EB80A /* Bumdle.app */,
+				081A0C882E12761A0078546B /* BumdleWatch Watch App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,6 +91,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		081A0C872E12761A0078546B /* BumdleWatch Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 081A0C962E12761A0078546B /* Build configuration list for PBXNativeTarget "BumdleWatch Watch App" */;
+			buildPhases = (
+				081A0C842E12761A0078546B /* Sources */,
+				081A0C852E12761A0078546B /* Frameworks */,
+				081A0C862E12761A0078546B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				081A0C892E12761A0078546B /* BumdleWatch Watch App */,
+			);
+			name = "BumdleWatch Watch App";
+			packageProductDependencies = (
+			);
+			productName = "BumdleWatch Watch App";
+			productReference = 081A0C882E12761A0078546B /* BumdleWatch Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
 		34643FAA2DDFF712008EB80A /* Bumdle */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 34643FBA2DDFF712008EB80A /* Build configuration list for PBXNativeTarget "Bumdle" */;
@@ -55,10 +120,12 @@
 				34643FA72DDFF712008EB80A /* Sources */,
 				34643FA82DDFF712008EB80A /* Frameworks */,
 				34643FA92DDFF712008EB80A /* Resources */,
+				081A0C932E12761A0078546B /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				081A0C912E12761A0078546B /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				34643FAD2DDFF712008EB80A /* Bumdle */,
@@ -77,9 +144,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1620;
+				LastSwiftUpdateCheck = 1640;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
+					081A0C872E12761A0078546B = {
+						CreatedOnToolsVersion = 16.4;
+					};
 					34643FAA2DDFF712008EB80A = {
 						CreatedOnToolsVersion = 16.2;
 					};
@@ -100,11 +170,19 @@
 			projectRoot = "";
 			targets = (
 				34643FAA2DDFF712008EB80A /* Bumdle */,
+				081A0C872E12761A0078546B /* BumdleWatch Watch App */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		081A0C862E12761A0078546B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		34643FA92DDFF712008EB80A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -115,6 +193,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		081A0C842E12761A0078546B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		34643FA72DDFF712008EB80A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -124,7 +209,74 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		081A0C912E12761A0078546B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 081A0C872E12761A0078546B /* BumdleWatch Watch App */;
+			targetProxy = 081A0C902E12761A0078546B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		081A0C942E12761A0078546B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 569YG8DZ54;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = BumdleWatch;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.adityarizki.vision-explore";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.adityarizki.vision-explore.watchkitapp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.5;
+			};
+			name = Debug;
+		};
+		081A0C952E12761A0078546B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 569YG8DZ54;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = BumdleWatch;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.adityarizki.vision-explore";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.adityarizki.vision-explore.watchkitapp";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 11.5;
+			};
+			name = Release;
+		};
 		34643FB82DDFF712008EB80A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -324,6 +476,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		081A0C962E12761A0078546B /* Build configuration list for PBXNativeTarget "BumdleWatch Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				081A0C942E12761A0078546B /* Debug */,
+				081A0C952E12761A0078546B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		34643FA62DDFF712008EB80A /* Build configuration list for PBXProject "Bumdle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
