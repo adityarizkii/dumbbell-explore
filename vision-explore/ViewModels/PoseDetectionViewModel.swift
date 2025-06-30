@@ -308,7 +308,6 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
         let elbowPos:VNHumanBodyPoseObservation.JointName = position == .left ? .leftElbow :.rightElbow
         let wristPos:VNHumanBodyPoseObservation.JointName = position == .left ? .leftWrist :.rightWrist
         
-        //        print(jointPoints[shoulderPos]?.location,jointPoints[elbowPos]?.location,jointPoints[wristPos]?.location)
         
         if let shoulder = jointPoints[shoulderPos],
            let elbow = jointPoints[elbowPos],
@@ -318,18 +317,12 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
            wrist.confidence > 0.1 {
             
             
-            // Record the first detected right arm joints
             let shoulderPoint = CGPoint(x: CGFloat(1 - shoulder.location.y), y: CGFloat(shoulder.location.x))
             let elbowPoint = CGPoint(x: CGFloat(1 - elbow.location.y), y: CGFloat(elbow.location.x))
             let wristPoint = CGPoint(x: CGFloat(1 - wrist.location.y), y: CGFloat(wrist.location.x))
-            //print(shoulderPoint,elbowPoint,wristPoint)
-            // Append to capturedJoints array
             self.capturedJoints.append((shoulder: shoulderPoint, elbow: elbowPoint, wrist: wristPoint))
             self.jointsCaptured = true
             self.mulai = true
-//            print("Captured arm joints shoulder : \(self.capturedJoints[0].shoulder.x) , \(self.capturedJoints[0].shoulder.y)")
-//            print("Captured arm joints elbow : \(self.capturedJoints[0].elbow.x) , \(self.capturedJoints[0].elbow.y)")
-//            print("Captured arm joints wrist : \(self.capturedJoints[0].wrist.x) , \(self.capturedJoints[0].wrist.y)")
         }
     }
     
