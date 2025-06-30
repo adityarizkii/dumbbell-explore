@@ -36,7 +36,7 @@ class PoseDetectionViewModel: NSObject, ObservableObject {
     private var currentTime = DispatchTime.now()
     
     var capturedJoints: [(shoulder: CGPoint, elbow: CGPoint, wrist: CGPoint)] = []
-    @Published var currentSide: position = .left
+    @Published var currentSide: position = .right
     
     
     var firstJoint: (shoulder: CGPoint, elbow: CGPoint, wrist: CGPoint)? {

@@ -96,23 +96,23 @@ struct WorkoutView: View {
                 VStack{
                     HStack{
                         VStack{
-                            Text("00:02")
-                                .font(.largeTitle)
-                                .overlay(
-                                    LinearGradient(
-                                        colors: [Color("Button1"),Color("Button2")],
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    )
-                                )
-                                .mask(
-                                    Text("00:02")
-                                )
-                                .font(.largeTitle)
-                                .font(.system(size: 10, weight: .light, design: .default))
+//                            Text("00:02")
+//                                .font(.largeTitle)
+//                                .overlay(
+//                                    LinearGradient(
+//                                        colors: [Color("Button1"),Color("Button2")],
+//                                        startPoint: .leading,
+//                                        endPoint: .trailing
+//                                    )
+//                                )
+//                                .mask(
+//                                    Text("00:02")
+//                                )
+//                                .font(.largeTitle)
+//                                .font(.system(size: 10, weight: .light, design: .default))
                         }
                         .frame(width: 134, height: 60)
-                        .background(Color.black)
+//                        .background(Color.black)
                         .cornerRadius(14)
                         
                         Spacer()
@@ -295,6 +295,7 @@ struct WorkoutView: View {
     WorkoutView()
         .environmentObject(RouteManager())
         .environmentObject(ExerciseManager())
+        .environmentObject(PhoneSessionManager())
     //        .environmentObject(RouteManager())
 }
 
