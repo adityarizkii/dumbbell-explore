@@ -9,12 +9,14 @@ import SwiftUI
 import Vision
 
 struct GuideLine: View {
+    @State var poseDetectionViewModel: PoseDetectionViewModel!
+
     @StateObject var trialVM: TrialViewModel
     @EnvironmentObject var routeManager : RouteManager
     @EnvironmentObject var phoneSessionManager : PhoneSessionManager
     @EnvironmentObject var exerciseManager : ExerciseManager
     let speechManager: SpeechManager = SpeechManager()
-    
+        
     @State private var count: Int = 3
     @State private var progress: Double = 0.0
     @State private var showReady = false
@@ -261,7 +263,7 @@ struct GuideLine: View {
                     showReady = true
                     repeatCount += 1
                     
-                    if repeatCount < 16 {
+                    if repeatCount <= 16 {
                         timer.invalidate()
                         let hit = isInPoint()
                         if hit[0] || hit[1] {
@@ -285,11 +287,10 @@ struct GuideLine: View {
                 {
                     speechManager.speak(step % 2 == 0 ? "Move your wrist down"  : "Move your wrist up")
                     
-                    if hit[0]  {
+                    if hit[1] && step > 0 {
                         repetition += 1
                         phoneSessionManager.sendData("repetition", "\(repetition ?? 0)")
                     }
-                    isPaused = false
                     step += 1
                     if repetition >= maxRepetition{
                         if side == .left {
@@ -302,6 +303,8 @@ struct GuideLine: View {
                         }
                         timer.invalidate()
                     }
+                    isPaused = false
+
                 }
             }
             

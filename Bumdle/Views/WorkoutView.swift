@@ -224,7 +224,7 @@ struct WorkoutView: View {
                         if let firstJoint = viewModel.capturedJoints.first {
                             GuideLine(
                                 //                    shoulderPoint: firstJoint.shoulder,
-                                
+                                poseDetectionViewModel : viewModel,
                                 trialVM : trialViewModel,
                                 isPaused: $isPaused,
                                 pointJoint : $viewModel.currentPoints,
