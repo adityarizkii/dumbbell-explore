@@ -44,10 +44,10 @@ class HomeViewModel: ObservableObject {
                 detail: ExerciseDetail(
                     about: "Hammer Curl menargetkan otot biceps dan brachialis dengan posisi telapak tangan netral.",
                     key_moment: [
-                        KeyMoment(key_image: "moment1", key_description: "Start standing, dumbbells at sides, palms facing in."),
-                        KeyMoment(key_image: "moment2", key_description: "Curl dumbbells up in a neutral grip."),
-                        KeyMoment(key_image: "moment3", key_description: "Hold at the top and feel the forearm contraction."),
-                        KeyMoment(key_image: "moment4", key_description: "Lower slowly back to start."),
+                        KeyMoment(key_image: "Hammer1", key_description: "Start standing, dumbbells at sides, palms facing in."),
+                        KeyMoment(key_image: "Hammer2", key_description: "Curl dumbbells up in a neutral grip."),
+                        KeyMoment(key_image: "Hammer3", key_description: "Hold at the top and feel the forearm contraction."),
+                        KeyMoment(key_image: "Hammer4", key_description: "Lower slowly back to start."),
                     ]
                 ),
                 config: hammer,
@@ -68,10 +68,10 @@ class HomeViewModel: ObservableObject {
                 detail: ExerciseDetail(
                     about: "Forearm Raise fokus pada penguatan otot lengan bawah dan pergelangan tangan.",
                     key_moment: [
-                        KeyMoment(key_image: "moment1", key_description: "Sit down, forearms on thighs, palms facing up."),
-                        KeyMoment(key_image: "moment2", key_description: "Curl wrists upward without moving forearms."),
-                        KeyMoment(key_image: "moment3", key_description: "Hold at the top, squeeze your forearms."),
-                        KeyMoment(key_image: "moment4", key_description: "Lower slowly to starting position.")
+                        KeyMoment(key_image: "Forearm1", key_description: "Sit down, forearms on thighs, palms facing up."),
+                        KeyMoment(key_image: "Forearm2", key_description: "Curl wrists upward without moving forearms."),
+                        KeyMoment(key_image: "Forearm3", key_description: "Hold at the top, squeeze your forearms."),
+                        KeyMoment(key_image: "Forearm4", key_description: "Lower slowly to starting position.")
 
                     ]
                 ),
