@@ -119,6 +119,7 @@ struct WorkoutView: View {
                         VStack{
                             Text("0/\(viewModel.config.repetition)")
                                 .font(.largeTitle)
+                                .frame(maxWidth: .infinity)
                                 .overlay(
                                     LinearGradient(
                                         colors: [Color("Button1"),Color("Button2")],
@@ -130,6 +131,7 @@ struct WorkoutView: View {
                                     Text("\(rep)/\(exerciseManager.exercise.config.repetition)")
                                 )
                                 .font(.largeTitle)
+                                .frame(maxWidth: .infinity)
                                 .font(.system(size: 10, weight: .light, design: .default))
                             
                         }
@@ -253,7 +255,7 @@ struct WorkoutView: View {
                 
                 
                 if !viewModel.is90degree{
-                    SetupOverlay()
+                    SetupOverlay(side : viewModel.currentSide)
                 }
 
                 

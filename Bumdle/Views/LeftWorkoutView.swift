@@ -242,7 +242,7 @@ struct LeftWorkoutView: View {
                 
                 
                 if !viewModel.is90degree{
-                    SetupOverlay()
+                    SetupOverlay(side : viewModel.currentSide)
                 }
 
                 
@@ -267,7 +267,7 @@ struct LeftWorkoutView: View {
             .onAppear(){
                 viewModel.config = exerciseManager.exercise.config
                 // Set untuk latihan lengan kiri (user menghadap kanan)
-                viewModel.currentSide = .right
+                viewModel.currentSide = .left
             }
             
         }
