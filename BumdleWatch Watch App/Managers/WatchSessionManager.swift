@@ -22,6 +22,8 @@ class WatchSessionManager: NSObject, WKExtensionDelegate, WCSessionDelegate, Obs
     @Published var text: String = "Welcome to Bumbdle"
     @Published var exerciseDetail: ExerciseDetail = ExerciseDetail(exercise : "", repetitions: 0, feedback: "Great")
     
+    
+    
     override init() {
         super.init()
         if WCSession.isSupported() {
