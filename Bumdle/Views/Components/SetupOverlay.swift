@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct SetupOverlay: View {
+    
+    
+    var side : position
     var body: some View {
         ZStack {
             // Background with blur effect
@@ -23,12 +26,12 @@ struct SetupOverlay: View {
 //                    .padding()
 //            }
             VStack{
-                Image("SetupImage2")
+                Image(side == .left ? "SetupImage2" :"SetupImage")
                     .resizable()
                     .frame(width: 235, height: 280)
                     .padding(.bottom, 24)
                 
-                Text("Turn to the side and make sure your full arm is clearly visible on camera.")
+                Text("Turn to the \(side == .left ? "right" : "left") and make sure your full arm is clearly visible on camera.")
                     .font(.body)
                     .frame(width:300, alignment: .center)
                     .foregroundColor(.white)
@@ -40,5 +43,5 @@ struct SetupOverlay: View {
 }
 
 #Preview {
-    SetupOverlay()
+    SetupOverlay(side : .right)
 }
