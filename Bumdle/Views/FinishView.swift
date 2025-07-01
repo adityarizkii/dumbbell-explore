@@ -9,6 +9,9 @@ import SwiftUI
 
 struct FinishView: View {
     @EnvironmentObject var routeManager : RouteManager
+    @EnvironmentObject var phoneManager:PhoneSessionManager
+
+    
     var body: some View {
             VStack {
                 Spacer()
@@ -58,6 +61,10 @@ struct FinishView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(.black)
             .navigationBarBackButtonHidden(true)
+            .onAppear(){
+                phoneManager.sendData("exercise", "")
+                phoneManager.sendMessage( "Great Job")
+            }
 
         }
 }

@@ -9,6 +9,7 @@ import SwiftUI
 import WatchConnectivity
 struct ContentView: View {
     @ObservedObject var manager: WatchSessionManager
+    @EnvironmentObject var runtimeManager: RuntimeManager
 
     var body: some View {
         if manager.exerciseDetail.exercise == "" {
@@ -25,6 +26,9 @@ struct ContentView: View {
                 Spacer()
             }
             .padding()
+            .onAppear {
+                runtimeManager.startSession()
+            }
         }else{
             ExerciseSession(manager: manager)
         }

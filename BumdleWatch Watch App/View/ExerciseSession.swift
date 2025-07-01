@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ExerciseSession: View {
     @ObservedObject var manager: WatchSessionManager
+    @EnvironmentObject var runtimeManager: RuntimeManager
 
     var body: some View {
         VStack{
@@ -33,6 +34,9 @@ struct ExerciseSession: View {
                     .font(.title3.bold())
             }
             Spacer()
+        }
+        .onAppear {
+            runtimeManager.startSession()
         }
     }
 }
