@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct TrialView: View {
+    @AppStorage("hasCompletedTrial") private var hasCompletedTrial = false
+
     @State var isPaused = false
     @EnvironmentObject var routeManager: RouteManager
     @EnvironmentObject var exerciseManager : ExerciseManager
@@ -225,6 +227,8 @@ struct TrialView: View {
                         }
                     }else{
                         Button{
+                            hasCompletedTrial = true
+                            routeManager.back(3)
                             routeManager.push("workout")
                         } label: {
                             Text("Start Your First Move")

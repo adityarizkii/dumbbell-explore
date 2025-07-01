@@ -25,7 +25,8 @@ struct TrialGuideLine: View {
 
     var wristPoint: CGPoint?
     var elbowPoint: CGPoint?
-
+    @State var pA: CGPoint = CGPoint(x : 0, y : 0)
+    @State var pB: CGPoint = CGPoint(x : 0, y : 0)
     let totalCount = 3
 
     var body: some View {
@@ -41,7 +42,9 @@ struct TrialGuideLine: View {
                 let dx = pointB.x - pointA.x
                 let dy = pointB.y - pointA.y
                 let radius = sqrt(dx * dx + dy * dy)
-
+                
+                
+                
                 let startAngle = Angle(radians: atan2(dy, dx))
                 let endAngle = Angle(degrees: startAngle.degrees + abs(exerciseManager.exercise.config.upAngle - exerciseManager.exercise.config.downAngle))
 
@@ -50,7 +53,15 @@ struct TrialGuideLine: View {
                     x: pointA.x + radius * cos(animatedAngle),
                     y: pointA.y + radius * sin(animatedAngle)
                 )
-
+                let endRadians = endAngle.radians
+                let endPoint = CGPoint(
+                    x: pointA.x + radius * cos(endRadians),
+                    y: pointA.y + radius * sin(endRadians)
+                )
+                let endPoints = CGPoint(
+                    x: 1 - ((pointA.x + radius * cos(endRadians))/width),
+                    y: (pointA.y + radius * sin(endRadians))/height
+                )
                 ZStack {
                     
                     // Elbow point visual
@@ -102,6 +113,15 @@ struct TrialGuideLine: View {
                                     y: pointA.y + radius * sin(CGFloat(endAngle.radians))
                                 )
                             )
+                            .onAppear(){
+                                
+                                let pb = CGPoint(
+                                    x : 1 - pointBref.x,
+                                    y : pointBref.y
+                                )
+                                self.pA = endPoints
+                                self.pB = pb
+                            }
 
                         // Moving animated circle
                         ZStack {
@@ -182,8 +202,8 @@ struct TrialGuideLine: View {
                     let radius: CGFloat = 0.2
                     let rectSize = CGSize(width: 0.5, height: 0.15) // bisa di-tweak sesuai kebutuhan
 
-                    if (step % 2 == 0 && isPoint(wrist, insideRectWithCenter: wristPoint ?? .zero, size: rectSize)) ||
-                       (step % 2 == 1 && isPoint(wrist, insideRectWithCenter: elbowPoint ?? .zero, size: rectSize)) {
+                    let masuk = isInPoint()
+                    if masuk[0] || masuk[1]{
 
                         isPaused = false
                         step += 1
@@ -193,12 +213,24 @@ struct TrialGuideLine: View {
             } else {
                 timer.invalidate()
             }
+            
+            func isInPoint() -> [Bool]{
+                guard let wrist = wj else { return [false, false]}
+                let radius: CGFloat = 0.1
+                let rectSize = CGSize(width: 0.5, height: 0.2) // bisa di-tweak sesuai kebutuhan
+                
+                return [(step % 2 == 0 && self.isPoint(wrist, insideCircleWithCenter: self.pA ?? .zero, radius: radius))
+                        , (step % 2 == 1 && self.isPoint(wrist, insideCircleWithCenter: self.pB ?? .zero, radius: radius))]
+            }
         }
+        
     }
 
-    func isPoint(_ point: CGPoint, insideRectWithCenter center: CGPoint, size: CGSize) -> Bool {
-        let dx = abs(point.x - center.x)
-        let dy = abs(point.y - center.y)
-        return dx <= size.width / 2 && dy <= size.height / 2
+    func isPoint(_ point: CGPoint, insideCircleWithCenter center: CGPoint, radius: CGFloat) -> Bool {
+        let dx = point.y - center.x
+        let dy = point.x - center.y
+        print("Hell nah :  \(dx * dx + dy * dy <= radius * radius)")
+        
+        return dx * dx + dy * dy <= radius * radius
     }
 }

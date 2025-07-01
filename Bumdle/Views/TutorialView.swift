@@ -32,6 +32,8 @@ struct TutorialView: View {
     @EnvironmentObject var routeManager: RouteManager
     @EnvironmentObject var exerciseManager: ExerciseManager
     @State private var selectedSegment = 0
+    @AppStorage("hasCompletedTrial") private var hasCompletedTrial = false
+
     
     var body: some View {
         @State var exercise = exerciseManager.exercise
@@ -47,7 +49,12 @@ struct TutorialView: View {
                 Spacer()
                 
                 Button(action: {
-                    routeManager.push("firstguidance")
+                    if hasCompletedTrial{
+                        routeManager.push("workout")
+
+                    }else{
+                        routeManager.push("firstguidance")
+                    }
                 }) {
                     Text("Start Exercise")
                         .font(.headline)

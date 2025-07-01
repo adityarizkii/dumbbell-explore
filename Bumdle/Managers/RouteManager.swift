@@ -30,6 +30,10 @@ class RouteManager: ObservableObject {
     func getView(for routeName: String) -> AnyView {
         routeService.getRoute(name: routeName)?.view ?? AnyView(EmptyView())
     }
+    
+    func back(_ count : Int = 1){
+        path.removeLast(count)
+    }
 
     func push(_ route: String) {
         path.append(route)
